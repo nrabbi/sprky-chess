@@ -20,3 +20,8 @@
 /config/application.yml
 
 /public/
+
+# Ignore test-related files
+/coverage/
+.rspec
+/spec/tmp
