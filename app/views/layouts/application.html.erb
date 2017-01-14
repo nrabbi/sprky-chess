@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Sprky</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,6 +10,18 @@
   </head>
 
   <body>
+<% if notice.present? %>
+  <p class="alert alert-info alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <%= notice %>
+  </p>
+<% end %>
+<% if alert.present? %>
+  <p class="alert alert-danger alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <%= alert %>
+  </p>
+<% end %>
     <%= yield %>
   </body>
 </html>
