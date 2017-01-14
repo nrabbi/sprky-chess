@@ -11,7 +11,6 @@ class CreateGames < ActiveRecord::Migration[5.0]
       t.timestamps
     end
 
-    add_index :games, :winner_id
     add_index :games, :player_1_id
     add_index :games, :player_2_id
   end
