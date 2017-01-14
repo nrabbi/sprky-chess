@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170113182034) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
+  end  
     
   create_table "players", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
