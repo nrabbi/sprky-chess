@@ -26,3 +26,6 @@
 .rspec
 /spec/tmp
 /log/*.log
+
+# RubyMine
+.idea/

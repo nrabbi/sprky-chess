@@ -15,6 +15,25 @@ ActiveRecord::Schema.define(version: 20170113182034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "games", force: :cascade do |t|
+    t.integer  "player_1_id"
+    t.integer  "player_2_id"
+    t.integer  "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["player_1_id"], name: "index_games_on_player_1_id", using: :btree
+    t.index ["player_2_id"], name: "index_games_on_player_2_id", using: :btree
+  end
+
+  create_table "moves", force: :cascade do |t|
+    t.integer  "game_id"
+    t.integer  "from"
+    t.integer  "to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
+  end  
+    
   create_table "players", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
