@@ -15,6 +15,16 @@ ActiveRecord::Schema.define(version: 20170113054352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "games", force: :cascade do |t|
+    t.integer  "player_1_id"
+    t.integer  "player_2_id"
+    t.integer  "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["player_1_id"], name: "index_games_on_player_1_id", using: :btree
+    t.index ["player_2_id"], name: "index_games_on_player_2_id", using: :btree
+  end
+
   create_table "moves", force: :cascade do |t|
     t.integer  "game_id"
     t.integer  "from"

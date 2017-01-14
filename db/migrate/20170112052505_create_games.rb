@@ -1,5 +1,5 @@
 class CreateGames < ActiveRecord::Migration[5.0]
-  def create
+  def change
     execute <<-SQL
       CREATE TYPE status AS ENUM ('created', 'started', 'player 1 won', 'player 2 won', 'draw');
     SQL
