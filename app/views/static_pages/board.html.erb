@@ -1,0 +1,25 @@
+<canvas id="chessBoard" width="560" height="560" style="border:2px solid #d3d3d3;"></canvas>
+
+<script>
+  var c = document.getElementById("chessBoard");
+  var ctx = c.getContext("2d");
+
+  for (i = 0; i < 8; i++) {
+    for (j = 0; j < 8; j++) {
+      ctx.moveTo(0, 70 * j);
+      ctx.lineTo(560, 70 * j);
+      ctx.stroke();
+      ctx.moveTo(70 * i, 0);
+      ctx.lineTo(70 * i, 560);
+      ctx.stroke();
+      var left = 0;
+      for (var a = 0; a < 8; a++) {
+        for (var b = 0; b < 8; b += 2) {
+          startX = 70 * b;
+          if (a % 2 == 0) startX = 70 * (b + 1);
+          ctx.fillRect(startX + left, 70 * a, 70, 70);
+        }
+      }
+    }
+  }
+</script>
