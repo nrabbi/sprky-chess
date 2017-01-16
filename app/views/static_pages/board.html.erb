@@ -1,81 +1,33 @@
 <div class="chessboard">
-  <!-- Row 1 -->
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
+  <% line = ["A", "B", "C", "D", "E", "F", "G", "H"]
+  number = 8
+  lineIndex = 0 %>
 
-  <!-- Row 2 -->
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
+  <table>
+    <% 4.times do %>
+      <tr>
+        <% 4.times do %>
+          <td><div class="white"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+          <td><div class="black"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %> 
+        <% end %>
+      </tr>
 
-  <!-- Row 3 -->
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
+      <% number -= 1 
+      lineIndex = 0 %>
 
-  <!-- Row 4 -->
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
+      <tr>
+        <% 4.times do %>
+          <td><div class="black"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+          <td><div class="white"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+        <% end %>
+      </tr>
 
-  <!-- Row 5 -->
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-
-  <!-- Row 6 -->
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-
-  <!-- Row 7 -->
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-
-  <!-- Row 8 -->
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
-  <div class="black"></div>
-  <div class="white"></div>
+      <% number -= 1 
+      lineIndex = 0 %>
+    <% end %>
+  </table>
 </div>
