@@ -18,3 +18,4 @@ class MovesController < ApplicationController
   end
 
 end
+
