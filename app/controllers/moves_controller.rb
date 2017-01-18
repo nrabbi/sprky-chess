@@ -9,12 +9,12 @@ class MovesController < ApplicationController
 
   def new
     #TODO
-    # new/create support entering move coordinates through forms
+    # these new/create actions support entering move coordinates through forms
     # might not use this if we do it through js...?
   end
 
   def create
-    #TOTO
+    #TODO
   end
 
 end
