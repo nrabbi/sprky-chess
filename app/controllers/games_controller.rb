@@ -1,10 +1,15 @@
 class GamesController < ApplicationController
+  
+  def new
+  end
+
+  def create
+  end
+
   def show
-    # Piece positions are taken from ChessPiece::STARTING_POSITIONS
-    @positions = StartingPositions::STARTING_POSITIONS
-    # if @positions.moves.any?
-    #   # apply moves
-    # end
+  end
+
+  def index
   end
 
 end

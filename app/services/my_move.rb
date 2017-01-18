@@ -4,8 +4,8 @@ class MyMove
     # Coordinate: [x, y]
 
   def initialize(x, y)
-        @from = [x, y]
-        @to = []
+    @from = [x, y]
+    @to = []
   end
 
   def call
@@ -46,9 +46,9 @@ class MyMove
 
   def findPieceForCoordinate(pieces, coordinate)
     pieces.each do |p|
-        if p.position == coordinate
-            return p
-        end
+      if p.position == coordinate
+        return p
+      end
     end
 
     # not found :-(
@@ -57,25 +57,25 @@ class MyMove
 
 
   def applyMoves(pieces, moves)
-      newPieces = pieces.map do |p| p.dup end
+    newPieces = pieces.map do |p| p.dup end
 
-      moves.each do |move|
-          # 1. look up the piece for this piece by matching the coordinate
-          #     of this move by positions of all pieces
-          thisPiece = findPieceForCoordinate(newPieces, move.from)
+    moves.each do |move|
+      # 1. look up the piece for this piece by matching the coordinate
+      #     of this move by positions of all pieces
+      thisPiece = findPieceForCoordinate(newPieces, move.from)
 
-          if thisPiece != nil
-              # 2. move piece to new position
-              thisPiece.position = move.to
-          else
-              # really bad - why is there a move defined on a piece
-              # which doesn't exist????
-          end
-
-
+      if thisPiece != nil
+        # 2. move piece to new position
+        thisPiece.position = move.to
+      else
+        # really bad - why is there a move defined on a piece
+        # which doesn't exist????
       end
 
-      return newPieces
+
     end
+
+    return newPieces
+  end
 
 end
