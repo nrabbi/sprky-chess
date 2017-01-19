@@ -13,6 +13,7 @@ class GamesController < ApplicationController
   end
 
   def board
+    @moved_pieces = PieceMover::move_piece
   end
 
 end

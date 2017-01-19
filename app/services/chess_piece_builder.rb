@@ -3,6 +3,6 @@ class ChessPieceBuilder
 
   def initialize
     @name = name
-    @position = [99, 99]
+    @position = [nil, nil]
   end
 end
