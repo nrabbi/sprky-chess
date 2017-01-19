@@ -13,10 +13,12 @@
     <% 4.times do %>
       <tr>
         <% 4.times do %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
+          
         <% end %>
       </tr>
 
@@ -25,9 +27,9 @@
 
       <tr>
         <% 4.times do %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
         <% end %>
       </tr>
@@ -38,8 +40,8 @@
   </table>
 </div>
 
-<%= StartingPositions::STARTING_POSITIONS.inspect %> <br />
 Before Movement:<br /> <%= @pieces.inspect %> <br />
 Moves: <br /> <%= @moves.inspect %> <br />
 After Movement: <br /> <%= @afterMovementPieces.inspect %> <br />
 </div>
+
