@@ -12,4 +12,7 @@ class GamesController < ApplicationController
   def index
   end
 
+  def board
+  end
+
 end
