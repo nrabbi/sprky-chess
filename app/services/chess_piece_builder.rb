@@ -1,4 +1,4 @@
-class MyChessPiece
+class ChessPieceBuilder
   attr_accessor :type, :position
 
   def initialize

@@ -1,4 +1,4 @@
-module StartingPositions
+module StartingPosition
   STARTING_POSITIONS = {
     white_rook_1: [0, 0],
     white_knight_1: [0, 1],
