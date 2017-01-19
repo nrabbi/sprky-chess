@@ -12,30 +12,28 @@ class MyMove
     # Coordinate: [x, y]
 
     # 1 pawn
-    piece0 = MyChessPiece.new
-    piece0.position = [0, 1]
+    piece0 = MyChessPiece.new(0, 1)
 
-    piece1 = MyChessPiece.new
-    piece1.position = [1,2]
+    piece1 = MyChessPiece.new(0, 1)
 
     @pieces = []
     @pieces << piece0
     @pieces << piece1
 
     @moves = []
-    move = MyMove.new(piece0.position[0], piece0.position[1])
+    move = MyMove.new(piece0.position.x, piece0.position.y)
     # TODO: add code to check if move is valid.
 
-    move.to << piece0.position[0]
-    move.to << piece0.position[1] + 1  # applies the movement rule for a pawn
+    move.to << piece0.position.x
+    move.to << piece0.position.y + 1  # applies the movement rule for a pawn
 
     @moves << move
 
 
 
-    move1 = MyMove.new(piece1.position[0], piece1.position[1])
-    move1.to << piece1.position[0]
-    move1.to << piece1.position[1] + 1  # applies the movement rule for a pawn
+    move1 = MyMove.new(piece1.position.x, piece1.position.y)
+    move1.to << piece1.position.x
+    move1.to << piece1.position.y + 1  # applies the movement rule for a pawn
     @moves << move1
 
 

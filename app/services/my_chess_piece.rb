@@ -1,8 +1,8 @@
 class MyChessPiece
   attr_accessor :type, :position
 
-  def initialize
+  def initialize(x, y)
     @type = 1
-    @position = [99, 99]
+    @position = Position.new(x, y)
   end
 end
