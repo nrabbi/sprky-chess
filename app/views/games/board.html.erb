@@ -13,10 +13,10 @@
     <% 4.times do %>
       <tr>
         <% 4.times do %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
           
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
           
         <% end %>
@@ -27,9 +27,9 @@
 
       <tr>
         <% 4.times do %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= StartingPositions::STARTING_POSITIONS.key([row_index, col_index]) %></p></div></td>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
         <% end %>
       </tr>
