@@ -55,8 +55,4 @@ class Bishop < MyChessPiece
     false
   end
 
-  def at_destination?(x, y, destination)
-    x == destination.x && y == destination.y
-  end
-
 end

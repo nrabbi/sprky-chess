@@ -20,4 +20,8 @@ class MyChessPiece
   def inside_board_boundaries?(x, y)
     x <= BOARD_END && x >= BOARD_START && y <= BOARD_END && y >= BOARD_START
   end
+
+  def at_destination?(x, y, destination)
+    x == destination.x && y == destination.y
+  end
 end
