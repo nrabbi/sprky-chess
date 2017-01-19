@@ -1,3 +1,7 @@
+class King < MyChessPiece
 
-class King
+  def is_obstructed?(pieces, destination)
+    # IMPLEMENT HERE
+    
+  end
 end
