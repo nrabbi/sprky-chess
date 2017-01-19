@@ -25,10 +25,8 @@ module PieceMover
       # move.to << new_x_axis_position << new_y_axis_position
       @moves << new_move
     end
-
     @moved_pieces = apply_moves(@pieces, @moves)
     # TODO -- get @pieces values loaded from actual pieces hash
-      # binding.pry
   end  
 
 
@@ -65,7 +63,7 @@ module PieceMover
         this_piece.position = move.to
       end
       # new_pieces has wrong values
-      return new_pieces
     end
+    return new_pieces
   end
 end
