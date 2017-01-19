@@ -1,8 +1,8 @@
 class ChessPieceBuilder
-  attr_accessor :type, :position
+  attr_accessor :name, :position
 
   def initialize
-    @type = 1
+    @name = name
     @position = [99, 99]
   end
 end

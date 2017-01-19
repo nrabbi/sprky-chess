@@ -2,16 +2,28 @@ module PieceMover
   def self.move_piece
     # Coordinate: [x, y]
 
-    # 1 pawn
-    piece0 = ChessPieceBuilder.new
-    piece0.position = [0, 1]
-
-    piece1 = ChessPieceBuilder.new
-    piece1.position = [1,2]
 
     @pieces = []
-    @pieces << piece0
-    @pieces << piece1
+
+    starting_positions = StartingPositions::STARTING_POSITIONS
+    # if not first move, this should get loaded w/a current_positions hash instead
+    starting_positions.each do |piece|
+      new_piece = ChessPieceBuilder.new
+      new_piece.name = piece[0].to_s
+      new_piece.position = piece[1]
+      @pieces << new_piece
+    end
+    puts @pieces.inspect
+
+    # piece0 = ChessPieceBuilder.new
+    # piece0.position = [0, 1]
+
+    # piece1 = ChessPieceBuilder.new
+    # piece1.position = [1,2]
+
+   
+    # @pieces << piece0
+    # @pieces << piece1
 
     @moves = []
     move = MoveBuilder.new(piece0.position[0], piece0.position[1])
@@ -22,7 +34,8 @@ module PieceMover
 
     @moves << move
 
-
+    @moves.each do |move|
+    end
 
     move1 = MoveBuilder.new(piece1.position[0], piece1.position[1])
     move1.to << piece1.position[0]
