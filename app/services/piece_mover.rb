@@ -6,7 +6,7 @@ module PieceMover
     @pieces = []
 
     starting_positions = StartingPositions::STARTING_POSITIONS
-    # if not first move, this should get loaded w/a current_positions hash instead
+    # TODO -- when not first move, this should get loaded w/a current_positions hash instead
     starting_positions.each do |piece|
       new_piece = ChessPieceBuilder.new
       new_piece.name = piece[0].to_s
@@ -15,39 +15,30 @@ module PieceMover
     end
     puts @pieces.inspect
 
-    # piece0 = ChessPieceBuilder.new
-    # piece0.position = [0, 1]
-
-    # piece1 = ChessPieceBuilder.new
-    # piece1.position = [1,2]
-
-   
-    # @pieces << piece0
-    # @pieces << piece1
 
     @moves = []
-    move = MoveBuilder.new(piece0.position[0], piece0.position[1])
-    # TODO: add code to check if move is valid.
-
-    move.to << piece0.position[0]
-    move.to << piece0.position[1] + 1  # applies the movement rule for a pawn
-
-    @moves << move
-
-    @moves.each do |move|
+    @pieces.each do |piece| # this method takes a collection of moves applies them to pieces
+      new_move = MoveBuilder.new(piece.position[0], piece.position[1])
+      # TODO: add code to check if move is valid.
+      new_move.to << piece.position[0] + 1 << piece.position[1] + 1
+      # move.to << new_x_axis_position << new_y_axis_position
+      @moves << new_move # stores results of moves
     end
 
-    move1 = MoveBuilder.new(piece1.position[0], piece1.position[1])
-    move1.to << piece1.position[0]
-    move1.to << piece1.position[1] + 1  # applies the movement rule for a pawn
-    @moves << move1
-
-    # binding.pry
     @moved_pieces = apply_moves(@pieces, @moves)
     # TODO -- get @pieces values loaded from actual pieces hash
   end  
 
   private
+
+  def self.new_x_axis_position
+    # TODO -- new position is given by user 
+  end
+
+  def self.new_y_axis_position
+    (move.position[1] + move_y_distance)
+    # TODO - new position is given by user 
+  end
 
   def self.find_piece_for_coordinate(pieces, coordinate)
     pieces.each do |p|
