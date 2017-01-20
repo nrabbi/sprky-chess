@@ -49,6 +49,6 @@ After Movement: <br /> <%= @moved_pieces.inspect %> <br /> -->
 
 <h4>Testing: moving all pieces +1 x and y </h4>
 <h4>Not yet checking if movements valid</h4>
-<%= @current_piece_positions.each do |piece| %> 
+<% @current_piece_positions.each do |piece| %> 
   <p>Piece <%= piece.name %> has been moved to <%= piece.position %></p>
   <% end %>
