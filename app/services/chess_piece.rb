@@ -1,5 +1,6 @@
 class ChessPiece
-  attr_accessor :type, :position
+  attr_accessor :position
+  attr_reader :type
   BOARD_START = 0
   BOARD_END = 7
 
