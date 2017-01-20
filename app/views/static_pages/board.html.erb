@@ -1,7 +1,7 @@
 <div class="chessboard">
   <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
-     row_index = 7
-     col_index = 0 %>
+  row_index = 7
+  col_index = 0 %>
   <!--
     Chess Coordinates (x, y)
     ------------------------------------
@@ -11,29 +11,29 @@
 
   <table>
     <% 4.times do %>
-        <tr>
-          <% 4.times do %>
-              <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
-              <% col_index += 1 %>
-              <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
-              <% col_index += 1 %>
-          <% end %>
-        </tr>
+      <tr>
+        <% 4.times do %>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <% col_index += 1 %>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <% col_index += 1 %>
+        <% end %>
+      </tr>
 
-        <% row_index -= 1
-           col_index = 0 %>
+      <% row_index -= 1
+      col_index = 0 %>
 
-        <tr>
-          <% 4.times do %>
-              <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
-              <% col_index += 1 %>
-              <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
-              <% col_index += 1 %>
-          <% end %>
-        </tr>
+      <tr>
+        <% 4.times do %>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <% col_index += 1 %>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %></div></td>
+          <% col_index += 1 %>
+        <% end %>
+      </tr>
 
-        <% row_index -= 1
-           col_index = 0 %>
+      <% row_index -= 1
+      col_index = 0 %>
     <% end %>
   </table>
 </div>
