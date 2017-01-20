@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :players
 
   get 'static_pages/home'
-  get 'board', to:'static_pages#board'
+  get 'show', to:'games#show'
 
   root 'static_pages#home'
 

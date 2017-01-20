@@ -1,0 +1,39 @@
+<div class="chessboard">
+  <% line = ["A", "B", "C", "D", "E", "F", "G", "H"]
+  number = 8
+  lineIndex = 0 %>
+
+  <table>
+    <% 4.times do %>
+      <tr>
+        <% 4.times do %>
+          <td><div class="white"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+          <td><div class="black"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %> 
+        <% end %>
+      </tr>
+
+      <% number -= 1 
+      lineIndex = 0 %>
+
+      <tr>
+        <% 4.times do %>
+          <td><div class="black"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+          <td><div class="white"><%= line[lineIndex] + number.to_s %></div></td>
+          <% lineIndex += 1 %>
+        <% end %>
+      </tr>
+
+      <% number -= 1 
+      lineIndex = 0 %>
+    <% end %>
+  </table>
+</div>
+
+<%= StartingPositions::STARTING_POSITIONS.inspect %> <br />
+Before Movement:<br /> <%= @pieces.inspect %> <br />
+Moves: <br /> <%= @moves.inspect %> <br />
+After Movement: <br /> <%= @afterMovementPieces.inspect %> <br />
+</div>
