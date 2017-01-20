@@ -20,12 +20,12 @@ RSpec.describe "Bishop" do
       obstructor_piece = ChessPiece.new(5, 3)
       pieces = [bishop, obstructor_piece]
       destination = Position.new(7,5)
-      bishop.is_obstructed?(pieces, destination).should == true
+      expect(bishop.is_obstructed?(pieces, destination)).to eq true
 
       # 2 obstructions
       obstructor_piece_2 = ChessPiece.new(3, 1)
       pieces << obstructor_piece_2
-      bishop.is_obstructed?(pieces, destination).should == true
+      expect(bishop.is_obstructed?(pieces, destination)).to eq true
     end
 
     it 'should determine that there is nothing between a bishop and a square' do
@@ -45,7 +45,7 @@ RSpec.describe "Bishop" do
                 ChessPiece.new(3, 1), ChessPiece.new(3, 3), ChessPiece.new(4, 2), ChessPiece.new(5, 1)]
       destination = Position.new(2, 3)
 
-      bishop.is_obstructed?(pieces, destination).should == false
+      expect(bishop.is_obstructed?(pieces, destination)).to eq false
     end
   end
 end

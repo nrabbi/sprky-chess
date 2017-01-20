@@ -19,7 +19,7 @@ RSpec.describe "Queen" do
       destination = Position.new(2, 7)
       obstructor_piece = ChessPiece.new(2, 5)
       pieces = [queen, obstructor_piece]
-      queen.is_obstructed?(pieces, destination).should == true
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
 
       # MORE TEST CASES SHOULD BE ADDED
 
@@ -41,7 +41,7 @@ RSpec.describe "Queen" do
       destination = Position.new(7, 7)
       pieces = [queen, ChessPiece.new(3, 2), ChessPiece.new(3, 4), ChessPiece.new(6, 7)]
 
-      queen.is_obstructed?(pieces, destination).should == false
+      expect(queen.is_obstructed?(pieces, destination)).to eq false
     end
   end
 end

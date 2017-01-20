@@ -19,7 +19,7 @@ RSpec.describe "Pawn" do
       obstructor_piece = ChessPiece.new(3, 4)
       pieces = [pawn, obstructor_piece]
       destination = Position.new(3, 4)
-      pawn.is_obstructed?(pieces, destination).should == true
+      expect(pawn.is_obstructed?(pieces, destination)).to eq true
 
     end
 
@@ -40,7 +40,7 @@ RSpec.describe "Pawn" do
       pieces = [pawn, ChessPiece.new(1, 3), ChessPiece.new(1, 4), ChessPiece.new(2, 2), ChessPiece.new(2, 3),
                 ChessPiece.new(3, 3), ChessPiece.new(4, 2), ChessPiece.new(5, 1)]
 
-      pawn.is_obstructed?(pieces, destination).should == false
+      expect(pawn.is_obstructed?(pieces, destination)).to eq false
     end
   end
 end
