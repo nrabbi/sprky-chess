@@ -1,4 +1,4 @@
-class MyChessPiece
+class ChessPiece
   attr_accessor :type, :position
   BOARD_START = 0
   BOARD_END = 7

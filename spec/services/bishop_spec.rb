@@ -17,13 +17,13 @@ RSpec.describe "Bishop" do
 
       # 1 obstruction
       bishop = Bishop.new(2, 0)
-      obstructor_piece = MyChessPiece.new(5, 3)
+      obstructor_piece = ChessPiece.new(5, 3)
       pieces = [bishop, obstructor_piece]
       destination = Position.new(7,5)
       bishop.is_obstructed?(pieces, destination).should == true
 
       # 2 obstructions
-      obstructor_piece_2 = MyChessPiece.new(3,1)
+      obstructor_piece_2 = ChessPiece.new(3, 1)
       pieces << obstructor_piece_2
       bishop.is_obstructed?(pieces, destination).should == true
     end
@@ -41,8 +41,8 @@ RSpec.describe "Bishop" do
 
       # No obstruction
       bishop = Bishop.new(5, 0)
-      pieces = [bishop, MyChessPiece.new(1, 3), MyChessPiece.new(1, 4), MyChessPiece.new(2, 2), MyChessPiece.new(2, 4),
-                MyChessPiece.new(3, 1), MyChessPiece.new(3, 3), MyChessPiece.new(4, 2), MyChessPiece.new(5, 1)]
+      pieces = [bishop, ChessPiece.new(1, 3), ChessPiece.new(1, 4), ChessPiece.new(2, 2), ChessPiece.new(2, 4),
+                ChessPiece.new(3, 1), ChessPiece.new(3, 3), ChessPiece.new(4, 2), ChessPiece.new(5, 1)]
       destination = Position.new(2, 3)
 
       bishop.is_obstructed?(pieces, destination).should == false

@@ -1,4 +1,4 @@
-class Bishop < MyChessPiece
+class Bishop < ChessPiece
 
   def is_obstructed?(pieces, destination)
     # first determine what x and y direction destination is from piece

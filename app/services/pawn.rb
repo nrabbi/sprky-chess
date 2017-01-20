@@ -1,4 +1,4 @@
-class Pawn < MyChessPiece
+class Pawn < ChessPiece
 
   def is_obstructed?(pieces, destination)
     # IMPLEMENT HERE

@@ -12,9 +12,9 @@ class MyMove
     # Coordinate: [x, y]
 
     # 1 pawn
-    piece0 = MyChessPiece.new(0, 1)
+    piece0 = ChessPiece.new(0, 1)
 
-    piece1 = MyChessPiece.new(0, 1)
+    piece1 = ChessPiece.new(0, 1)
 
     @pieces = []
     @pieces << piece0

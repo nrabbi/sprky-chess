@@ -17,7 +17,7 @@ RSpec.describe "Queen" do
 
       queen = Queen.new(2, 2)
       destination = Position.new(2, 7)
-      obstructor_piece = MyChessPiece.new(2, 5)
+      obstructor_piece = ChessPiece.new(2, 5)
       pieces = [queen, obstructor_piece]
       queen.is_obstructed?(pieces, destination).should == true
 
@@ -39,7 +39,7 @@ RSpec.describe "Queen" do
       # No obstruction
       queen = Queen.new(2, 2)
       destination = Position.new(7, 7)
-      pieces = [queen, MyChessPiece.new(3, 2), MyChessPiece.new(3, 4), MyChessPiece.new(6, 7)]
+      pieces = [queen, ChessPiece.new(3, 2), ChessPiece.new(3, 4), ChessPiece.new(6, 7)]
 
       queen.is_obstructed?(pieces, destination).should == false
     end

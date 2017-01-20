@@ -17,7 +17,7 @@ RSpec.describe "Rook" do
 
       rook = Rook.new(2, 2)
       destination = Position.new(2, 7)
-      obstructor_piece = MyChessPiece.new(2, 5)
+      obstructor_piece = ChessPiece.new(2, 5)
       pieces = [rook, obstructor_piece]
       rook.is_obstructed?(pieces, destination).should == true
 
@@ -39,7 +39,7 @@ RSpec.describe "Rook" do
       # No obstruction
       rook = Rook.new(2, 2)
       destination = Position.new(7, 7)
-      pieces = [rook, MyChessPiece.new(2, 1), MyChessPiece.new(3, 4)]
+      pieces = [rook, ChessPiece.new(2, 1), ChessPiece.new(3, 4)]
 
       rook.is_obstructed?(pieces, destination).should == false
     end
