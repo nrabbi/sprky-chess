@@ -19,7 +19,7 @@
           <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
           <% col_index += 1 %>
           
-        <% end %>
+        <% end %>git
       </tr>
 
       <% row_index -= 1
@@ -51,4 +51,4 @@ After Movement: <br /> <%= @moved_pieces.inspect %> <br /> -->
 <h4>Not yet checking if movements valid</h4>
 <% @current_piece_positions.each do |piece| %> 
   <p>Piece <%= piece.name %> has been moved to <%= piece.position %></p>
-  <% end %>
+<% end %>
