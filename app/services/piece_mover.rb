@@ -1,5 +1,6 @@
-module PieceMover
-  def self.move_piece
+class PieceMover
+
+  def move_piece # rename this method to move_all_pieces
     # Coordinate: [x, y]
 
 
@@ -13,7 +14,6 @@ module PieceMover
       new_piece.position = piece[1]
       @pieces << new_piece
     end
-
 
     @moves = []
     @pieces.each do |piece| # this method takes a collection of moves applies them to pieces
@@ -32,15 +32,15 @@ module PieceMover
 
   private
 
-  def self.new_x_axis_position
+  def new_x_axis_position
     # TODO -- new position is given by user 
   end
 
-  def self.new_y_axis_position
+  def new_y_axis_position
     # TODO - new position is given by user 
   end
 
-  def self.find_piece_for_coordinate(pieces, coordinate)
+  def find_piece_for_coordinate(pieces, coordinate)
     pieces.each do |p|
       if p.position == coordinate
         return p
@@ -50,7 +50,7 @@ module PieceMover
     end
   end
 
-  def self.apply_moves(pieces, moves)
+  def apply_moves(pieces, moves)
     new_pieces = pieces.map { |p| p.dup }
 
 

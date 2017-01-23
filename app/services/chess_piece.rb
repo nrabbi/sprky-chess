@@ -1,12 +1,14 @@
 class ChessPiece
   attr_accessor :position
   attr_reader :type
+  attr_reader :color
   BOARD_START = 0
   BOARD_END = 7
 
-  def initialize(x, y)
-    @type = 1
-    @position = Position.new(x, y)
+  def initialize(color, type, position)
+    @color = color
+    @type = type
+    @position = [position.x, position.y]
   end
 
   # Abstract Method(pieces : MyChessPiece[], destination: Position)
