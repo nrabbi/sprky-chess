@@ -5,7 +5,7 @@ class MoveBuilder
     # Coordinate: [x, y]
 
   def initialize(x, y)
-    @from = [x, y]
-    @to = []
+    @from = Position.new(x,y)
+    @to = Position.new(99, 99)
   end
 end
