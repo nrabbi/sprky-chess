@@ -8,7 +8,7 @@ class ChessPiece
   def initialize(color, type, position)
     @color = color
     @type = type
-    @position = [position.x, position.y]
+    @position = position
   end
 
   # Abstract Method(pieces : MyChessPiece[], destination: Position)

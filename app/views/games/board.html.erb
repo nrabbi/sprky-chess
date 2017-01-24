@@ -13,10 +13,14 @@
     <% 4.times do %>
       <tr>
         <% 4.times do %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
+          <% position = @starting_positions[col_index].position %>
+          <% color = @starting_positions[col_index].color %>
+          <% type = @starting_positions[col_index].type %>
+
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= "#{color} #{type}"  %></p></div></td>
           <% col_index += 1 %>
           
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
           <% col_index += 1 %>
           
         <% end %>
@@ -27,9 +31,9 @@
 
       <tr>
         <% 4.times do %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
+          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
           <% col_index += 1 %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
+          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
           <% col_index += 1 %>
         <% end %>
       </tr>
@@ -47,8 +51,3 @@
 Moves: <br /> <%= @moves.inspect %> <br />
 After Movement: <br /> <%= @moved_pieces.inspect %> <br /> -->
 
-<h4>Testing: moving all pieces +1 x and y </h4>
-<h4>Not yet checking if movements valid</h4>
-<% @current_piece_positions.each do |piece| %> 
-  <p>Piece <%= piece.name %> has been moved to <%= piece.position %></p>
-<% end %>
