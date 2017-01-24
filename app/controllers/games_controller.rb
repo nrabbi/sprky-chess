@@ -18,10 +18,10 @@ class GamesController < ApplicationController
     pieces = StartingPositions::STARTING_POSITIONS
 
     moves = []
-    # move0 = MoveBuilder.new(pieces[0].position.x, pieces[0].position.y)
-    # move0.to.x = move0.from.x
-    # move0.to.y = move0.from.y + 2
-    # moves << move0
+    move0 = Move.new(pieces[0].position.x, pieces[0].position.y)
+    move0.to.x = move0.from.x
+    move0.to.y = move0.from.y + 2
+    moves << move0
 
     piece_mover = PieceMover.new
     @after_move_pieces = piece_mover.move_pieces(pieces, moves)

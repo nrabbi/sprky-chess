@@ -1,7 +1,7 @@
 class PieceMover
 
   def move_pieces(pieces, moves)   
-    @moved_pieces = apply_moves(pieces, moves)
+    moved_pieces = apply_moves(pieces, moves)
   end  
 
   private
