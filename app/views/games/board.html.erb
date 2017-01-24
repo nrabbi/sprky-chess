@@ -2,6 +2,7 @@
   <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
   row_index = 7
   col_index = 0 %>
+
   <!--
     Chess Coordinates (x, y)
     ------------------------------------
@@ -10,36 +11,26 @@
   -->
 
   <table>
-    <% 4.times do %>
+    <% 8.times do %>
       <tr>
-        <% 4.times do %>
-          <% position = @starting_positions[col_index].position %>
-          <% color = @starting_positions[col_index].color %>
-          <% type = @starting_positions[col_index].type %>
+        <% 8.times do %>
+          <td>
+            <div><%= col[col_index] + (row_index+1).to_s %><p><%= %></p></div>
+            
 
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= "#{color} #{type}"  %></p></div></td>
-          <% col_index += 1 %>
-          
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
+            <% piece = get_piece_at(col_index, row_index) %>
+            <% if piece %> 
+              <div><%= piece.color %></div>
+              <div><%= piece.type %></div>
+            <% end %>
+          </td>
           <% col_index += 1 %>
           
         <% end %>
       </tr>
 
-      <% row_index -= 1
-      col_index = 0 %>
-
-      <tr>
-        <% 4.times do %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
-          <% col_index += 1 %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= %></p></div></td>
-          <% col_index += 1 %>
-        <% end %>
-      </tr>
-
-      <% row_index -= 1
-      col_index = 0 %>
+      <% row_index -= 1 %>
+      <% col_index = 0 %>
     <% end %>
   </table>
 </div>

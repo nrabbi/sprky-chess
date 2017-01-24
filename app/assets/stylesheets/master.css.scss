@@ -8,7 +8,7 @@
   border: 20px solid #333;
 }
 
-.black {
+tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
   float: left;
   width: 80px;
   height: 80px;
@@ -19,7 +19,7 @@
   vertical-align: middle;
 }
 
-.white {
+tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   float: left;
   width: 80px;
   height: 80px;
