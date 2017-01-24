@@ -8,7 +8,6 @@ class PieceMover
 
   def find_piece_for_coordinate(pieces, coordinate)
     pieces.find { |p| p.position.x == coordinate.x && p.position.y == coordinate.y }
-      # if p.position.x == coordinate.x && p.position.y == coordinate.y
   end
 
   def apply_moves(pieces, moves)
