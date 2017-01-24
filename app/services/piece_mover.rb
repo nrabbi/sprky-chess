@@ -4,7 +4,6 @@ class PieceMover
     @moved_pieces = apply_moves(pieces, moves)
   end  
 
-
   private
 
   def find_piece_for_coordinate(pieces, coordinate)

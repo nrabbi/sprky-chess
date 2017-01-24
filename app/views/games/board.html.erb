@@ -16,8 +16,6 @@
         <% 8.times do %>
           <td>
             <div><%= col[col_index] + (row_index+1).to_s %><p><%= %></p></div>
-            
-
             <% piece = get_piece_at(col_index, row_index) %>
             <% if piece %> 
               <div><%= piece.color %></div>
@@ -34,11 +32,3 @@
     <% end %>
   </table>
 </div>
-
-
-
-
-<!-- Before Movement:<br /> <%= @pieces.inspect %> <br />
-Moves: <br /> <%= @moves.inspect %> <br />
-After Movement: <br /> <%= @moved_pieces.inspect %> <br /> -->
-
