@@ -16,8 +16,8 @@ class GamesController < ApplicationController
 
   def board
     pieces = StartingPositions::STARTING_POSITIONS
-
     moves = []
+
     move0 = Move.new(pieces[0].position.x, pieces[0].position.y)
     move0.to.x = move0.from.x
     move0.to.y = move0.from.y + 2
