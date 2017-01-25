@@ -32,7 +32,7 @@ module StartingPositions
     King.new(:black, Position.new(4, 7)),
     Bishop.new(:black, Position.new(5, 7)),
     Knight.new(:black, Position.new(6, 7)),
-    Rook.new(:black, Position.new(7, 7)),
+    Rook.new(:black, Position.new(7, 7))
 
   ]
 end
