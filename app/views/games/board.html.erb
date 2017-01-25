@@ -2,6 +2,7 @@
   <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
   row_index = 7
   col_index = 0 %>
+
   <!--
     Chess Coordinates (x, y)
     ------------------------------------
@@ -10,45 +11,24 @@
   -->
 
   <table>
-    <% 4.times do %>
+    <% 8.times do %>
       <tr>
-        <% 4.times do %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
-          <% col_index += 1 %>
-          
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
+        <% 8.times do %>
+          <td>
+            <div><%= col[col_index] + (row_index+1).to_s %><p><%= %></p></div>
+            <% piece = get_piece_at(col_index, row_index) %>
+            <% if piece %> 
+              <div><%= piece.color %></div>
+              <div><%= piece.class %></div>
+            <% end %>
+          </td>
           <% col_index += 1 %>
           
         <% end %>
       </tr>
 
-      <% row_index -= 1
-      col_index = 0 %>
-
-      <tr>
-        <% 4.times do %>
-          <td><div class="black"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
-          <% col_index += 1 %>
-          <td><div class="white"><%= col[col_index] + (row_index + 1).to_s %><p><%= @starting_positions.key([row_index, col_index]) %></p></div></td>
-          <% col_index += 1 %>
-        <% end %>
-      </tr>
-
-      <% row_index -= 1
-      col_index = 0 %>
+      <% row_index -= 1 %>
+      <% col_index = 0 %>
     <% end %>
   </table>
 </div>
-
-
-
-
-<!-- Before Movement:<br /> <%= @pieces.inspect %> <br />
-Moves: <br /> <%= @moves.inspect %> <br />
-After Movement: <br /> <%= @moved_pieces.inspect %> <br /> -->
-
-<h4>Testing: moving all pieces +1 x and y </h4>
-<h4>Not yet checking if movements valid</h4>
-<% @current_piece_positions.each do |piece| %> 
-  <p>Piece <%= piece.name %> has been moved to <%= piece.position %></p>
-  <% end %>
