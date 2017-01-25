@@ -1,13 +1,11 @@
 class ChessPiece
   attr_accessor :position
-  attr_reader :type
   attr_reader :color
   BOARD_START = 0
   BOARD_END = 7
 
-  def initialize(color, type, position)
+  def initialize(color, position)
     @color = color
-    @type = type
     @position = position
   end
 
