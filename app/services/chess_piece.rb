@@ -1,10 +1,11 @@
 class ChessPiece
   attr_accessor :position
   attr_reader :color
+
   BOARD_START = 0
   BOARD_END = 7
 
-  def initialize(color, position)
+  def initialize(color, position, html_icon=nil)
     @color = color
     @position = position
   end
@@ -25,4 +26,5 @@ class ChessPiece
   def at_destination?(x, y, destination)
     x == destination.x && y == destination.y
   end
+
 end
