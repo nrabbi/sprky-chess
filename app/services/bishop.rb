@@ -47,7 +47,7 @@ class Bishop < ChessPiece
 
   def square_occupied?(pieces, position)
     pieces.each do |piece|
-      if piece.position.x == position.x && piece.position.y == position.y
+      if piece.position.equals?(position)
         return true
       end
     end
