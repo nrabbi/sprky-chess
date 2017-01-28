@@ -15,9 +15,9 @@ RSpec.describe "Knight" do
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
-      knight = Knight.new(2, 2)
+      knight = Knight.new(:white, Position.new(2, 2))
       destination = Position.new(3, 4)
-      obstructor_piece = ChessPiece.new(3, 4)
+      obstructor_piece = Pawn.new(:white, Position.new(3, 4))
       pieces = [knight, obstructor_piece]
       expect(knight.is_obstructed?(pieces, destination)).to eq true
 
@@ -35,10 +35,10 @@ RSpec.describe "Knight" do
       # 0,0,0,0,0,0,0,0
 
       # No obstruction
-      knight = Knight.new(2, 4)
+      knight = Knight.new(:white, Position.new(2, 4))
       destination = Position.new(3, 2)
-      pieces = [knight, ChessPiece.new(2, 2), ChessPiece.new(2, 3), ChessPiece.new(3, 3), ChessPiece.new(3, 4),
-                ChessPiece.new(5, 1)]
+      pieces = [knight, Pawn.new(:white, Position.new(2, 2)), Pawn.new(:white, Position.new(2, 3)), Pawn.new(:white, Position.new(3, 3)), Pawn.new(:white, Position.new(3, 4)),
+                Pawn.new(:white, Position.new(5, 1))]
 
       expect(knight.is_obstructed?(pieces, destination)).to eq false
     end
