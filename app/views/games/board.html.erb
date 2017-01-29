@@ -15,11 +15,10 @@
       <tr>
         <% 8.times do %>
           <td>
-            <div><%= col[col_index] + (row_index+1).to_s %><p><%= %></p></div>
+            <div><%= col[col_index] + (row_index+1).to_s %></div>
             <% piece = get_piece_at(col_index, row_index) %>
             <% if piece %> 
-              <div><%= piece.color %></div>
-              <div><%= piece.class %></div>
+              <div class="pieces"><%= piece.html_icon.html_safe %></div>
             <% end %>
           </td>
           <% col_index += 1 %>

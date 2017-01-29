@@ -43,6 +43,10 @@ class Bishop < ChessPiece
     false
   end
 
+  def html_icon
+    @color == :white ? "&#9815;" : "&#9821;"
+  end
+
   private
 
   def square_occupied?(pieces, position)

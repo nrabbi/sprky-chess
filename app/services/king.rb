@@ -1,4 +1,5 @@
 class King < ChessPiece
+  attr_reader :color
 
 
   def is_obstructed?(pieces, destination)
