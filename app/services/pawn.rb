@@ -14,7 +14,7 @@ class Pawn < ChessPiece
     end
 
     pieces.each do |piece|
-      return true if piece.position.y == destination.y && piece.position.x == destination.x
+      return true if piece.position.equals?(destination)
       return true if piece.position.y == (destination.y - 1) && piece.position.x == destination.x && activePlayer == 1 && pawnAtStartingPosition == true
       return true if piece.position.y == (destination.y + 1) && piece.position.x == destination.x && activePlayer == 2 && pawnAtStartingPosition == true
     end
