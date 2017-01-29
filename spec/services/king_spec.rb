@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "King" do
   describe 'king#is_obstructed' do # Assuming move is valid
 
-    it 'should check that a king moves only 1 square' do
+    it 'checks that a king moves only 1 square' do
 
       king = King.new(:white, Position.new(3, 3))
       pieces = [king]
@@ -13,7 +13,7 @@ RSpec.describe "King" do
 
     end
 
-    it 'should check that a king cant move off the board' do
+    it 'checks that a king cant move off the board' do
 
       king = King.new(:white, Position.new(0, 0))
       pieces = [king]
@@ -37,7 +37,7 @@ RSpec.describe "King" do
 
     end
 
-    it 'should determine that a piece is between a king and a square' do
+    it 'determines that a piece is between a king and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -57,7 +57,7 @@ RSpec.describe "King" do
 
     end
 
-    it 'should determine that there is nothing between a king and a square' do
+    it 'determines that there is nothing between a king and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0

@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "Bishop" do
   describe 'bishop#is_obstructed' do # Assuming move is valid
 
-    it 'should determine that a piece is between a bishop and a square' do
+    it 'determines that a piece is between a bishop and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -28,7 +28,7 @@ RSpec.describe "Bishop" do
       expect(bishop.is_obstructed?(pieces, destination)).to eq true
     end
 
-    it 'should determine that there is nothing between a bishop and a square' do
+    it 'determines that there is nothing between a bishop and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0

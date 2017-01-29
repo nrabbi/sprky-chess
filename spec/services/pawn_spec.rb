@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "Pawn" do
   describe 'pawn#is_obstructed' do
 
-    it 'should determine that there is nothing between a pawn and a square (Player 1)' do
+    it 'determines that there is nothing between a pawn and a square (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -22,7 +22,7 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'should determine that a piece already exists on the destination (Player 1)' do
+    it 'determines that a piece already exists on the destination (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -42,7 +42,7 @@ RSpec.describe "Pawn" do
     end
 
     # a pawn can move two blocks if it is at it's starting position
-    it 'should determine that a piece is between a pawn and a square if the pawn moves two blocks (Player 1)' do
+    it 'determines that a piece is between a pawn and a square if the pawn moves two blocks (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -62,7 +62,7 @@ RSpec.describe "Pawn" do
     end
 
     # a pawn can move two blocks if it is at it's starting position
-    it 'should determine that a pawn can move two blocks if it is at starting position (Player 1)' do
+    it 'determines that a pawn can move two blocks if it is at starting position (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -80,7 +80,7 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'should determine that there is nothing between a pawn and a square (Player 2)' do
+    it 'determines that there is nothing between a pawn and a square (Player 2)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -98,7 +98,7 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'should determine that a piece already exists on the destination (Player 2)' do
+    it 'determines that a piece already exists on the destination (Player 2)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -118,7 +118,7 @@ RSpec.describe "Pawn" do
     end
 
     # a pawn can move two blocks if it is at it's starting position
-    it 'should determine that a piece is between a pawn and a square if the pawn moves two blocks (Player 2)' do
+    it 'determines that a piece is between a pawn and a square if the pawn moves two blocks (Player 2)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,P,0,0,0,0
@@ -138,7 +138,7 @@ RSpec.describe "Pawn" do
     end
 
     # a pawn can move two blocks if it is at it's starting position
-    it 'should determine that a pawn can move two blocks if it is at starting position (Player 2)' do
+    it 'determines that a pawn can move two blocks if it is at starting position (Player 2)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,P,0,0,0,0

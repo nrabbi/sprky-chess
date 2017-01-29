@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "Knight" do
   describe 'knight#is_obstructed' do # Assuming move is valid
 
-    it 'should determine that a piece is between a knight and a square' do
+    it 'determines that a piece is between a knight and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -23,7 +23,7 @@ RSpec.describe "Knight" do
 
     end
 
-    it 'should determine that there is nothing between a knight and a square' do
+    it 'determines that there is nothing between a knight and a square' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
