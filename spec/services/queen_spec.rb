@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "Queen" do
-  describe 'queen#is_obstructed' do   # Assuming move is valid
+  describe 'queen#is_obstructed' do # Assuming move is valid
 
     it 'should determine that a piece is between a queen and a square' do
       pending("Queen is_obstructed? method is awaiting implementation")

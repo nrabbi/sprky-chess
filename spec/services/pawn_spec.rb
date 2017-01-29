@@ -15,13 +15,12 @@ RSpec.describe "Pawn" do
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
-      pawn = Pawn.new(:white, Position.new(5,2))
-      pieces = [pawn, ChessPiece.new(:white, Position.new(1,3))]
+      pawn = Pawn.new(:white, Position.new(5, 2))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 3)
       expect(pawn.is_obstructed?(pieces, destination)).to eq false
 
     end
-
 
     it 'should determine that a piece already exists on the destination (Player 1)' do
 

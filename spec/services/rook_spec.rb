@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "Rook" do
-  describe 'rook#is_obstructed' do   # Assuming move is valid
+  describe 'rook#is_obstructed' do # Assuming move is valid
 
     it 'should determine that a piece is between a rook and a square' do
 

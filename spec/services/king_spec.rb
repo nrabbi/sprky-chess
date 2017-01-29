@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "King" do
-  describe 'king#is_obstructed' do   # Assuming move is valid
+  describe 'king#is_obstructed' do # Assuming move is valid
 
     it 'should check that a king moves only 1 square' do
 

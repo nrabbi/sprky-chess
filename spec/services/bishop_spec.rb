@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "Bishop" do
-  describe 'bishop#is_obstructed' do   # Assuming move is valid
+  describe 'bishop#is_obstructed' do # Assuming move is valid
 
     it 'should determine that a piece is between a bishop and a square' do
 
@@ -16,10 +16,10 @@ RSpec.describe "Bishop" do
       # 0,0,B,0,0,0,0,0
 
       # 1 obstruction
-      bishop = Bishop.new(:white, Position.new(2,0))
+      bishop = Bishop.new(:white, Position.new(2, 0))
       obstructor_piece = Pawn.new(:white, Position.new(5, 3))
       pieces = [bishop, obstructor_piece]
-      destination = Position.new(7,5)
+      destination = Position.new(7, 5)
       expect(bishop.is_obstructed?(pieces, destination)).to eq true
 
       # 2 obstructions
