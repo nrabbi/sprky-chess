@@ -4,4 +4,8 @@ class Queen < ChessPiece
     # IMPLEMENT HERE
 
   end
+
+  def html_icon
+    @color == :white ? "&#9813;" : "&#9819;"
+  end
 end

@@ -4,4 +4,8 @@ class Pawn < ChessPiece
     # IMPLEMENT HERE
 
   end
+
+  def html_icon
+    @color == :white ? "&#9817;" : "&#9823;"
+  end
 end
