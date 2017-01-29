@@ -5,7 +5,7 @@ class ChessPiece
   BOARD_START = 0
   BOARD_END = 7
 
-  def initialize(color, position, html_icon=nil)
+  def initialize(color, position)
     @color = color
     @position = position
   end
