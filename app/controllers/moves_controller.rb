@@ -1,3 +1,2 @@
 class MovesController < ApplicationController
 end
-

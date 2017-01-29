@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'static_pages/home'
   resources :games
   get '/board', to: 'games#board'
-    # change this later to '/games/:id/board'
+  # change this later to '/games/:id/board'
 
   root 'static_pages#home'
 
