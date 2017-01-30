@@ -1,5 +1,4 @@
 class King < ChessPiece
-  attr_reader :color
 
   def is_obstructed?(pieces, destination)
     # king can move 1 square in any direction
@@ -24,4 +23,8 @@ class King < ChessPiece
 
     false
   end
+  def html_icon
+    @color == :white ? "&#9812;" : "&#9818;"
+  end
+
 end
