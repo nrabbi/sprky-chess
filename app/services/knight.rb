@@ -8,4 +8,7 @@ class Knight < ChessPiece
 
     false
   end
+  def html_icon
+    @color == :white ? "&#9816;" : "&#9822;"
+  end
 end

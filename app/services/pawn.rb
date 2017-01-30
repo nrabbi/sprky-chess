@@ -25,3 +25,4 @@ class Pawn < ChessPiece
     @color == :white ? "&#9817;" : "&#9823;"
   end
 end
+
