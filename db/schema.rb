@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118112534) do
+ActiveRecord::Schema.define(version: 20170130130946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(version: 20170118112534) do
 
   create_table "moves", force: :cascade do |t|
     t.integer  "game_id"
-    t.integer  "from"
-    t.integer  "to"
+    t.text     "from"
+    t.text     "to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
