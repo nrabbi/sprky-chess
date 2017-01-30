@@ -34,5 +34,5 @@ module StartingPositions
     Knight.new(:black, Position.new(6, 7)),
     Rook.new(:black, Position.new(7, 7))
 
-  ]
+  ].freeze
 end

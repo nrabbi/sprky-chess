@@ -5,18 +5,14 @@ class Bishop < ChessPiece
     destination_is_to_right = false
     destination_is_above = false
 
-    if destination.x > self.position.x
-      destination_is_to_right = true
-    end
+    destination_is_to_right = true if destination.x > position.x
 
-    if destination.y > self.position.y
-      destination_is_above = true
-    end
+    destination_is_above = true if destination.y > position.y
 
     # move along path to destination
-    curr_x = self.position.x
-    curr_y = self.position.y
-    while true do
+    curr_x = position.x
+    curr_y = position.y
+    loop do
       if destination_is_to_right
         curr_x += 1
       else
@@ -31,9 +27,7 @@ class Bishop < ChessPiece
 
       # check
       if inside_board_boundaries?(curr_x, curr_y) && !at_destination?(curr_x, curr_y, destination)
-        if square_occupied?(pieces, Position.new(curr_x, curr_y))
-          return true
-        end
+        return true if square_occupied?(pieces, Position.new(curr_x, curr_y))
       else
         # made it this far without detecting obstruction, so no obstruction
         return false
@@ -51,9 +45,7 @@ class Bishop < ChessPiece
 
   def square_occupied?(pieces, position)
     pieces.each do |piece|
-      if piece.position.x == position.x && piece.position.y == position.y
-        return true
-      end
+      return true if piece.position.equals?(position)
     end
 
     false

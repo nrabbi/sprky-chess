@@ -1,18 +1,14 @@
 class GamesController < ApplicationController
 
   helper_method :get_piece_at
-  
-  def new
-  end
 
-  def create
-  end
+  def new; end
 
-  def show
-  end
+  def create; end
 
-  def index
-  end
+  def show; end
+
+  def index; end
 
   def board
     pieces = StartingPositions::STARTING_POSITIONS
@@ -45,10 +41,8 @@ class GamesController < ApplicationController
     # returns nil if no piece @ position
     # starting_positions = StartingPositions::STARTING_POSITIONS
     positions = @after_move_pieces
-    positions.each do |piece| 
-      if piece.position.x == x && piece.position.y == y
-        return piece
-      end
+    positions.each do |piece|
+      return piece if piece.position.x == x && piece.position.y == y
     end
     nil
   end

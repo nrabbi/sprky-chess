@@ -1,8 +1,8 @@
 class PieceMover
 
-  def move_pieces(pieces, moves)   
+  def move_pieces(pieces, moves)
     moved_pieces = apply_moves(pieces, moves)
-  end  
+  end
 
   private
 
@@ -11,7 +11,7 @@ class PieceMover
   end
 
   def apply_moves(pieces, moves)
-    new_pieces = pieces.map { |p| p.dup }
+    new_pieces = pieces.map(&:dup)
 
     moves.each do |move|
       # look up the piece to move, by matching from-coordinate
@@ -23,6 +23,6 @@ class PieceMover
         this_piece.position = move.to
       end
     end
-    return new_pieces
+    new_pieces
   end
 end
