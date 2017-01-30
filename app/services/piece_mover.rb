@@ -5,7 +5,13 @@ class PieceMover
   end
 
   def move_to(x_pos, y_pos)
-
+    # removes a chesspiece and updates the database if the destination block is being used and is a piece of different color
+=begin
+     if block_in_use(new_x, new_y) == true && opponent_check? true
+       remove_piece(new_x,new_y)
+       update_attributes(new_x,new_y)
+     end
+=end
   end
 
   private
