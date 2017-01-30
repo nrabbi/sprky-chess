@@ -4,7 +4,7 @@ class PieceMover
     moved_pieces = apply_moves(pieces, moves)
   end
 
-  def move_to
+  def move_to(x_pos, y_pos)
 
   end
 
