@@ -18,15 +18,11 @@ class GamesController < ApplicationController
     move0 = Move.new(from: "A1", to: "A3")
     moves << move0 
 
-    # move1 = Move.new(pieces[1].position.x, pieces[1].position.y)
-    # move1.to.x = move1.from.x
-    # move1.to.y = move1.from.y + 2
-    # moves << move1
+    move1 = Move.new(from: "B1", to: "B3")
+    moves << move1
 
-    # move2 = Move.new(pieces[2].position.x, pieces[2].position.y)
-    # move2.to.x = move2.from.x
-    # move2.to.y = move2.from.y + 2
-    # moves << move2
+    move2 = Move.new(from: "C1", to: "C3")
+    moves << move2
 
     piece_mover = PieceMover.new
     @after_move_pieces = piece_mover.move_pieces(pieces, moves)
