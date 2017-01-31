@@ -11,4 +11,3 @@ class Move < ApplicationRecord
   # end
 
 end
-
