@@ -15,13 +15,13 @@ class GamesController < ApplicationController
     moves = []
     # these are temporary "dummy" moves
     # TODO -- get moves from user input
-    move0 = Move.new(from: "A1", to: "A3")
+    move0 = Move.new(from: "0", to: "16")
     moves << move0 
 
-    move1 = Move.new(from: "B1", to: "B3")
+    move1 = Move.new(from: "1", to: "17")
     moves << move1
 
-    move2 = Move.new(from: "C1", to: "C3")
+    move2 = Move.new(from: "2", to: "18")
     moves << move2
 
     piece_mover = PieceMover.new
