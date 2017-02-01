@@ -4,6 +4,7 @@ class ChessPiece
 
   BOARD_START = 0
   BOARD_END = 7
+  BOARD_LENGTH = 8
 
   def initialize(color, position)
     @color = color

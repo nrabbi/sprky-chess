@@ -10,6 +10,9 @@ AllCops:
     - spec/services/*
     - app/controllers/*
     - spec/controllers/*
+    - spec/helpers/*
+    - spec/models/*
+    - config/initializers/*
   DisplayCopNames: true
 
 Documentation:

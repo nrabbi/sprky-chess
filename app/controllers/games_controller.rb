@@ -13,22 +13,15 @@ class GamesController < ApplicationController
   def board
     pieces = StartingPositions::STARTING_POSITIONS
     moves = []
-
     # these are temporary "dummy" moves
     # TODO -- get moves from user input
-    move0 = Move.new(pieces[0].position.x, pieces[0].position.y)
-    move0.to.x = move0.from.x
-    move0.to.y = move0.from.y + 2
-    moves << move0 # unless move0.is_obstructed?(#TODO)
+    move0 = Move.new(from: 0, to: 16)
+    moves << move0 
 
-    move1 = Move.new(pieces[1].position.x, pieces[1].position.y)
-    move1.to.x = move1.from.x
-    move1.to.y = move1.from.y + 2
+    move1 = Move.new(from: 1, to: 17)
     moves << move1
 
-    move2 = Move.new(pieces[2].position.x, pieces[2].position.y)
-    move2.to.x = move2.from.x
-    move2.to.y = move2.from.y + 2
+    move2 = Move.new(from: 2, to: 18)
     moves << move2
 
     piece_mover = PieceMover.new

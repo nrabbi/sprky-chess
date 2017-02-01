@@ -6,6 +6,18 @@ class PieceMover
 
   private
 
+  # def square_letters
+  #   ["A", "B", "C", "D", "E", "F", "G", "H"]
+  # end
+
+  def move_position_from(move)
+    Position.new_from_int(move.from)
+  end
+
+  def move_position_to(move)
+    Position.new_from_int(move.to)
+  end
+
   def find_piece_for_coordinate(pieces, coordinate)
     pieces.find { |p| p.position.x == coordinate.x && p.position.y == coordinate.y }
   end
@@ -16,11 +28,10 @@ class PieceMover
     moves.each do |move|
       # look up the piece to move, by matching from-coordinate
       #  of this move to positions of all pieces
-      this_piece = find_piece_for_coordinate(new_pieces, move.from)
-      # binding.pry
+      this_piece = find_piece_for_coordinate(new_pieces, move_position_from(move))
       unless this_piece.nil?
         # move piece to new position
-        this_piece.position = move.to
+        this_piece.position = move_position_to(move)
       end
     end
     new_pieces
