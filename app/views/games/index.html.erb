@@ -1,0 +1,7 @@
+<div class="container">
+  <h1 class="text-center">Available Games</h1>
+  <hr />
+  <% @games.each do |game| %>
+    <h2 class="text-center"><%= game.name %></h2>
+  <% end %>
+</div>
