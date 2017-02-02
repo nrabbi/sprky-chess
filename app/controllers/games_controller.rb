@@ -1,14 +1,28 @@
 class GamesController < ApplicationController
+  # TODO -- add before_action to authenticate_players! for :new, :create
 
   helper_method :get_piece_at
 
-  def new; end
+  def new 
+    @game = Game.new
+  end
 
-  def create; end
+  def create
+    @game = Game.create(game_params)
+    if @game.valid?
+      redirect_to game_path(@game)
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
 
-  def show; end
+  def show
+    @game = Game.find(params[:id])
+  end
 
-  def index; end
+  def index
+    @games = Game.all
+  end
 
   def board
     pieces = StartingPositions::STARTING_POSITIONS
@@ -41,3 +55,9 @@ class GamesController < ApplicationController
   end
 
 end
+
+  private 
+  def game_params
+    params.require(:game).permit(:name)
+  end
+

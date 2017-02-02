@@ -1,4 +1,7 @@
 class Game < ApplicationRecord
+
+  validates :name, presence: true
+
   CREATED = 'created'
   STARTED = 'started'
   PLAYER_1_WON = 'player 1 won'
