@@ -1,1 +1,9 @@
-<h1>New Move</h1>
+<br />
+<div class="container">
+  <h1>Move a Piece</h1>
+  <%= simple_form_for @move, url: game_moves_path(@game) do |f| %>
+    <%= f.input :from, collection: (0..63), as: :select %>
+    <%= f.input :to, collection: (0..63), as: :select %>
+    <%= f.submit "Create Move", class: 'btn btn-primary' %>
+  <% end %>
+</div>
