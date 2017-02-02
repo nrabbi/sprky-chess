@@ -19,6 +19,16 @@ class ChessPiece
     raise NotImplementedError, "Must be able to detect obstruction!"
   end
 
+  # Abstract Method(destination: Position)
+  # -------------------
+  # Determines if a destination is a valid move for a piece
+  # A valid move is one that a chess piece can make based on it's ability.
+  # For example: A rook moves vertically or sideways, a bishop diagonally etc.
+  # This method doesn't handle obstruction
+  def is_valid?(_destination)
+    raise NotImplementedError, "Must be able to detect if a move is valid!"
+  end
+
   private
 
   def inside_board_boundaries?(x, y)
