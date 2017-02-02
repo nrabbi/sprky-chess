@@ -34,3 +34,11 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   font-size: 60px;
   margin-top: -10px;
 }
+
+.clear {
+  clear: both;
+}
+
+.moves-list {
+  float: right;
+}

@@ -25,6 +25,7 @@ class GamesController < ApplicationController
   end
 
   def board
+    @game = Game.find(params[:id])
     pieces = StartingPositions::STARTING_POSITIONS
     moves = []
     # these are temporary "dummy" moves
