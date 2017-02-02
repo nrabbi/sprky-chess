@@ -33,17 +33,21 @@
         <% end %>
       </table>
       <br />
-      <div class="moves-list clear">
-      <h3>Game moves</h3>
+      <div class="col-xs-2 move-button">
+      <br />
+        <%= link_to "Add a Move", new_game_move_path(@game), class: 'btn btn-primary' %>
+      </div>
+      <div class="col-xs-8 moves-list">
+      <h3><%= @game.name %> moves</h3>
       <ul>
         <% @game.moves.each do |move| %>
-          <li>
+          <li class="text-right">
             From: <%= move.from %>
             To: <%= move.to %>
           </li>
-        <% end %>
-      </ul>
-    </div>
+          <% end %>
+        </ul>
+      </div>
     </div>
     
 </div>
