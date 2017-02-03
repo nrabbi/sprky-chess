@@ -1,7 +1,8 @@
 class King < ChessPiece
 
   def is_valid?(destination)
-    distance_valid = ((self.position.x - destination.x).abs < 2) && ((self.position.y - destination.y).abs < 2)
+    distance_valid = ((self.position.x - destination.x).abs < 2) && ((self.position.y - destination.y).abs < 2) && !self.position.equals?(destination)
+
 
     inside_board_boundaries?(destination.x, destination.y) && distance_valid
   end

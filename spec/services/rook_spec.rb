@@ -4,6 +4,12 @@ require 'rails_helper'
 RSpec.describe "Rook" do
 
   describe 'rook#is_valid' do
+    it "checks that a move actually contains movement" do
+      rook = Rook.new(:black, Position.new(4,4))
+      destination = Position.new(4,4)
+
+      expect(rook.is_valid?(destination)).to eq(false)
+    end
 
     it "checks that a rook can't move diagonally" do
       rook = Rook.new(:black, Position.new(4,4))

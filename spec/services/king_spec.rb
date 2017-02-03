@@ -4,6 +4,15 @@ require 'rails_helper'
 RSpec.describe "King" do
 
   describe "king#is_valid" do
+
+
+    it "checks that a move actually contains movement" do
+      king = King.new(:black, Position.new(4,4))
+      destination = Position.new(4,4)
+
+      expect(king.is_valid?(destination)).to eq(false)
+    end
+
     it "checks that a king can't move more than 1 square" do
       king = King.new(:white, Position.new(3, 3))
       destination1 = Position.new(3,5)
