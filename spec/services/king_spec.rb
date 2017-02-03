@@ -46,6 +46,20 @@ RSpec.describe "King" do
       expect(king.is_valid?(destination8)).to eq(true)
     end
 
+    it "checks that a king can't move off the board" do
+
+      king = King.new(:black, Position.new(4,4))
+      destination1 = Position.new(10,4)
+      destination2 = Position.new(4,-5)
+      destination3 = Position.new(50,4)
+      destination4 = Position.new(-16,4)
+
+      expect(king.is_valid?(destination1)).to eq(false)
+      expect(king.is_valid?(destination2)).to eq(false)
+      expect(king.is_valid?(destination3)).to eq(false)
+      expect(king.is_valid?(destination4)).to eq(false)
+    end
+
   end
 
   describe 'king#is_obstructed' do # Assuming move is valid
