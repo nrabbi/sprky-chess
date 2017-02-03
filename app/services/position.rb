@@ -34,18 +34,18 @@ class Position
     end
 
     case index
-      when BLACK_CAPTURE_INT
-        x = CAPTURE_X
-        y = BLACK_CAPTURE_Y
-      when WHITE_CAPTURE_INT
-        x = CAPTURE_X
-        y = WHITE_CAPTURE_Y
-      else
-        x = index % 8
-        y = index / 8
+    when BLACK_CAPTURE_INT
+      x = CAPTURE_X
+      y = BLACK_CAPTURE_Y
+    when WHITE_CAPTURE_INT
+      x = CAPTURE_X
+      y = WHITE_CAPTURE_Y
+    else
+      x = index % 8
+      y = index / 8
     end
 
-    self.new(x, y)
+    new(x, y)
   end
 
   # Compares two positions and returns true if they are the same
@@ -58,12 +58,12 @@ class Position
   # Converts 2d array index(x,y) to 1d index(integer) and returns it
   def to_integer
     case @y
-      when BLACK_CAPTURE_Y
-        return BLACK_CAPTURE_INT
-      when WHITE_CAPTURE_Y
-        return WHITE_CAPTURE_INT
-      else
-        return (@y * ChessPiece::BOARD_LENGTH) + @x
+    when BLACK_CAPTURE_Y
+      BLACK_CAPTURE_INT
+    when WHITE_CAPTURE_Y
+      WHITE_CAPTURE_INT
+    else
+      (@y * ChessPiece::BOARD_LENGTH) + @x
     end
   end
 end

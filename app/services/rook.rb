@@ -56,6 +56,7 @@ class Rook < ChessPiece
 
     false
   end
+
   def html_icon
     @color == :white ? "&#9814;" : "&#9820;"
   end

@@ -15,6 +15,7 @@ class MovesController < ApplicationController
   end
 
   private
+
   def move_params
     params.require(:move).permit(:from, :to)
   end
