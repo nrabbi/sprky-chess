@@ -1,5 +1,11 @@
 class King < ChessPiece
 
+  def is_valid?(destination)
+    distance_valid = ((self.position.x - destination.x).abs < 2) && ((self.position.y - destination.y).abs < 2)
+
+    inside_board_boundaries?(destination.x, destination.y) && distance_valid
+  end
+
   def is_obstructed?(pieces, destination)
     # king can move 1 square in any direction
 
