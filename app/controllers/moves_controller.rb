@@ -11,7 +11,11 @@ class MovesController < ApplicationController
   def create
     set_game
     @move = @game.moves.create(move_params)
-    redirect_to game_board_path(@game)
+    if @move.valid?
+      redirect_to game_board_path(@game)
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   private
