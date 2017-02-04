@@ -23,6 +23,7 @@ class King < ChessPiece
 
     false
   end
+
   def html_icon
     @color == :white ? "&#9812;" : "&#9818;"
   end

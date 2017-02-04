@@ -1,9 +1,9 @@
 class GamesController < ApplicationController
-  # TODO -- add before_action to authenticate_players! for :new, :create
+  # TODO: -- add before_action to authenticate_players! for :new, :create
 
   helper_method :get_piece_at
 
-  def new 
+  def new
     @game = Game.new
   end
 
@@ -31,7 +31,7 @@ class GamesController < ApplicationController
     # these are temporary "dummy" moves
     # TODO -- get moves from user input
     # move0 = Move.new(from: 0, to: 16)
-    # moves << move0 
+    # moves << move0
 
     # move1 = Move.new(from: 1, to: 17)
     # moves << move1
@@ -57,8 +57,8 @@ class GamesController < ApplicationController
 
 end
 
-  private 
-  def game_params
-    params.require(:game).permit(:name)
-  end
+  private
 
+def game_params
+  params.require(:game).permit(:name)
+end
