@@ -158,6 +158,24 @@ RSpec.describe "Pawn" do
 
   describe 'pawn#is_valid?' do
 
+    it 'determines that a pawn cant move out of bounds' do
+
+      # 0,0,0,0,0,0,0,0 --> Destination is invalid
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,x,0,0,0,P,0,0
+      # 0,0,0,0,0,D,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(5, 3))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
+      destination = Position.new(5, 8)
+      expect(pawn.is_valid?(destination)).to eq false
+
+    end
+
     it 'determines that a pawn cant move backwards (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
@@ -267,7 +285,8 @@ RSpec.describe "Pawn" do
     end
 
   end
-
+=begin
+  # The tests will be moved to a different file
   describe 'pawn#can_capture?' do
 
     it 'determines that a pawn can capture diagonally (player 1)' do
@@ -343,5 +362,6 @@ RSpec.describe "Pawn" do
     end
 
   end
+=end
 
 end
