@@ -194,7 +194,6 @@ RSpec.describe "Pawn" do
 
     end
 
-
     it 'determines that a pawn cant move backwards (Player 2)' do
 
       # 0,0,0,0,0,0,0,0
@@ -306,7 +305,6 @@ RSpec.describe "Pawn" do
       expect(pawn.can_capture?(pieces, destination)).to eq false
 
     end
-
 
     it 'determines that a pawn can capture diagonally (player 2)' do
 

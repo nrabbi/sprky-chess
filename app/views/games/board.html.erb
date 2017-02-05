@@ -1,36 +1,53 @@
 <div class="container">
-<br />
-  <div class="chessboard">
-    <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    row_index = 7
-    col_index = 0 %>
+  <br />
+    <div class="chessboard">
+      <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
+      row_index = 7
+      col_index = 0 %>
 
-    <!--
-      Chess Coordinates (x, y)
-      ------------------------------------
-      top-left(0, 7), top-right(7,7)
-      bottom-left(0, 0), bottom-right(7,0)
-    -->
+      <!--
+        Chess Coordinates (x, y)
+        ------------------------------------
+        top-left(0, 7), top-right(7,7)
+        bottom-left(0, 0), bottom-right(7,0)
+      -->
 
-    <table>
-      <% 8.times do %>
-        <tr>
-          <% 8.times do %>
-            <td>
-              <div><%= col[col_index] + (row_index+1).to_s %></div>
-              <% piece = get_piece_at(col_index, row_index) %>
-              <% if piece %> 
-                <div class="pieces"><%= piece.html_icon.html_safe %></div>
-              <% end %>
-            </td>
-            <% col_index += 1 %>
-            
+      <table>
+        <% 8.times do %>
+          <tr>
+            <% 8.times do %>
+              <td>
+                <div><%= col[col_index] + (row_index+1).to_s %></div>
+                <% piece = get_piece_at(col_index, row_index) %>
+                <% if piece %> 
+                  <div class="pieces"><%= piece.html_icon.html_safe %></div>
+                <% end %>
+              </td>
+              <% col_index += 1 %>
+              
+            <% end %>
+          </tr>
+
+          <% row_index -= 1 %>
+          <% col_index = 0 %>
+        <% end %>
+      </table>
+      <br />
+      <div class="col-xs-2 move-button">
+      <br />
+        <%= link_to "Add a Move", new_game_move_path(@game), class: 'btn btn-primary' %>
+      </div>
+      <div class="col-xs-8 moves-list">
+      <h3><%= @game.name %> moves</h3>
+      <ul>
+        <% @game.moves.each do |move| %>
+          <li class="text-right">
+            From: <%= move.from %>
+            To: <%= move.to %>
+          </li>
           <% end %>
-        </tr>
-
-        <% row_index -= 1 %>
-        <% col_index = 0 %>
-      <% end %>
-    </table>
-  </div>
+        </ul>
+      </div>
+    </div>
+    
 </div>
