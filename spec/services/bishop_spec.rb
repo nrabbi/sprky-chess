@@ -2,6 +2,70 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "Bishop" do
+  
+  describe 'bishop#is_valid' do
+    it 'checks that a move actually contains movement' do
+
+      bishop = Bishop.new(:black, Position.new(4,4))
+      destination = Position.new(4,4)
+
+      expect(bishop.is_valid?(destination)).to eq(false)
+    end
+
+    it 'checks that a bishop does not move off the board' do
+
+      bishop = Bishop.new(:black, Position.new(4,4))
+      destination1 = Position.new(10,4)
+      destination2 = Position.new(4,-5)
+      destination3 = Position.new(50,4)
+      destination4 = Position.new(-16,4)
+
+      expect(bishop.is_valid?(destination1)).to eq(false)
+      expect(bishop.is_valid?(destination2)).to eq(false)
+      expect(bishop.is_valid?(destination3)).to eq(false)
+      expect(bishop.is_valid?(destination4)).to eq(false)
+
+    end
+    
+    it 'checks that a bishop can move diagonally' do
+      start_x = 3
+      start_y = 3
+      bishop = Bishop.new(:black, Position.new(start_x, start_y))
+      
+      destination1 = Position.new(start_x + 1, start_y + 1)
+      destination2 = Position.new(start_x + 3, start_y + 3)
+      destination3 = Position.new(start_x - 2, start_y + 2)
+      destination4 = Position.new(start_x + 1, start_y - 1)
+      destination5 = Position.new(start_x - 3, start_y - 3)
+
+
+      expect(bishop.is_valid?(destination1)).to eq(true)
+      expect(bishop.is_valid?(destination2)).to eq(true)
+      expect(bishop.is_valid?(destination3)).to eq(true)
+      expect(bishop.is_valid?(destination4)).to eq(true)
+      expect(bishop.is_valid?(destination5)).to eq(true)
+    end
+    
+    it "checks that a bishop can't move vertically or horizontally" do
+      start_x = 3
+      start_y = 3
+      bishop = Bishop.new(:black, Position.new(start_x, start_y))
+
+      destination1 = Position.new(start_x, start_y - 1)
+      destination2 = Position.new(start_x, start_y + 3)
+      destination3 = Position.new(start_x - 2, start_y)
+      destination4 = Position.new(start_x + 1, start_y)
+      destination5 = Position.new(start_x - 3, start_y)
+
+
+      expect(bishop.is_valid?(destination1)).to eq(false)
+      expect(bishop.is_valid?(destination2)).to eq(false)
+      expect(bishop.is_valid?(destination3)).to eq(false)
+      expect(bishop.is_valid?(destination4)).to eq(false)
+      expect(bishop.is_valid?(destination5)).to eq(false)
+    end
+  end
+  
   describe 'bishop#is_obstructed' do # Assuming move is valid
 
     it 'determines that a piece is between a bishop and a square' do

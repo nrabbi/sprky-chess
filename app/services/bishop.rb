@@ -1,5 +1,14 @@
 class Bishop < ChessPiece
 
+  def is_valid?(destination)
+    x_diff = (self.position.x - destination.x).abs
+    y_diff = (self.position.y - destination.y).abs
+    valid_diagonal_move = (x_diff == y_diff)
+    moved = !self.position.equals?(destination)
+
+    valid_diagonal_move && moved && inside_board_boundaries?(destination.x, destination.y)
+  end
+
   def is_obstructed?(pieces, destination)
     # first determine what x and y direction destination is from piece
     destination_is_to_right = false
