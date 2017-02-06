@@ -2,6 +2,6 @@
   <h1 class="text-center">Available Games</h1>
   <hr />
   <% @games.each do |game| %>
-    <h2 class="text-center"><%= game.name %></h2>
+    <h2 class="text-center"><%= link_to game.name, game_path(game) %></h2>
   <% end %>
 </div>

@@ -1,1 +1,12 @@
-<h1>Moves</h1>
+<div class="container">
+<h1 class="text-center">Moves</h1>
+  <h3><%= @game.name %> moves</h3>
+  <ul>
+    <% @game.moves.each do |move| %>
+      <li>
+        From: <%= move.from %>
+        To: <%= move.to %>
+      </li>
+      <% end %>
+  </ul>
+</div>

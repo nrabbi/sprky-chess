@@ -1,5 +1,7 @@
 class Move < ApplicationRecord
   belongs_to :game
+  validates :from, presence: true
+  validates :to, presence: true
 
   # OLD STUFF
   # attr_accessor :to
