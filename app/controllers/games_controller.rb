@@ -27,17 +27,6 @@ class GamesController < ApplicationController
   def board
     @game = Game.find(params[:id])
     pieces = StartingPositions::STARTING_POSITIONS
-    # moves = []
-    # these are temporary "dummy" moves
-    # TODO -- get moves from user input
-    # move0 = Move.new(from: 0, to: 16)
-    # moves << move0
-
-    # move1 = Move.new(from: 1, to: 17)
-    # moves << move1
-
-    # move2 = Move.new(from: 2, to: 18)
-    # moves << move2
 
     piece_mover = PieceMover.new
     @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
