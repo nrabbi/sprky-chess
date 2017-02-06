@@ -5,7 +5,6 @@ RSpec.describe "Queen" do
   describe 'queen#is_obstructed' do # Assuming move is valid
 
     it 'determines that a piece is between a queen and a square' do
-      pending("Queen is_obstructed? method is awaiting implementation")
       # 0,0,D,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,x,0,0,0,0,0
@@ -15,9 +14,9 @@ RSpec.describe "Queen" do
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
-      queen = Queen.new(2, 2)
+      queen = Queen.new(:white, Position.new(2, 2))
       destination = Position.new(2, 7)
-      obstructor_piece = ChessPiece.new(2, 5)
+      obstructor_piece = Pawn.new(:white, Position.new(2, 5))
       pieces = [queen, obstructor_piece]
       expect(queen.is_obstructed?(pieces, destination)).to eq true
 
@@ -26,7 +25,6 @@ RSpec.describe "Queen" do
     end
 
     it 'determines that there is nothing between a queen and a square' do
-      pending("Queen is_obstructed? method is awaiting implementation")
       # 0,0,0,0,0,0,x,D
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -37,9 +35,9 @@ RSpec.describe "Queen" do
       # 0,0,0,0,0,0,0,0
 
       # No obstruction
-      queen = Queen.new(2, 2)
+      queen = Queen.new(:white, Position.new(2, 2))
       destination = Position.new(7, 7)
-      pieces = [queen, ChessPiece.new(3, 2), ChessPiece.new(3, 4), ChessPiece.new(6, 7)]
+      pieces = [queen, Pawn.new(:white, Position.new(3, 2)), Pawn.new(:white, Position.new(3, 4)), Pawn.new(:white, Position.new(6, 7))]
 
       expect(queen.is_obstructed?(pieces, destination)).to eq false
     end
