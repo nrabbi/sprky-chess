@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  # TODO: -- add before_action to authenticate_players! for :new, :create
+  before_action :authenticate_player!, only: [:new, :create]
 
   helper_method :get_piece_at
 
@@ -49,5 +49,5 @@ end
   private
 
 def game_params
-  params.require(:game).permit(:name)
+  params.require(:game).permit(:name).merge(player_1_id: current_player.id)
 end
