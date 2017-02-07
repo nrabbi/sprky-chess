@@ -18,8 +18,6 @@ class Pawn < ChessPiece
     true
   end
 
-=begin
-  # this method will be moved to a different file
   def can_capture?(pieces, destination)
     pieces.each do |piece|
       return true if piece.position.equals?(destination) && (position.y - destination.y).abs == 1 && (position.x - destination.x).abs == 1 && piece.color != color
@@ -27,7 +25,6 @@ class Pawn < ChessPiece
 
     false
   end
-=end
 
   def html_icon
     @color == :white ? "&#9817;" : "&#9823;"

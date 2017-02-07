@@ -285,7 +285,7 @@ RSpec.describe "Pawn" do
     end
 
   end
-=begin
+
   # The tests will be moved to a different file
   describe 'pawn#can_capture?' do
 
@@ -362,6 +362,5 @@ RSpec.describe "Pawn" do
     end
 
   end
-=end
 
 end
