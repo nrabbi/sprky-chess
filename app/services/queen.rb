@@ -13,9 +13,9 @@ class Queen < ChessPiece
     x_only_move = (self.position.x - destination.x).abs > 0 && (self.position.y - destination.y).abs == 0
     y_only_move = (self.position.y - destination.y).abs > 0 && (self.position.x - destination.x).abs == 0
 
-    moved = !self.position.equals?(destination)
+    # moved = !self.position.equals?(destination)
 
-    (valid_diagonal_move || x_only_move || y_only_move) && moved && inside_board_boundaries?(destination.x, destination.y)
+    (valid_diagonal_move || x_only_move || y_only_move) && moved?(destination) && inside_board_boundaries?(destination.x, destination.y)
   end
 
   def html_icon

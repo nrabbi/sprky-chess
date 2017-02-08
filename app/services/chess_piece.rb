@@ -29,6 +29,10 @@ class ChessPiece
     raise NotImplementedError, "Must be able to detect if a move is valid!"
   end
 
+  def moved?(destination)
+    !position.equals?(destination)
+  end
+
   private
 
   def inside_board_boundaries?(x, y)
