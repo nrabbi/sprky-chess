@@ -44,9 +44,9 @@
             <% @game.moves.each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
-                From: <%= position.x %>, <%= position.y %>
+                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
                 <%  position = Position.new_from_int(move.to) %>
-                To: <%= position.x %>, <%= position.y %>
+                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
               <% end %>
             </ul>
