@@ -1,5 +1,12 @@
 class Rook < ChessPiece
 
+  def is_valid?(destination)
+    x_only_move = (self.position.x - destination.x).abs > 0 && (self.position.y - destination.y).abs == 0
+    y_only_move = (self.position.y - destination.y).abs > 0 && (self.position.x - destination.x).abs == 0
+
+    (x_only_move || y_only_move) && inside_board_boundaries?(destination.x, destination.y)
+  end
+
   def is_obstructed?(pieces, destination)
     # rook can move n squares in any direction
 
