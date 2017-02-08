@@ -11,7 +11,7 @@ class ChessPiece
     @position = position
   end
 
-  # can_capture?(pieces : MyChessPiece[], destination: Position)
+  # can_capture?(pieces : ChessPiece[], destination: Position)
   # -------------------
   # Checks if a square contains a piece of opposite color
   def can_capture?(_pieces, _destination)
@@ -20,7 +20,7 @@ class ChessPiece
     destination_piece != nil && destination_piece.color != self.color
   end
 
-  # Abstract Method(pieces : MyChessPiece[], destination: Position)
+  # Abstract Method(pieces : ChessPiece[], destination: Position)
   # -------------------
   # Determines if another piece is between "self" and destination Position.
   # The pieces array will hold all 32 pieces, including self.
