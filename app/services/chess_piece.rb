@@ -33,6 +33,20 @@ class ChessPiece
     !position.equals?(destination)
   end
 
+  def valid_diagonal_move?(destination)
+    x_diff = (position.x - destination.x).abs
+    y_diff = (position.y - destination.y).abs
+    (x_diff == y_diff)
+  end
+
+  def x_only_move?(destination)
+    x_only_move = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
+  end
+
+  def y_only_move?(destination)
+    (position.y - destination.y).abs > 0 && (position.x - destination.x).abs == 0
+  end
+
   private
 
   def inside_board_boundaries?(x, y)
