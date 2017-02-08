@@ -29,8 +29,8 @@ RSpec.describe MovesController, type: :controller do
       @game = FactoryGirl.create(:game)
       move_count = Move.count
       expect { post :create, params: { game_id: -2, move: { from: 128, to: -43 } } }.to  raise_error(ActiveRecord::RecordNotFound)
-      # post :create, params: { game_id: @game.id, move: { from: 128, to: -43 } }
-      # expect(Move.count).to eq move_count
+      post :create, params: { game_id: @game.id, move: { from: 128, to: -43 } }
+      expect(Move.count).to eq move_count
     end
   end
 
