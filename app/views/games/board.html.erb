@@ -26,22 +26,30 @@
         <% end %>
       </table>
       <br />
-      <div class="col-xs-2 move-button">
-      <br />
-        <%= link_to "Add a Move", new_game_move_path(@game), class: 'btn btn-primary' %>
-      </div>
-      <div class="col-xs-8 moves-list">
-      <h3><%= pluralize(@game.moves.count, 'move') %></h3>
-      <ul>
-        <% @game.moves.each do |move| %>
-          <li>
-            <%  position = Position.new_from_int(move.from) %>
-            From: <%= position.x %>, <%= position.y %>
-            <%  position = Position.new_from_int(move.to) %>
-            To: <%= position.x %>, <%= position.y %>
-          </li>
+  </div>
+
+  <div class="row">
+      <div class="col-md-4">
+          <h3>Move a Piece</h3>
+          <%= simple_form_for Move.new, url: game_moves_path(@game) do |f| %>
+            <%= f.input :from, collection: (0..63), as: :select %>
+            <%= f.input :to, collection: (0..63), as: :select %>
+            <%= f.submit "Create Move", class: 'btn btn-primary' %>
           <% end %>
-        </ul>
+      </div>
+
+      <div class="col-md-4">
+          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
+          <ul>
+            <% @game.moves.each do |move| %>
+              <li>
+                <%  position = Position.new_from_int(move.from) %>
+                From: <%= position.x %>, <%= position.y %>
+                <%  position = Position.new_from_int(move.to) %>
+                To: <%= position.x %>, <%= position.y %>
+              </li>
+              <% end %>
+            </ul>
       </div>
     </div>
 
