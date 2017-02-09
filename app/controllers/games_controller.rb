@@ -33,6 +33,10 @@ class GamesController < ApplicationController
     @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
   end
 
+  def available
+    @games = Game.where(player_2_id: nil)
+  end
+
   # x in [0, 7]
   # y in [0, 7]
   def get_piece_at(x, y)
@@ -50,5 +54,5 @@ end
   private
 
 def game_params
-  params.require(:game).permit(:name, :player_1_color).merge(player_1_id: current_player.id)
+  params.require(:game).permit(:name, :player_1_color, :player_2_id).merge(player_1_id: current_player.id)
 end
