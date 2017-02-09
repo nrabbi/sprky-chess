@@ -6,6 +6,7 @@ describe 'PieceMover' do
   describe 'PieceMover#move_to!' do
     piece_mover = PieceMover.new
     it 'moves a piece to an empty square if the move is valid and is not obstructed' do
+      pending("Implementation not done yet")
       orig_pos = Position.new(0,0)
       destination = Position.new(5, 0)
 
@@ -25,6 +26,7 @@ describe 'PieceMover' do
     end
 
     it 'captures a piece BEFORE performing a move if the move is valid, unobstructed, and the square can be captured' do
+      pending("Implementation not done yet")
       orig_pos = Position.new(0,0)
       destination = Position.new(5, 0)
 
