@@ -2,6 +2,75 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe "King" do
+
+  describe "king#is_valid" do
+
+
+    it "checks that a move actually contains movement" do
+      king = King.new(:black, Position.new(4,4))
+      destination = Position.new(4,4)
+
+      expect(king.is_valid?(destination)).to eq(false)
+    end
+
+    it "checks that a king can't move more than 1 square" do
+      king = King.new(:white, Position.new(3, 3))
+      destination1 = Position.new(3,5)
+      destination2 = Position.new(5,3)
+      destination3 = Position.new(5,5)
+      destination4 = Position.new(1,3)
+      destination5 = Position.new(3,1)
+      destination6 = Position.new(1,1)
+      destination7 = Position.new(5,1)
+      destination8 = Position.new(1,5)
+
+      expect(king.is_valid?(destination1)).to eq(false)
+      expect(king.is_valid?(destination2)).to eq(false)
+      expect(king.is_valid?(destination3)).to eq(false)
+      expect(king.is_valid?(destination4)).to eq(false)
+      expect(king.is_valid?(destination5)).to eq(false)
+      expect(king.is_valid?(destination6)).to eq(false)
+      expect(king.is_valid?(destination7)).to eq(false)
+      expect(king.is_valid?(destination8)).to eq(false)
+    end
+
+    it "checks that a king can move 1 square in any directions" do
+      king = King.new(:white, Position.new(3, 3))
+      destination1 = Position.new(3,4)
+      destination2 = Position.new(3,2)
+      destination3 = Position.new(4,3)
+      destination4 = Position.new(2,4)
+      destination5 = Position.new(2,2)
+      destination6 = Position.new(4,4)
+      destination7 = Position.new(4,2)
+      destination8 = Position.new(2,3)
+
+      expect(king.is_valid?(destination1)).to eq(true)
+      expect(king.is_valid?(destination2)).to eq(true)
+      expect(king.is_valid?(destination3)).to eq(true)
+      expect(king.is_valid?(destination4)).to eq(true)
+      expect(king.is_valid?(destination5)).to eq(true)
+      expect(king.is_valid?(destination6)).to eq(true)
+      expect(king.is_valid?(destination7)).to eq(true)
+      expect(king.is_valid?(destination8)).to eq(true)
+    end
+
+    it "checks that a king can't move off the board" do
+
+      king = King.new(:black, Position.new(4,4))
+      destination1 = Position.new(10,4)
+      destination2 = Position.new(4,-5)
+      destination3 = Position.new(50,4)
+      destination4 = Position.new(-16,4)
+
+      expect(king.is_valid?(destination1)).to eq(false)
+      expect(king.is_valid?(destination2)).to eq(false)
+      expect(king.is_valid?(destination3)).to eq(false)
+      expect(king.is_valid?(destination4)).to eq(false)
+    end
+
+  end
+
   describe 'king#is_obstructed' do # Assuming move is valid
 
     it 'checks that a king moves only 1 square' do
