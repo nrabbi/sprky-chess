@@ -16,7 +16,7 @@ class Pawn < ChessPiece
 
   def can_capture?(pieces, destination)
     pieces.each do |piece|
-      return true if piece.position.equals?(destination) && (position.y - destination.y).abs == 1 && (position.x - destination.x).abs == 1 && piece.color != color
+      return true if piece.position.equals?(destination) && destination.y - position.y == 1 && (position.x - destination.x).abs == 1 && piece.color == :black && color == :white || position.y - destination.y == 1 && (position.x - destination.x).abs == 1 && piece.color == :white && color == :black
     end
 
     false

@@ -4,25 +4,6 @@ require 'rails_helper'
 RSpec.describe "Pawn" do
   describe 'pawn#is_obstructed' do
 
-    it 'determines that a valid diagnonal move move can be made if the piece is of different color and movement is upwards (Player 1)' do
-      pending("Implementation not done yet")
-
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,D,0,0,D,0,0 --> Destination can be captured so not obstructed
-      # 0,P,0,0,0,P,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-
-      pawn = Pawn.new(:white, Position.new(1, 2))
-      pieces = [pawn, ChessPiece.new(:black, Position.new(2, 3))]
-      destination = Position.new(2, 3)
-      expect(pawn.is_obstructed?(pieces, destination)).to eq false
-
-    end
-
     it 'determines that a single block move can be made from starting position (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
@@ -452,6 +433,24 @@ RSpec.describe "Pawn" do
   # The tests will be moved to a different file
   describe 'pawn#can_capture?' do
 
+    it 'determines that a pawn cannot capture diagonally backwards (player 1)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,D,P,x,0,0
+      # 0,0,0,D,0,0,0,0 --> Destination capture invalid
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(4, 3))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(3, 2)), ChessPiece.new(:black, Position.new(5, 3))]
+      destination = Position.new(3, 2)
+      expect(pawn.can_capture?(pieces, destination)).to eq false
+
+    end
+
     it 'determines that a pawn can capture diagonally (player 1)' do
 
       # 0,0,0,0,0,0,0,0
@@ -484,6 +483,24 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(4, 2))
       pieces = [pawn, ChessPiece.new(:black, Position.new(2, 4)), ChessPiece.new(:black, Position.new(4, 3))]
       destination = Position.new(2, 4)
+      expect(pawn.can_capture?(pieces, destination)).to eq false
+
+    end
+
+    it 'determines that a pawn cannot capture diagonally backwards (player 2)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,D,0,0 --> Destination capture invalid
+      # 0,0,0,0,P,0,0,0
+      # 0,0,0,0,0,x,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(4, 4))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(5, 5)), ChessPiece.new(:black, Position.new(5, 3))]
+      destination = Position.new(5, 5)
       expect(pawn.can_capture?(pieces, destination)).to eq false
 
     end
