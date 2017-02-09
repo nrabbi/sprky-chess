@@ -51,6 +51,8 @@ RSpec.describe GamesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(game_count).to eq Game.count
       end
+      it 'should let a player choose their color' do
+      end
     end
 
 end
