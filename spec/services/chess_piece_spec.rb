@@ -1,7 +1,6 @@
 require 'rspec'
 require 'rails_helper'
 
-
 describe 'Chess Piece' do
 
   describe 'chess_piece#can_capture?' do

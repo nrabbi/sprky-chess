@@ -5,15 +5,15 @@ class PieceMover
   # Moves a ChessPiece to a destination Position if a move is valid and unobstructed
   # Obstruction is checked using the _pieces array
   # Captured pieces are moved off the board
-  
+
   def move_to!(_chess_piece, _destination, _pieces)
 
-     # if _chess_piece.can_capture? false
-     #   Do something
-     # else
-     #   remove_piece(_destination)
-     #   update_attributes(new_x,new_y)
-     # end
+    # if _chess_piece.can_capture? false
+    #   Do something
+    # else
+    #   remove_piece(_destination)
+    #   update_attributes(new_x,new_y)
+    # end
 
   end
 

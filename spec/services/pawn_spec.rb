@@ -6,7 +6,7 @@ RSpec.describe "Pawn" do
 
     it 'determines that a valid diagnonal move move can be made if the piece is of different color and movement is upwards (Player 1)' do
       pending("Implementation not done yet")
-      
+
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0

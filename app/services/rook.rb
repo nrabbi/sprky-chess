@@ -1,8 +1,8 @@
 class Rook < ChessPiece
 
   def is_valid?(destination)
-    x_only_move = (self.position.x - destination.x).abs > 0 && (self.position.y - destination.y).abs == 0
-    y_only_move = (self.position.y - destination.y).abs > 0 && (self.position.x - destination.x).abs == 0
+    x_only_move = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
+    y_only_move = (position.y - destination.y).abs > 0 && (position.x - destination.x).abs == 0
 
     (x_only_move || y_only_move) && inside_board_boundaries?(destination.x, destination.y)
   end
@@ -57,7 +57,7 @@ class Rook < ChessPiece
 
     pieces.each do |piece|
       cellsTouched.each do |position|
-        return true if (piece.position.x == position.x) && (piece.position.y == position.y) && piece.color == self.color
+        return true if (piece.position.x == position.x) && (piece.position.y == position.y) && piece.color == color
       end
     end
 

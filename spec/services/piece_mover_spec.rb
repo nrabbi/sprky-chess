@@ -7,7 +7,7 @@ describe 'PieceMover' do
     piece_mover = PieceMover.new
     it 'moves a piece to an empty square if the move is valid and is not obstructed' do
       pending("Implementation not done yet")
-      orig_pos = Position.new(0,0)
+      orig_pos = Position.new(0, 0)
       destination = Position.new(5, 0)
 
       rook = Rook.new(:white, orig_pos)
@@ -22,12 +22,11 @@ describe 'PieceMover' do
       expect(inserted_from.equals?(orig_pos)).to eq true
       expect(inserted_to.equals?(destination)).to eq true
 
-
     end
 
     it 'captures a piece BEFORE performing a move if the move is valid, unobstructed, and the square can be captured' do
       pending("Implementation not done yet")
-      orig_pos = Position.new(0,0)
+      orig_pos = Position.new(0, 0)
       destination = Position.new(5, 0)
 
       rook = Rook.new(:white, orig_pos)
@@ -40,7 +39,6 @@ describe 'PieceMover' do
       inserted = Move.last(2)
       expect(inserted.length).to eq(2)
 
-
       # Check that the captured piece was moved off board
       capture_move = inserted[0]
       capture_from = Position.new_from_int(capture_move.from)
@@ -50,7 +48,6 @@ describe 'PieceMover' do
 
       expect(capture_from.equals?(destination)).to eq true
       expect(capture_to.equals?(black_capture_pos)).to eq true
-
 
       # Check that the piece was moved to the destination
       move = inserted[1]

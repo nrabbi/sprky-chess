@@ -1,8 +1,7 @@
 class King < ChessPiece
 
   def is_valid?(destination)
-    distance_valid = ((self.position.x - destination.x).abs < 2) && ((self.position.y - destination.y).abs < 2) && !self.position.equals?(destination)
-
+    distance_valid = ((position.x - destination.x).abs < 2) && ((position.y - destination.y).abs < 2) && !position.equals?(destination)
 
     inside_board_boundaries?(destination.x, destination.y) && distance_valid
   end
@@ -25,7 +24,7 @@ class King < ChessPiece
     otherPieces = pieces.slice(1, pieces.count - 1)
 
     otherPieces.each do |piece|
-      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == self.color)
+      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == color)
     end
 
     false

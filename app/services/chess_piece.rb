@@ -17,7 +17,7 @@ class ChessPiece
   def can_capture?(_pieces, _destination)
     destination_piece = _pieces.find { |p| p.position.equals?(_destination) }
 
-    destination_piece != nil && destination_piece.color != self.color
+    !destination_piece.nil? && destination_piece.color != color
   end
 
   # Abstract Method(pieces : ChessPiece[], destination: Position)
