@@ -3,9 +3,9 @@
   <hr />
   <% @games.each do |game| %>
     <h2 class="text-center"><%= link_to game.name, game_path(game) %></h2>
-    <p class="text-center">Created by <%= game.player_1_id %> on <%= game.created_at.strftime("%b. %d, %Y") %></p>
+    <p class="text-center">Created by <b><%= Player.find(game.player_1_id).email %></b> on <%= game.created_at.strftime("%b. %d, %Y") %></p>
     <% if game.player_1_color == "White" %>
-      <p class="text-center">Black is available.</p>
+      <p class="text-center"><b>Black</b> is available.</p>
     <% elsif game.player_1_color == "Black" %>
       <p class="text-center">White is available.</p>
     <% end %>
