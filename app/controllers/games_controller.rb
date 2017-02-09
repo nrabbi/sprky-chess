@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :authenticate_player!, only: [:new, :create]
+  before_action :authenticate_player!, only: [:new, :create, :update]
 
   helper_method :get_piece_at
 
@@ -18,7 +18,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
+    @game = current_game
   end
 
   def index
@@ -26,7 +26,7 @@ class GamesController < ApplicationController
   end
 
   def board
-    @game = Game.find(params[:id])
+    @game = current_game
     pieces = StartingPositions::STARTING_POSITIONS
 
     piece_mover = PieceMover.new
@@ -35,6 +35,16 @@ class GamesController < ApplicationController
 
   def available
     @games = Game.available
+  end
+
+  def update
+    current_game.update_attributes(player_2_id: current_player.id)
+    if current_game.save
+      current_game.started!
+      redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
+    else
+      render :available, status: :unauthorized
+    end
   end
 
   # x in [0, 7]
@@ -53,6 +63,11 @@ end
 
   private
 
-def game_params
-  params.require(:game).permit(:name, :player_1_color, :player_2_id).merge(player_1_id: current_player.id)
-end
+  def game_params
+    params.require(:game).permit(:name, :player_1_color, :player_2_id).merge(player_1_id: current_player.id)
+  end
+
+  def current_game
+    @current_game ||= Game.find(params[:id])
+  end
+

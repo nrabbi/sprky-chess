@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe GamesController, type: :controller do
   let(:player) { FactoryGirl.create :player }
+  let(:player2) { FactoryGirl.create :player }
   let(:sign_in_player) { sign_in player }
   let(:post_valid_game) { post :create, params: { game: { name: "Test Game", player_1_color: "White" } } }
   let(:post_valid_unavailable_game) { post :create, params: { game: { name: "Unavailable Test Game", player_1_color: "White", player_2_id: 101 } } }
@@ -30,7 +31,7 @@ RSpec.describe GamesController, type: :controller do
 
   describe "games#create action" do
     it "should require players to be logged in" do
-      post_invalid_game
+      post_valid_game
       expect(response).to redirect_to new_player_session_path
     end
 
@@ -92,7 +93,17 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 
-  describe "games#join action" do
+  describe "games#update action" do
+    it "should add current_player to current_game as player_2_id" do
+      player
+      sign_in_player
+      post_valid_game
+      player2
+      sign_in_player
+      game = Game.last
+      game.update(player_2_id: player2.id)
+      expect(game.player_2_id).to eq(player2.id)
+    end
   end
 
 end

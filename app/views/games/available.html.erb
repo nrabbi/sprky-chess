@@ -9,5 +9,11 @@
     <% elsif game.player_1_color == "Black" %>
       <p class="text-center">White is available.</p>
     <% end %>
+      <%= simple_form_for game do |f| %>
+        <%= f.hidden_field :player_2_id, value: current_player %>
+        <%= f.submit "Join This Game", class: 'btn btn-primary alignedbutton' %>
+        <br />
+      <% end %>
+    <br class="clr" />
   <% end %>
 </div>
