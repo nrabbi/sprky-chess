@@ -44,10 +44,10 @@ class MovesController < ApplicationController
     else
       message = 'Invalid move. '
       if is_obstructed
-        message += 'The piece is obstructed.'
+        message += 'The piece is obstructed. '
       end
       if !is_valid
-        message += 'The move is invalid for that piece, it is not allowed to move there.'
+        message += 'The move is invalid for that piece, it is not allowed to move there. '
       end
       message += "Moving from #{from.to_chess_position} to #{to.to_chess_position}."
       redirect_to game_board_path(@game), notice: message
