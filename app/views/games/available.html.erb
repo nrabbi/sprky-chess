@@ -1,0 +1,13 @@
+<div class="container">
+  <h1 class="text-center">Available Games</h1>
+  <hr />
+  <% @games.each do |game| %>
+    <h2 class="text-center"><%= link_to game.name, game_path(game) %></h2>
+    <p class="text-center">Created by <%= game.player_1_id %> on <%= game.created_at.strftime("%b. %d, %Y") %></p>
+    <% if game.player_1_color == "White" %>
+      <p class="text-center">Black is available.</p>
+    <% elsif game.player_1_color == "Black" %>
+      <p class="text-center">White is available.</p>
+    <% end %>
+  <% end %>
+</div>
