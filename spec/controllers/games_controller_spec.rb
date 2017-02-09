@@ -7,6 +7,8 @@ RSpec.describe GamesController, type: :controller do
   let(:post_valid_game) { post :create, params: { game: { name: "Test Game", player_1_color: "White" } } }
   let(:post_valid_unavailable_game) { post :create, params: { game: { name: "Unavailable Test Game", player_1_color: "White", player_2_id: 101 } } }
   let(:post_invalid_game) { post :create, params: { game: { name: '' } } }
+  let(:patch_valid_game) { patch :update, params: { game: { id: Game.last.id, player_2_id: player2.id } } }
+  
 
   describe "games#index action" do
     it "should successfully show the page" do
@@ -104,6 +106,17 @@ RSpec.describe GamesController, type: :controller do
       game.update(player_2_id: player2.id)
       expect(game.player_2_id).to eq(player2.id)
     end
+    # it "should update player_2_color to the remaining color" do
+    #   player
+    #   sign_in_player
+    #   post_valid_game
+    #   player2
+    #   sign_in_player
+    #   binding.pry
+    #   patch_valid_game
+    #   game = Game.last.reload
+    #   expect(game.player_2_color).to eq("Black")
+    # end
   end
 
 end

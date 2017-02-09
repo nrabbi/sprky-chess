@@ -39,6 +39,7 @@ class GamesController < ApplicationController
 
   def update
     current_game.update_attributes(player_2_id: current_player.id)
+    current_game.update_attributes(player_2_color: opposite_color(current_game))
     if current_game.save
       current_game.started!
       redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
@@ -59,15 +60,22 @@ class GamesController < ApplicationController
     nil
   end
 
-end
-
   private
 
   def game_params
-    params.require(:game).permit(:name, :player_1_color, :player_2_id).merge(player_1_id: current_player.id)
+    params.require(:game).permit(:name, :player_1_color, :player_2_id, :player_2_color).merge(player_1_id: current_player.id)
   end
 
   def current_game
     @current_game ||= Game.find(params[:id])
   end
 
+  def opposite_color(current_game)
+    if current_game.player_1_color == "Black"
+      "White"
+    elsif current_game.player_1_color == "White"
+      "Black"
+    end
+  end
+
+end
