@@ -34,7 +34,7 @@ class GamesController < ApplicationController
   end
 
   def available
-    @games = Game.where(player_2_id: nil)
+    @games = Game.available
   end
 
   # x in [0, 7]
