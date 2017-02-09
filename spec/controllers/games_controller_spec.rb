@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GamesController, type: :controller do
   let(:player) { FactoryGirl.create :player }
   let(:sign_in_player) { sign_in player }
-  let(:post_valid_game) { post :create, params: { game: { name: "Test Game" } } }
+  let(:post_valid_game) { post :create, params: { game: { name: "Test Game", player_1_color: "White" } } }
   let(:post_invalid_game) { post :create, params: { game: { name: '' } } }
 
   describe "games#index action" do
@@ -51,7 +51,20 @@ RSpec.describe GamesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(game_count).to eq Game.count
       end
-      it 'should let a player choose their color' do
+      it 'should set the player_1_id to the current_player' do
+        player
+        sign_in_player
+        post_valid_game
+        game = Game.last
+        expect(game).to have_attributes(player_1_id: player.id)
+      end
+        it 'should let a player choose their color' do
+        player
+        sign_in_player
+        post_valid_game
+        binding.pry
+        game = Game.last
+        expect(game.player_1_color).to eq("White")
       end
     end
 

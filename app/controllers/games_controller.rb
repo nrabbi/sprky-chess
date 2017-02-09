@@ -49,5 +49,5 @@ end
   private
 
 def game_params
-  params.require(:game).permit(:name).merge(player_1_id: current_player.id)
+  params.require(:game).permit(:name, :player_1_color).merge(player_1_id: current_player.id)
 end
