@@ -18,7 +18,7 @@ class King < ChessPiece
     otherPieces = pieces.slice(1, pieces.count - 1)
 
     otherPieces.each do |piece|
-      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y)
+      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == self.color)
     end
 
     false

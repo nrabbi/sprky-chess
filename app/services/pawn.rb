@@ -5,7 +5,7 @@ class Pawn < ChessPiece
     position.y == 1 && color == :white || position.y == 6 && color == :black ? (pawn_unused = true) : (pawn_unused = false)
 
     pieces.each do |piece|
-      return true if piece.position.equals?(destination)
+      return true if piece.position.equals?(destination) && piece.color == self.color
       return true if piece.position.y == (destination.y - 1) && piece.position.x == destination.x && color == :white && pawn_unused == true
       return true if piece.position.y == (destination.y + 1) && piece.position.x == destination.x && color == :black && pawn_unused == true
     end

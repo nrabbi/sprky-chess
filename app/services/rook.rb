@@ -50,7 +50,7 @@ class Rook < ChessPiece
 
     pieces.each do |piece|
       cellsTouched.each do |position|
-        return true if (piece.position.x == position.x) && (piece.position.y == position.y)
+        return true if (piece.position.x == position.x) && (piece.position.y == position.y) && piece.color == self.color
       end
     end
 

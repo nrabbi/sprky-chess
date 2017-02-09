@@ -24,6 +24,7 @@ class ChessPiece
   # -------------------
   # Determines if another piece is between "self" and destination Position.
   # The pieces array will hold all 32 pieces, including self.
+  # A piece of opposite color is not an obstruction if it is at the destination.
   def is_obstructed?(_pieces, _destination)
     raise NotImplementedError, "Must be able to detect obstruction!"
   end
