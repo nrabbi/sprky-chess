@@ -5,13 +5,11 @@ class PieceMover
   # Moves a ChessPiece to a destination Position if a move is valid and unobstructed
   # Obstruction is checked using the _pieces array
   # Captured pieces are moved off the board
+  
   def move_to!(_chess_piece, _destination, _pieces)
 
-
      # if _chess_piece.can_capture? false
-     #   # Do something
-     #   remove_piece(_destination)
-     #   update_attributes(new_x,new_y)
+     #   Do something
      # else
      #   remove_piece(_destination)
      #   update_attributes(new_x,new_y)
@@ -24,24 +22,6 @@ class PieceMover
   end
 
   private
-
-  # methods for move_to
-  # checks the board to see if the co-ordinate is already in use or not
-  def block_in_use?(position)
-    # compare the given position with the data structure that holds the info about position of all chesspieces
-    # if a chesspiece exists on the given location then return true
-  end
-  # equals (postion.rb)
-
-  def opponent_check?
-    # check if the opponent is of different color
-  end
-
-  def remove_piece (position)
-    #You could have a “status” flag on the piece that will be one of “onboard” or “captured”.
-    #You could set the piece’s x/y coordinates to nil
-    #You could delete the item from the database.
-  end
 
   # def square_letters
   #   ["A", "B", "C", "D", "E", "F", "G", "H"]
