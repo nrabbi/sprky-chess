@@ -1,17 +1,21 @@
 class PieceMover
 
-  def move_to!(new_x, new_y)
-    # removes a chesspiece and updates the database if the destination block is being used and is a piece of different color
-     if block_in_use(new_x, new_y) == true && opponent_check? true && pawn.can_capture? false
-       # Do something
-       remove_piece(new_x,new_y)
-       update_attributes(new_x,new_y)
-     end
+  # move_to!(piece: ChessPiece, destination: Position, _pieces: ChessPiece[])
+  # -------------------------------
+  # Moves a ChessPiece to a destination Position if a move is valid and unobstructed
+  # Obstruction is checked using the _pieces array
+  # Captured pieces are moved off the board
+  def move_to!(_chess_piece, _destination, _pieces)
 
-     if pawn.can_capture? true
-       remove_piece(new_x,new_y)
-       update_attributes(new_x,new_y)
-     end
+
+     # if _chess_piece.can_capture? false
+     #   # Do something
+     #   remove_piece(_destination)
+     #   update_attributes(new_x,new_y)
+     # else
+     #   remove_piece(_destination)
+     #   update_attributes(new_x,new_y)
+     # end
 
   end
 
@@ -23,7 +27,7 @@ class PieceMover
 
   # methods for move_to
   # checks the board to see if the co-ordinate is already in use or not
-  def block_in_use?(x_pos, y_pos)
+  def block_in_use?(position)
     # compare the given position with the data structure that holds the info about position of all chesspieces
     # if a chesspiece exists on the given location then return true
   end
@@ -33,7 +37,7 @@ class PieceMover
     # check if the opponent is of different color
   end
 
-  def remove_piece (x_pos, y_pos)
+  def remove_piece (position)
     #You could have a “status” flag on the piece that will be one of “onboard” or “captured”.
     #You could set the piece’s x/y coordinates to nil
     #You could delete the item from the database.
