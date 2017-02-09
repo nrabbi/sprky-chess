@@ -6,10 +6,6 @@ class PieceMover
 
   private
 
-  # def square_letters
-  #   ["A", "B", "C", "D", "E", "F", "G", "H"]
-  # end
-
   def move_position_from(move)
     Position.new_from_int(move.from)
   end

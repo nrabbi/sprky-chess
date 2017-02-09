@@ -39,9 +39,13 @@
       </div>
 
       <div class="col-md-4">
-          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
+        <% if @game.moves.count > 0 %>
+          <h3><%= pluralize(@game.moves.count, 'move') %>, newest first</h3>
+          <% else %>
+          <h3>No moves yet.</h3>
+          <% end %>
           <ul>
-            <% @game.moves.each do |move| %>
+            <% @game.moves.order('created_at DESC').each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
                 From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
