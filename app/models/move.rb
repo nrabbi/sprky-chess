@@ -2,14 +2,7 @@ class Move < ApplicationRecord
   belongs_to :game
   validates :from, presence: true
   validates :to, presence: true
-
-  # OLD STUFF
-  # attr_accessor :to
-  # attr_reader :from
-
-  # def initialize(x, y)
-  #   @from = Position.new(x, y)
-  #   @to = Position.new(99, 99)
-  # end
+  validates_inclusion_of :from, in: (Position::BLACK_CAPTURE_INT..Position::WHITE_CAPTURE_INT)
+  validates_inclusion_of :to, in: (Position::BLACK_CAPTURE_INT..Position::WHITE_CAPTURE_INT)
 
 end

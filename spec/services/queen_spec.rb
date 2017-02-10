@@ -79,10 +79,10 @@ RSpec.describe "Queen" do
 
     it 'checks that a queen can move vertically' do
       queen = Queen.new(:white, Position.new(4, 4))
-      destination1 = Position.new(4,7)
-      destination2 = Position.new(4,0)
-      destination3 = Position.new(4,5)
-      destination4 = Position.new(4,3)
+      destination1 = Position.new(4, 7)
+      destination2 = Position.new(4, 0)
+      destination3 = Position.new(4, 5)
+      destination4 = Position.new(4, 3)
 
       expect(queen.is_valid?(destination1)).to eq(true)
       expect(queen.is_valid?(destination2)).to eq(true)
@@ -94,13 +94,12 @@ RSpec.describe "Queen" do
       start_x = 3
       start_y = 3
       queen = Queen.new(:white, Position.new(3, 3))
-      
+
       destination1 = Position.new(start_x + 1, start_y + 1)
       destination2 = Position.new(start_x + 3, start_y + 3)
       destination3 = Position.new(start_x - 2, start_y + 2)
       destination4 = Position.new(start_x + 1, start_y - 1)
       destination5 = Position.new(start_x - 3, start_y - 3)
-
 
       expect(queen.is_valid?(destination1)).to eq(true)
       expect(queen.is_valid?(destination2)).to eq(true)

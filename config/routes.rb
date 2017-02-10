@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   root 'static_pages#home'
   get 'games/:id/board', to: 'games#board', as: 'game_board'
+  get 'games/:id/join_game', to: 'games#join_game', as: 'join_game'
+  get 'games/available', to: 'games#available', as: 'available_games'
   # change this later to '/games/:id/board'
   resources :games do
     resources :moves, only: [:new, :create, :show, :index]
