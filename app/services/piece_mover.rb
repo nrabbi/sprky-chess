@@ -1,21 +1,16 @@
 class PieceMover
 
   # move_to!(piece: ChessPiece, destination: Position, _pieces: ChessPiece[])
+  # RETURNS: False if move invalid or obstructed. True for successful move or capture.
   # -------------------------------
   # Moves a ChessPiece to a destination Position if a move is valid and unobstructed
   # Obstruction is checked using the _pieces array
   # Captured pieces are moved off the board
-
   def move_to!(_chess_piece, _destination, _pieces)
 
-    # if _chess_piece.can_capture? false
-    #   Do something
-    # else
-    #   remove_piece(_destination)
-    #   update_attributes(new_x,new_y)
-    # end
-
   end
+
+
 
   def move_pieces(pieces, moves)
     moved_pieces = apply_moves(pieces, moves)
