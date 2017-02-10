@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  # TODO: -- add before_action to authenticate_players! for :new, :create
+  before_action :authenticate_player!, only: [:new, :create, :update]
 
   helper_method :get_piece_at
 
@@ -10,6 +10,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.create(game_params)
     if @game.valid?
+      @game.created!
       redirect_to game_path(@game)
     else
       render :new, status: :unprocessable_entity
@@ -17,7 +18,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
+    @game = current_game
   end
 
   def index
@@ -25,22 +26,26 @@ class GamesController < ApplicationController
   end
 
   def board
-    @game = Game.find(params[:id])
+    @game = current_game
     pieces = StartingPositions::STARTING_POSITIONS
-    # moves = []
-    # these are temporary "dummy" moves
-    # TODO -- get moves from user input
-    # move0 = Move.new(from: 0, to: 16)
-    # moves << move0
-
-    # move1 = Move.new(from: 1, to: 17)
-    # moves << move1
-
-    # move2 = Move.new(from: 2, to: 18)
-    # moves << move2
 
     piece_mover = PieceMover.new
     @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
+  end
+
+  def available
+    @games = Game.available
+  end
+
+  def update
+    current_game.update_attributes(player_2_id: current_player.id)
+    current_game.update_attributes(player_2_color: opposite_color(current_game))
+    if current_game.save
+      current_game.started!
+      redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
+    else
+      render :available, status: :unauthorized
+    end
   end
 
   # x in [0, 7]
@@ -55,10 +60,22 @@ class GamesController < ApplicationController
     nil
   end
 
-end
-
   private
 
-def game_params
-  params.require(:game).permit(:name)
+  def game_params
+    params.require(:game).permit(:name, :player_1_color, :player_2_id, :player_2_color).merge(player_1_id: current_player.id)
+  end
+
+  def current_game
+    @current_game ||= Game.find(params[:id])
+  end
+
+  def opposite_color(current_game)
+    if current_game.player_1_color == "Black"
+      "White"
+    elsif current_game.player_1_color == "White"
+      "Black"
+    end
+  end
+
 end

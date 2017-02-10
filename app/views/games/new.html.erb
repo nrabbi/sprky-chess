@@ -3,6 +3,8 @@
 <h1 class="text-center">Start a New Game</h1>
 <%= simple_form_for @game do |f| %>
   <%= f.input :name %>
+  <%= f.input :player_1_color, label: "Choose Your Piece Color", include_blank: false, 
+  collection: ["White", "Black"], as: :select %>
   <br />
   <%= f.submit "Create Game", class: 'btn btn-primary' %>
   <br />

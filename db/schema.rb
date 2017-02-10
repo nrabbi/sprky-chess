@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20_170_201_161_340) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,9 +20,11 @@ ActiveRecord::Schema.define(version: 20_170_201_161_340) do
     t.integer  "player_1_id"
     t.integer  "player_2_id"
     t.string   "status"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "name"
+    t.string   "player_1_color"
+    t.string   "player_2_color"
     t.index ["player_1_id"], name: "index_games_on_player_1_id", using: :btree
     t.index ["player_2_id"], name: "index_games_on_player_2_id", using: :btree
     t.index ["status"], name: "index_games_on_status", using: :btree
