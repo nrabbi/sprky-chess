@@ -52,7 +52,7 @@ RSpec.describe "Pawn" do
       # 0,0,0,P,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
-      pawn = Pawn.new(:white, Position.new(3, 1))
+      pawn = Pawn.new(:black, Position.new(3, 1))
       obstructor_piece = ChessPiece.new(:white, Position.new(3, 2))
       pieces = [pawn, obstructor_piece]
       destination = Position.new(3, 3)
@@ -127,7 +127,7 @@ RSpec.describe "Pawn" do
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
-      pawn = Pawn.new(:black, Position.new(3, 6))
+      pawn = Pawn.new(:white, Position.new(3, 6))
       obstructor_piece = ChessPiece.new(:black, Position.new(3, 5))
       pieces = [pawn, obstructor_piece]
       destination = Position.new(3, 4)

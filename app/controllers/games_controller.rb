@@ -29,7 +29,7 @@ class GamesController < ApplicationController
     pieces = StartingPositions::STARTING_POSITIONS
 
     piece_mover = PieceMover.new
-    @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
+    @after_move_pieces = piece_mover.apply_moves(pieces, @game.moves)
   end
 
   # x in [0, 7]

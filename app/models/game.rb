@@ -17,4 +17,12 @@ class Game < ApplicationRecord
   }
 
   has_many :moves
+
+  def initialize
+    @piece_mover = PieceMover.new
+  end
+
+  def move_pieces
+    # do the moving here...
+  end
 end
