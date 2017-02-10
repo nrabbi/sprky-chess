@@ -4,14 +4,50 @@ require 'rails_helper'
 RSpec.describe "Pawn" do
   describe 'pawn#is_obstructed' do
 
+    it 'makes sure diagonal capture move is not considered to be obstructed (Player 1)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,D,0 --> Destination can be captured
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(5, 2))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(1, 3))]
+      destination = Position.new(6, 3)
+      expect(pawn.is_obstructed?(pieces, destination)).to eq false
+
+    end
+
+    it 'makes sure diagonal capture move is considered to be obstructed (Player 1)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,D,0 --> Destination cannot be captured
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(5, 2))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(6, 3))]
+      destination = Position.new(6, 3)
+      expect(pawn.is_obstructed?(pieces, destination)).to eq true
+
+    end
+
     it 'determines that a single block move can be made from starting position (Player 1)' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
-      # x,0,0,0,0,D,0,0
-      # D,0,0,0,0,P,0,0 --> Destination is unoccupied
+      # x,0,0,0,0,0,0,0
+      # D,0,0,0,0,0,0,0 --> Destination is unoccupied
       # P,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
@@ -111,6 +147,42 @@ RSpec.describe "Pawn" do
       destination = Position.new(3, 3)
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       expect(pawn.is_obstructed?(pieces, destination)).to eq false
+
+    end
+
+    it 'makes sure diagonal capture move is not considered to be obstructed (Player 2)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,P,0
+      # 0,0,0,0,0,D,0,0 --> Destination can be captured
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(6, 3))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(5, 2))]
+      destination = Position.new(5, 2)
+      expect(pawn.is_obstructed?(pieces, destination)).to eq false
+
+    end
+
+    it 'makes sure diagonal capture move is considered to be obstructed (Player 2)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,P,0
+      # 0,0,0,0,0,D,0,0 --> Destination cannote be captured
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(6, 3))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(5, 2))]
+      destination = Position.new(5, 2)
+      expect(pawn.is_obstructed?(pieces, destination)).to eq true
 
     end
 
@@ -244,7 +316,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(5, 3))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 8)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -262,7 +334,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(1, 1))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 3)
-      expect(pawn.is_valid?(destination)).to eq true
+      expect(pawn.is_valid?(pieces, destination)).to eq true
 
     end
 
@@ -280,7 +352,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(1, 1))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 4)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -298,7 +370,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(5, 3))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 2)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -316,7 +388,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(5, 2))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 3)
-      expect(pawn.is_valid?(destination)).to eq true
+      expect(pawn.is_valid?(pieces, destination)).to eq true
 
     end
 
@@ -334,7 +406,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(1, 6))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 4)
-      expect(pawn.is_valid?(destination)).to eq true
+      expect(pawn.is_valid?(pieces, destination)).to eq true
 
     end
 
@@ -352,7 +424,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(1, 6))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 3)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -370,7 +442,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 5)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -388,7 +460,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 3))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 2)
-      expect(pawn.is_valid?(destination)).to eq true
+      expect(pawn.is_valid?(pieces, destination)).to eq true
 
     end
 
@@ -406,25 +478,61 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(4, 4)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
-    it 'determines that a pawn cant move diagonally' do
+    it 'determines that a pawn can move diagonally if it can capture' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,P,0,0
-      # 0,x,0,0,0,0,D,0 --> Destination is invalid
+      # 0,0,0,0,0,0,D,0 --> Destination is valid
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
 
       pawn = Pawn.new(:black, Position.new(5, 4))
-      pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
+      pieces = [pawn, ChessPiece.new(:white, Position.new(6, 3))]
       destination = Position.new(6, 3)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(pieces, destination)).to eq true
+
+    end
+
+    it 'determines that a pawn cannot move diagonally if it cannot capture' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,D,0 --> Destination is valid
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(5, 4))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(6, 3))]
+      destination = Position.new(6, 3)
+      expect(pawn.is_valid?(pieces, destination)).to eq false
+
+    end
+
+    it 'determines that a pawn cant move diagonally if destination is empty' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,x,D,0 --> Destination is invalid
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(5, 3))
+      pieces = [pawn, ChessPiece.new(:white, Position.new(5, 4))]
+      destination = Position.new(6, 4)
+      expect(pawn.is_valid?(pieces, destination)).to eq false
 
     end
 
@@ -432,6 +540,24 @@ RSpec.describe "Pawn" do
 
   # The tests will be moved to a different file
   describe 'pawn#can_capture?' do
+
+    it 'determines that a pawn cant move diagonally if destination is empty (Player 1)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,x,0,0,0,0,0,0
+      # 0,0,0,0,0,0,D,0 --> Destination is invalid
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(5, 3))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(1, 5))]
+      destination = Position.new(6, 4)
+      expect(pawn.can_capture?(pieces, destination)).to eq false
+
+    end
 
     it 'determines that a pawn cannot capture diagonally backwards (player 1)' do
 
@@ -483,6 +609,24 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(4, 2))
       pieces = [pawn, ChessPiece.new(:black, Position.new(2, 4)), ChessPiece.new(:black, Position.new(4, 3))]
       destination = Position.new(2, 4)
+      expect(pawn.can_capture?(pieces, destination)).to eq false
+
+    end
+
+    it 'determines that a pawn cant move diagonally if destination is empty (Player 2)' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,x,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,P,0,0,0,0,0,0
+      # 0,0,D,0,0,0,0,0 --> Destination is invalid
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:black, Position.new(1, 3))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(1, 5))]
+      destination = Position.new(2, 2)
       expect(pawn.can_capture?(pieces, destination)).to eq false
 
     end
