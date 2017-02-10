@@ -7,25 +7,25 @@ RSpec.describe "Knight" do
 
     it 'checks that a move actually contains movement' do
 
-      knight = Knight.new(:black, Position.new(4,4))
-      destination = Position.new(4,4)
+      knight = Knight.new(:black, Position.new(4, 4))
+      destination = Position.new(4, 4)
 
       expect(knight.is_valid?(destination)).to eq(false)
     end
 
     it 'checks that a knight does not move off the board' do
-      
-      knight = Knight.new(:black, Position.new(4,4))
-      destination1 = Position.new(10,4)
-      destination2 = Position.new(4,-5)
-      destination3 = Position.new(50,4)
-      destination4 = Position.new(-16,4)
+
+      knight = Knight.new(:black, Position.new(4, 4))
+      destination1 = Position.new(10, 4)
+      destination2 = Position.new(4, -5)
+      destination3 = Position.new(50, 4)
+      destination4 = Position.new(-16, 4)
 
       expect(knight.is_valid?(destination1)).to eq(false)
       expect(knight.is_valid?(destination2)).to eq(false)
       expect(knight.is_valid?(destination3)).to eq(false)
       expect(knight.is_valid?(destination4)).to eq(false)
-    
+
     end
 
     it 'checks that a knight can move in an L-shape' do
@@ -34,18 +34,18 @@ RSpec.describe "Knight" do
       knight = Knight.new(:black, Position.new(start_x, start_y))
       m1 = 1
       m2 = 2
-      
+
       # L-shape in all directions
       destination1 = Position.new(start_x + m1, start_y + m2)
       destination2 = Position.new(start_x - m1, start_y + m2)
       destination3 = Position.new(start_x - m1, start_y - m2)
       destination4 = Position.new(start_x + m1, start_y - m2)
-      
+
       destination5 = Position.new(start_x + m2, start_y + m1)
       destination6 = Position.new(start_x - m2, start_y + m1)
       destination7 = Position.new(start_x - m2, start_y - m1)
       destination8 = Position.new(start_x + m2, start_y - m1)
-      
+
       expect(knight.is_valid?(destination1)).to eq(true)
       expect(knight.is_valid?(destination2)).to eq(true)
       expect(knight.is_valid?(destination3)).to eq(true)
