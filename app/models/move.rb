@@ -1,11 +1,11 @@
 class MovesValidator < ActiveModel::Validator
-    def validate(record)
-        move_resolution = PieceMover.move_to!(StartingPositions::STARTING_POSITIONS, record.game.moves, record.from, record.to)
-        unless move_resolution.ok?
-            record.errors[:base] << move_resolution.error_message
-        end
-        move_resolution.ok?
+  def validate(record)
+    move_resolution = PieceMover.move_to!(StartingPositions::STARTING_POSITIONS, record.game.moves, record.from, record.to)
+    unless move_resolution.ok?
+      record.errors[:base] << move_resolution.error_message
     end
+    move_resolution.ok?
+  end
 end
 
 class Move < ApplicationRecord
