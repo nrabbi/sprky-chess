@@ -29,8 +29,7 @@ class GamesController < ApplicationController
     @game = current_game
     pieces = StartingPositions::STARTING_POSITIONS
 
-    piece_mover = PieceMover.new
-    @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
+    @after_move_pieces = PieceMover.apply_moves(pieces, @game.moves)
   end
 
   def available
