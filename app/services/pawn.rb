@@ -17,7 +17,7 @@ class Pawn < ChessPiece
 
   def can_capture?(pieces, destination)
     pieces.each do |piece|
-      return true if piece.position.equals?(destination) && piece.position.equals?(destination) && diagonal_capture_check(piece, destination)
+      return true if piece.position.equals?(destination) && diagonal_capture_check(piece, destination)
     end
 
     false
@@ -58,7 +58,7 @@ class Pawn < ChessPiece
     pawn_not_moved? == true && (position.y - destination.y).abs > 2
   end
 
-  # capture logic for pawns
+  # diagonal one block capture logic for pawns
   def diagonal_capture_check(piece, destination)
     if piece.color == :black && color == :white
       destination.y - position.y == 1 && (position.x - destination.x).abs == 1
