@@ -60,7 +60,6 @@ describe 'queen#is_valid?' do
     expect(queen.is_valid?(destination)).to eq(false)
   end
 
-
   it 'checks that a queen cannot move off the board' do
     queen = Queen.new(:white, Position.new(3, 0))
     destination1 = Position.new(10, 4)

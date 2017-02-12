@@ -69,8 +69,6 @@ describe 'PieceMover' do
       obstructor_piece = ChessPiece.new(:white, Position.new(3, 0))
       pieces = [rook, obstructor_piece]
 
-      
-      
       # OBSTRUCTED MOVE
       success = piece_mover.move_to!(rook, destination, pieces)
       expect(success).to eq false
@@ -78,7 +76,7 @@ describe 'PieceMover' do
       # check no move in db
       inserted1 = Move.last
       obstructed_move_created = true
-      if inserted1 == nil
+      if inserted1.nil?
         obstructed_move_created = false
       else
         # last move should not equal this move
@@ -86,20 +84,18 @@ describe 'PieceMover' do
         move_to = Position.new_from_int(inserted1.to)
         obstructed_move_created = (move_from.equals?(orig_pos) && move_to.equals(destination))
       end
-      
+
       expect(obstructed_move_created).to eq(false)
 
-      
-      
       # INVALID MOVE
       destination = Position.new(-10, -10)
       success = piece_mover.move_to!(rook, destination, pieces)
       expect(success).to eq false
 
-      # check no move 
+      # check no move
       inserted2 = Move.last
       invalid_move_created = true
-      if inserted2 == nil
+      if inserted2.nil?
         invalid_move_created = false
       else
         # last move should not equal this move
@@ -109,7 +105,7 @@ describe 'PieceMover' do
       end
 
       expect(invalid_move_created).to eq(false)
-      
+
     end
   end
 
