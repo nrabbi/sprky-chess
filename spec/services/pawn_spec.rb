@@ -153,8 +153,8 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'determines that a pawn can move diagonally if it can capture' do
-      pending('Awaiting Implementation')
+    it 'determines that a pawn can move diagonally' do
+
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -171,27 +171,8 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'determines that a pawn cannot move diagonally if it cannot capture' do
-
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,P,0,0
-      # 0,0,0,0,0,0,D,0 --> Destination is valid
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-      # 0,0,0,0,0,0,0,0
-
-      pawn = Pawn.new(:black, Position.new(5, 4))
-      pieces = [pawn, ChessPiece.new(:black, Position.new(6, 3))]
-      destination = Position.new(6, 3)
-      expect(pawn.is_valid?(destination)).to eq false
-
-    end
-
   end
 
-  # The tests will be moved to a different file
   describe 'pawn#can_capture?' do
 
     it 'determines that a pawn can capture diagonally' do
