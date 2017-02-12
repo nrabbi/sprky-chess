@@ -1,6 +1,7 @@
 class Game < ApplicationRecord
 
   validates :name, presence: true
+  scope :available, -> { where(player_2_id: nil) }
 
   CREATED = 'created'
   STARTED = 'started'

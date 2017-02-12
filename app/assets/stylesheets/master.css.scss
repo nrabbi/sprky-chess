@@ -42,3 +42,8 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 .moves-list {
   float: right;
 }
+
+.alignedbutton {
+  margin: 0 auto;
+  display: block;
+}

@@ -10,18 +10,27 @@
   </head>
 
   <body>
-<% if notice.present? %>
-  <p class="alert alert-info alert-dismissable" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <%= notice %>
-  </p>
-<% end %>
-<% if alert.present? %>
-  <p class="alert alert-danger alert-dismissable" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <%= alert %>
-  </p>
-<% end %>
+
+  <% if current_player %>
+  You're signed in as <%= current_player.email %>.
+  <%= link_to "Sign out", destroy_player_session_path, method: :delete %>
+  <% else %>
+  <%= link_to "Sign In", new_player_session_path %>
+  <%= link_to "Sign Up", new_player_registration_path %>
+  <% end %>
+
+  <% if notice.present? %>
+    <p class="alert alert-info alert-dismissable" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= notice %>
+    </p>
+  <% end %>
+  <% if alert.present? %>
+    <p class="alert alert-danger alert-dismissable" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= alert %>
+    </p>
+  <% end %>
     <%= yield %>
   </body>
 </html>
