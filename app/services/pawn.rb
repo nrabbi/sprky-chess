@@ -9,8 +9,8 @@ class Pawn < ChessPiece
     false
   end
 
-  def is_valid?(pieces, destination)
-    return false if can_capture?(pieces, destination) == false && (inside_board_boundaries?(destination.x, destination.y) == false || invalid_backwards_move_check_white(destination) || invalid_backwards_move_check_black(destination) || invalid_non_vertical_movement_check(destination) || invalid_starting_movement_check(destination))
+  def is_valid?(destination)
+    return false if (inside_board_boundaries?(destination.x, destination.y) == false || invalid_backwards_move_check_white(destination) || invalid_backwards_move_check_black(destination) || invalid_non_vertical_movement_check(destination) || invalid_starting_movement_check(destination))
 
     true
   end

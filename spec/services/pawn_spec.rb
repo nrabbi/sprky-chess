@@ -77,7 +77,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:white, Position.new(5, 3))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 8)
-      expect(pawn.is_valid?(pieces, destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
@@ -95,7 +95,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(1, 6))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 4)
-      expect(pawn.is_valid?(pieces, destination)).to eq true
+      expect(pawn.is_valid?(destination)).to eq true
 
     end
 
@@ -113,7 +113,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(1, 6))
       pieces = [pawn, ChessPiece.new(:white, Position.new(2, 3))]
       destination = Position.new(1, 3)
-      expect(pawn.is_valid?(pieces, destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
@@ -131,7 +131,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(5, 5)
-      expect(pawn.is_valid?(pieces, destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
@@ -149,12 +149,12 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(1, 3))]
       destination = Position.new(4, 4)
-      expect(pawn.is_valid?(pieces, destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
     it 'determines that a pawn can move diagonally if it can capture' do
-
+      pending('Awaiting Implementation')
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -167,7 +167,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(6, 3))]
       destination = Position.new(6, 3)
-      expect(pawn.is_valid?(pieces, destination)).to eq true
+      expect(pawn.is_valid?(destination)).to eq true
 
     end
 
@@ -185,7 +185,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:black, Position.new(6, 3))]
       destination = Position.new(6, 3)
-      expect(pawn.is_valid?(pieces, destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
