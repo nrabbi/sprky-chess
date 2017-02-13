@@ -3,7 +3,7 @@ class CheckDeterminer
   attr_accessor :after_move_pieces
   
   def checks_exist?
-    # creates current state of board, then
+    # creates current state of board, returns true if any pieces could move to check opposite king
     # TODO: should also return alert with the pieces and moves causing check
     # TODO: current_game might not work here
     # TODO: validations might not work here
