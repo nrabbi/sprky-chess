@@ -1,6 +1,12 @@
 class CheckDeterminer
 
   attr_accessor :after_move_pieces
+
+  def initialize(params)
+    @game = Game.find(params[:game_id])
+    @from = params[:from]
+    @to = params[:to]
+  end
   
   def checks_exist?
     # creates current state of board, returns true if any pieces could move to check opposite king
@@ -8,7 +14,6 @@ class CheckDeterminer
     # TODO: current_game might not work here
     # TODO: validations might not work here
     starting_positions = StartingPositions::STARTING_POSITIONS
-    all_positions = (0..63).to_a
     potential_destinations = []
     potential_moves = []
     unvalidated_check_moves = []
@@ -20,29 +25,32 @@ class CheckDeterminer
       from = piece.position
       from_integer = from.to_integer
       # get array of all the other positions on the board
+      all_positions = (0..63).to_a
       all_positions.delete(from_integer)
       # make and collect new positions for each other square
       all_positions.each do |other_position|
         to = Position.new_from_int(other_position)
         potential_destinations << to
         # make a new move for every potential_destination
-        new_move = Move.new(from: from.to_integer, to: to.to_integer)
+        new_move = current_game.moves.new(from: from.to_integer, to: to.to_integer)
         potential_moves << new_move
       end
       potential_moves.each do |move|
         if move.to == opposite_king_position(piece)
           unvalidated_check_moves << move
         end
-        unvalidated_check_moves.each do |move|
-          # make sure validation call will work here
-          if move.valid?
-            validated_check_moves << move
-          end
+      end
+      unvalidated_check_moves.each do |move|
+        binding.pry
+        if move.valid? # does this need Position and not integer?
+          validated_check_moves << move
         end
       end
     end
     if validated_check_moves.any?
       true
+    else
+      false
       # TODO send piece name and destination as error message
     end
   end
@@ -57,16 +65,17 @@ class CheckDeterminer
   private 
 
   def current_game
-    # this probably won't work here! Need some other way to set the game
     @game ||= Game.find(params[:game_id])
   end
 
   def white_king_position
-    @after_move_pieces.select {|piece| piece.class.to_s == "King" && piece.color == :white }
+    white_king = @after_move_pieces.select {|piece| piece.class.to_s == "King" && piece.color == :white }
+    white_king.first.position.to_integer
   end
   
   def black_king_position
-    @after_move_pieces.select {|piece| piece.class.to_s == "King" && piece.color == :black }
+    black_king = @after_move_pieces.select {|piece| piece.class.to_s == "King" && piece.color == :black }
+    black_king.first.position.to_integer
   end
 
   def opposite_king_position(piece)
