@@ -1,6 +1,6 @@
 <div class="container">
   <br />
-    <div class="chessboard">
+    <div id="chessboard" data-game-id="<%= @current_game.id %>">
       <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
       row_index = 7
       col_index = 0 %>
@@ -16,7 +16,7 @@
         <% 8.times do %>
           <tr>
             <% 8.times do %>
-              <td>
+              <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
                 <div><%= col[col_index] + (row_index+1).to_s %></div>
                 <% piece = get_piece_at(col_index, row_index) %>
                 <% if piece %> 
@@ -51,3 +51,45 @@
     </div>
     
 </div>
+
+<script>
+  $(document).ready(function(){
+    var gameId = $('#chessboard').data('game-id');
+    var from, to;
+
+    var selectedCount = 0;
+    $('.square').click(function(ev){
+
+      var square = $(this);
+      square.addClass('selected');
+      console.log(square.data('x'), square.data('y'));
+      selectedCount++;
+      if(selectedCount == 2){
+        //  Send
+
+        to =  integerConversion(square.data('x'), square.data('y'));
+        var payload = {
+          move: {
+            game_id: gameId,
+            from: from,
+            to: to
+          }
+        };
+        console.log(payload);
+        $.post('/games/' + gameId + "/moves", payload).success(function(data){
+          console.log(data);
+        });
+        selectedCount = 0;
+      }else{
+        from = integerConversion(square.data('x'), square.data('y'));
+      }
+
+//      console.log(ev.target.attr("x"), ev.target.attr("y"));
+    });
+
+    function integerConversion(x, y){
+      console.log(y);
+      return (y * 8) + x;
+    }
+  });
+</script>

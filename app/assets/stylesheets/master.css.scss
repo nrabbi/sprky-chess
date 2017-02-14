@@ -1,7 +1,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-.chessboard {
+#chessboard {
   width: 680px;
   height: 680px;
   margin: 20px;
@@ -46,4 +46,8 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 .alignedbutton {
   margin: 0 auto;
   display: block;
+}
+
+.selected{
+  background: lightcyan !important;
 }
