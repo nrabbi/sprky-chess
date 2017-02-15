@@ -32,22 +32,7 @@
           <% col_index = 0 %>
         <% end %>
       </table>
-      <br />
-      <div class="col-xs-2 move-button">
-      <br />
-        <%= link_to "Add a Move", new_game_move_path(@game), class: 'btn btn-primary' %>
-      </div>
-      <div class="col-xs-8 moves-list">
-      <h3><%= @game.name %> moves</h3>
-      <ul>
-        <% @game.moves.each do |move| %>
-          <li class="text-right">
-            From: <%= move.from %>
-            To: <%= move.to %>
-          </li>
-          <% end %>
-        </ul>
-      </div>
+
     </div>
     
 </div>
@@ -59,14 +44,12 @@
 
     var selectedCount = 0;
     $('.square').click(function(ev){
-
       var square = $(this);
-      square.addClass('selected');
-      console.log(square.data('x'), square.data('y'));
       selectedCount++;
+      // 1st or 2nd Selection?
       if(selectedCount == 2){
-        //  Send
-
+        //  2nd. Post move
+        square.addClass('selected');
         to =  integerConversion(square.data('x'), square.data('y'));
         var payload = {
           move: {
@@ -75,16 +58,20 @@
             to: to
           }
         };
-        console.log(payload);
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
           console.log(data);
         });
         selectedCount = 0;
       }else{
-        from = integerConversion(square.data('x'), square.data('y'));
+        //  1st. Make sure square contains piece
+        if(square.find('.pieces').length != 0){
+          square.addClass('selected');
+          from = integerConversion(square.data('x'), square.data('y'));
+        }else{
+          alert('Select a piece!');
+          selectedCount = 0;
+        }
       }
-
-//      console.log(ev.target.attr("x"), ev.target.attr("y"));
     });
 
     function integerConversion(x, y){
