@@ -10,7 +10,7 @@ class Pawn < ChessPiece
   end
 
   def is_valid?(destination)
-    return false if invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination)
+    return false if invalid_non_starting_move_check(destination) ||invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination)
 
     true
   end
@@ -29,17 +29,17 @@ class Pawn < ChessPiece
 
   private
 
-  # checks if there is the pawn is at least used once or not
+  # checks if the pawn is at least used once or not
   def pawn_not_moved?
-    position.y == 1 && color == :white || position.y == 6 && color == :black ? (return true) : (return false)
+    (position.y == 1 && color == :white) || (position.y == 6 && color == :black) ? (return true) : (return false)
   end
 
   # checks if there is a piece in between the pawn and the destination
   def obstruction_check(piece, destination)
     if color == :white
-      piece.position.y == (destination.y - 1) && piece.position.x == destination.x && pawn_not_moved? == true && (position.y - destination.y).abs > 1
+      piece.position.y == (destination.y - 1) && piece.position.x == destination.x && pawn_not_moved? && (position.y - destination.y).abs > 1
     else
-      piece.position.y == (destination.y + 1) && piece.position.x == destination.x && pawn_not_moved? == true && (position.y - destination.y).abs > 1
+      piece.position.y == (destination.y + 1) && piece.position.x == destination.x && pawn_not_moved? && (position.y - destination.y).abs > 1
     end
   end
 
@@ -53,9 +53,14 @@ class Pawn < ChessPiece
     destination.x != position.x && destination.y == position.y || destination.x != position.x && (destination.y - position.y).abs > 1
   end
 
-  # checks if the pawn movment froms tarting position is valid or not
+  # checks if the pawn movement from starting position is valid or not
   def invalid_starting_move_check(destination)
-    pawn_not_moved? == true && (position.y - destination.y).abs > 2
+    pawn_not_moved? && (position.y - destination.y).abs > 2
+  end
+
+  # checks if the pawn movement from non starting position is valid or not
+  def invalid_non_starting_move_check(destination)
+    pawn_not_moved? == false && (position.y - destination.y).abs > 1
   end
 
   # diagonal one block capture logic for pawns
