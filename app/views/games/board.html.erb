@@ -41,9 +41,9 @@
       <div class="col-md-4">
         <% if @game.moves.count > 0 %>
           <h3><%= pluralize(@game.moves.count, 'move') %>, newest first</h3>
-          <% else %>
+        <% else %>
           <h3>No moves yet.</h3>
-          <% end %>
+        <% end %>
           <ul>
             <% @game.moves.order('created_at DESC').each do |move| %>
               <li>
@@ -57,4 +57,39 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-4">
+        <% if @black_captured_pieces.count == 0 %>
+          <h3>Black has not captured anything yet.</h3>
+        <% else %>
+          <h3>Black's captured pieces:</h3>
+          <ul>
+            <% @black_captured_pieces.each do |piece| %>
+              <li>
+                <%= piece.class.name %>
+              </li>
+              <% end %>
+          </ul>
+        <% end %>
+      </div>
+
+      <div class="col-md-4">
+          <% if @white_captured_pieces.count == 0 %>
+          <h3>White has not captured anything yet.</h3>
+        <% else %>
+          <h3>White's captured pieces:</h3>
+          <ul>
+            <% @white_captured_pieces.each do |piece| %>
+              <li>
+                <%= piece.class.name %>
+              </li>
+              <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+
 </div>
+<br />
+<br />
+<br />
