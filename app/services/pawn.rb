@@ -10,7 +10,7 @@ class Pawn < ChessPiece
   end
 
   def is_valid?(destination)
-    return false if invalid_non_starting_move_check(destination) ||invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination)
+    return false if invalid_non_starting_move_check(destination) || invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination)
 
     true
   end
