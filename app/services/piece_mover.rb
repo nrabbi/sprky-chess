@@ -50,6 +50,14 @@ class PieceMover
     # 4) check for obstruction
     is_obstructed = thisChessPiece.is_obstructed?(after_move_pieces, to)
 
+    #5) check if the move puts self into check
+    # binding.pry
+    # something = CheckDeterminer.new(new_move).checks_exist?
+    # self_checks = CheckDeterminer.new.puts_self_in_check?(after_move_pieces, to)
+    # if self_checks
+    #   result.error_message += 'Invalid move. Cannot move self into check. '
+    #   result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
+    # end
 
     if is_obstructed
       result.error_message += 'Invalid move. The piece is obstructed. '
@@ -73,8 +81,8 @@ class PieceMover
 
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
 
-      if to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
-        capture_int = (to_piece.color == :black) ? BLACK_CAPTURE_INT : WHITE_CAPTURE_INT
+      if to_piece && this_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
+        capture_int = (to_piece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
         to_position.position = Position.new_from_int(capture_int)
       end
       unless this_piece.nil?

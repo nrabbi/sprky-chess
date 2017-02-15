@@ -11,8 +11,10 @@ class CheckDeterminer
   def checks_exist?
     # creates current state of board, returns true if any pieces could move to check opposite king
     # TODO: should also return alert with the pieces and moves causing check
-    # TODO: current_game might not work here
-    # TODO: validations might not work here
+
+    # update -- this will become the puts_opponent_into_check method
+    # purpose should be to take a new move which has been created, then check if it has created any checks.
+    # it will already have been validated 
     starting_positions = StartingPositions::STARTING_POSITIONS
     potential_destinations = []
     potential_moves = []
@@ -41,8 +43,9 @@ class CheckDeterminer
         end
       end
       unvalidated_check_moves.each do |move|
-        binding.pry
-        if move.valid? # does this need Position and not integer?
+                  binding.pry
+        # binding.pry
+        if move.valid?
           validated_check_moves << move
         end
       end
@@ -55,11 +58,42 @@ class CheckDeterminer
     end
   end
 
-  def determine_check_before_move
-    # tentatively run move (through move_to! method??) and collect in @after_move_pieces
-    # if @after_move_pieces.checks_exist?
-      # make the move not valid, error: "King cannot be moved into check"
-    # end
+  # def puts_self_into_check?(after_move_pieces, to)
+  #   potential_destinations = []
+  #   potential_moves = []
+  #   unvalidated_check_moves = []
+  #   validated_check_moves = []
+  #   after_move_pieces.each do |piece|
+  #     from = piece.position
+  #     from_integer = from.to_integer
+  #     # get array of all the other positions on the board
+  #     all_positions = (0..63).to_a
+  #     all_positions.delete(from_integer)
+  #     # make and collect new positions for each other square
+  #     all_positions.each do |other_position|
+  #       to = Position.new_from_int(other_position)
+  #       potential_destinations << to
+  #       # make a new move for every potential_destination
+  #       new_move = current_game.moves.new(from: from.to_integer, to: to.to_integer)
+  #       potential_moves << new_move
+  #     end
+  #     potential_moves.each do |move|
+  #       if move.to == opposite_king_position(piece)
+  #         unvalidated_check_moves << move
+  #       end
+  #     end
+  #     unvalidated_check_moves.each do |move|
+  #       binding.pry
+  #       if move.valid? # does this need Position and not integer?
+  #         validated_check_moves << move
+  #       end
+  #     end
+
+
+  # end
+
+  def puts_opponent_into_check(after_move_pieces, to)
+
   end
 
   private 
