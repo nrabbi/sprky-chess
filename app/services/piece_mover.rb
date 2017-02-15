@@ -74,8 +74,8 @@ class PieceMover
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
 
       if to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
-        capture_int = (to_piece.color == :black) ? BLACK_CAPTURE_INT : WHITE_CAPTURE_INT
-        to_position.position = Position.new_from_int(capture_int)
+        capture_int = (to_piece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+        to_piece.position = Position.new_from_int(capture_int)
       end
       unless this_piece.nil?
         # move piece to new position
