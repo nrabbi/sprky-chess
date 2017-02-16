@@ -1,8 +1,10 @@
 class MoveResolution
     attr_accessor :error_message
+    attr_accessor :pieces
 
     def initialize
       @error_message = ""
+      @pieces = nil
     end
 
     def ok?
@@ -16,11 +18,11 @@ class PieceMover
   # -------------------------------
   # Moves a ChessPiece to a destination Position if a move is valid and unobstructed
   # Captured pieces are moved off the board
-  def self.move_to!(_pieces, _moves, _from, _to)
+  def self.move_to!(_pieces, _moves)
     result = MoveResolution.new
 
-    from = Position.new_from_int(_from)
-    to = Position.new_from_int(_to)
+    from = Position.new_from_int(_moves.last.from)
+    to = Position.new_from_int(_moves.last.to)
 
     # 1) get the current state of the board:
     #     move pieces, remove any captured pieces
@@ -29,14 +31,15 @@ class PieceMover
     # so it keeps the link to this game and all its moves.
     # in order to check if the move is valid, it can't be applied here
     # and needs to be sliced off
-    after_move_pieces = apply_moves(_pieces, _moves[0..-2])
+    result.pieces = apply_moves(_pieces, _moves[0..-2])
     # after_move_pieces is an array with all the chess pieces
 
     # 2) find the chess piece being moved
-    pieces = after_move_pieces.select { |piece| piece.position.equals?(from)}
+    pieces = result.pieces.select { |piece| piece.position.equals?(from) }
 
     if pieces.count == 0
-      result.error_message += "No piece found at #{from.to_chess_position}."
+      # the piece might be captured, this is okay
+      # result.error_message += "No piece found at #{from.to_chess_position}."
       return result
     elsif pieces.count > 1
       result.error_message +=  "Invalid number of chess pieces when moving: #{pieces.count}. Should be 1 piece."
@@ -48,7 +51,16 @@ class PieceMover
     is_valid = thisChessPiece.is_valid?(to)
 
     # 4) check for obstruction
-    is_obstructed = thisChessPiece.is_obstructed?(after_move_pieces, to)
+    is_obstructed = thisChessPiece.is_obstructed?(result.pieces, to)
+
+    # 5)
+    can_capture = thisChessPiece.can_capture?(result.pieces, to)
+
+    if can_capture && is_valid && !is_obstructed
+      capture_int = (thisChessPiece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+      captured_piece = result.pieces.select { |piece| piece.position.equals?(to)}[0]
+      captured_piece.position = Position.new_from_int(capture_int)
+    end
 
     #5) check if the move puts self into check
     # binding.pry
@@ -80,16 +92,17 @@ class PieceMover
       this_piece = find_piece_for_coordinate(new_pieces, move_position_from(move))
 
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
-
-      if to_piece && this_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
+          # binding.pry
+      if to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
         capture_int = (to_piece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
-        to_position.position = Position.new_from_int(capture_int)
+        to_piece.position = Position.new_from_int(capture_int)
       end
       unless this_piece.nil?
         # move piece to new position
         this_piece.position = move_position_to(move)
       end
     end
+
     new_pieces
   end
 

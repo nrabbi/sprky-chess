@@ -43,8 +43,6 @@ class CheckDeterminer
         end
       end
       unvalidated_check_moves.each do |move|
-                  binding.pry
-        # binding.pry
         if move.valid?
           validated_check_moves << move
         end
@@ -58,39 +56,9 @@ class CheckDeterminer
     end
   end
 
-  # def puts_self_into_check?(after_move_pieces, to)
-  #   potential_destinations = []
-  #   potential_moves = []
-  #   unvalidated_check_moves = []
-  #   validated_check_moves = []
-  #   after_move_pieces.each do |piece|
-  #     from = piece.position
-  #     from_integer = from.to_integer
-  #     # get array of all the other positions on the board
-  #     all_positions = (0..63).to_a
-  #     all_positions.delete(from_integer)
-  #     # make and collect new positions for each other square
-  #     all_positions.each do |other_position|
-  #       to = Position.new_from_int(other_position)
-  #       potential_destinations << to
-  #       # make a new move for every potential_destination
-  #       new_move = current_game.moves.new(from: from.to_integer, to: to.to_integer)
-  #       potential_moves << new_move
-  #     end
-  #     potential_moves.each do |move|
-  #       if move.to == opposite_king_position(piece)
-  #         unvalidated_check_moves << move
-  #       end
-  #     end
-  #     unvalidated_check_moves.each do |move|
-  #       binding.pry
-  #       if move.valid? # does this need Position and not integer?
-  #         validated_check_moves << move
-  #       end
-  #     end
-
-
-  # end
+  def puts_self_into_check
+    
+  end
 
   def puts_opponent_into_check(after_move_pieces, to)
 

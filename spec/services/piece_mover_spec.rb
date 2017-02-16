@@ -7,19 +7,6 @@ describe 'PieceMover' do
     piece_mover = PieceMover.new
     let(:game) { FactoryGirl.create :game }
 
-    it 'moves a piece to an empty square if the move is valid and is not obstructed. returns true.' do
-      game
-      from_pos = Position.new(0, 0)
-      to_pos = Position.new(5, 0)
-
-      rook = Rook.new(:white, from_pos)
-      pieces = [rook]
-
-      move_resolution = PieceMover.move_to!(pieces, game.moves, from_pos.to_integer, to_pos.to_integer)
-      expect(move_resolution.ok?).to eq true
-
-    end
-
     it 'captures a piece BEFORE performing a move if the move is valid, unobstructed, and the square can be captured. returns true.' do
       game
 
@@ -30,11 +17,14 @@ describe 'PieceMover' do
       capture_piece = Pawn.new(:black, to_pos)
       pieces = [rook, capture_piece]
 
-      move_resolution = PieceMover.move_to!(pieces, game.moves, from_pos.to_integer, to_pos.to_integer)
+      white_capture_area_pos = Position.new_from_int(Position::WHITE_CAPTURE_INT)
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
       expect(move_resolution.ok?).to eq true
-
-      game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
-
+      # check that the black pawn is captured
+      expect(move_resolution.pieces[1].position.equals?(white_capture_area_pos)).to eq true
       # ???????????????????
 
 
@@ -64,52 +54,51 @@ describe 'PieceMover' do
 
     end
 
-    it "returns false if move is invalid or obstructed" do
-      # pending("Implementation not done yet")
-      # from_pos = Position.new(0, 0)
-      # to_pos = Position.new(5, 0)
+    it "returns false if move is obstructed" do
+      game
+      from_pos = Position.new(0, 0)
+      to_pos = Position.new(5, 0)
 
-      # rook = Rook.new(:white, from_pos)
-      # obstructor_piece = ChessPiece.new(:white, Position.new(3, 0))
-      # pieces = [rook, obstructor_piece]
+      rook = Rook.new(:white, from_pos)
+      obstructor_piece = ChessPiece.new(:white, Position.new(3, 0))
+      pieces = [rook, obstructor_piece]
 
-      # # OBSTRUCTED MOVE
-      # success = piece_mover.move_to!(rook, to_pos, pieces)
-      # expect(success).to eq false
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
-      # # check no move in db
-      # inserted1 = Move.last
-      # obstructed_move_created = true
-      # if inserted1.nil?
-      #   obstructed_move_created = false
-      # else
-      #   # last move should not equal this move
-      #   move_from = Position.new_from_int(inserted1.from)
-      #   move_to = Position.new_from_int(inserted1.to)
-      #   obstructed_move_created = (move_from.equals?(from_pos) && move_to.equals(to_pos))
-      # end
+      # OBSTRUCTED MOVE
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      expect(move_resolution.ok?).to eq false
+    end
 
-      # expect(obstructed_move_created).to eq(false)
+    it "raises an ArgumentError for invalid positions" do
+      game
 
-      # # INVALID MOVE
-      # to_pos = Position.new(-10, -10)
-      # success = piece_mover.move_to!(rook, to_pos, pieces)
-      # expect(success).to eq false
+      # INVALID MOVE
+      to_pos = Position.new(-10, -10)
 
-      # # check no move
-      # inserted2 = Move.last
-      # invalid_move_created = true
-      # if inserted2.nil?
-      #   invalid_move_created = false
-      # else
-      #   # last move should not equal this move
-      #   move_from = Position.new_from_int(inserted2.from)
-      #   move_to = Position.new_from_int(inserted2.to)
-      #   invalid_move_created = (move_from.equals?(from_pos) && move_to.equals(to_pos))
-      # end
+      from_pos = Position.new(0, 0)
 
-      # expect(invalid_move_created).to eq(false)
+      rook = Rook.new(:white, from_pos)
+      obstructor_piece = ChessPiece.new(:white, Position.new(3, 0))
+      pieces = [rook, obstructor_piece]
 
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      expect { PieceMover.move_to!(pieces, game.moves) }.to raise_error(ArgumentError)
+    end
+
+    it 'moves a piece to an empty square if the move is valid and is not obstructed.' do
+      game
+      from_pos = Position.new(0, 0)
+      to_pos = Position.new(5, 0)
+
+      rook = Rook.new(:white, from_pos)
+      pieces = [rook]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      expect(move_resolution.ok?).to eq true
     end
   end
 
