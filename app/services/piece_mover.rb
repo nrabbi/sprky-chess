@@ -57,7 +57,7 @@ class PieceMover
     can_capture = thisChessPiece.can_capture?(result.pieces, to)
 
     if can_capture && is_valid && !is_obstructed
-      capture_int = thisChessPiece.color == :black ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+      capture_int = thisChessPiece.color == :black ? Position::WHITE_CAPTURE_INT : Position::BLACK_CAPTURE_INT
       captured_piece = result.pieces.select { |piece| piece.position.equals?(to) }[0]
       captured_piece.position = Position.new_from_int(capture_int)
     end
@@ -86,7 +86,7 @@ class PieceMover
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
 
       if to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
-        capture_int = to_piece.color == :black ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+        capture_int = to_piece.color == :black ? Position::WHITE_CAPTURE_INT : Position::BLACK_CAPTURE_INT
         to_piece.position = Position.new_from_int(capture_int)
       end
       unless this_piece.nil?
