@@ -63,6 +63,24 @@ RSpec.describe "Pawn" do
 
   describe 'pawn#is_valid?' do
 
+    it 'determines that a valid move can be made if the pawn is not at starting position' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # D,0,0,0,0,0,0,0 --> Destination is invalid
+      # 0,x,0,0,0,0,0,0 
+      # P,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(0, 2))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(1, 3))]
+      destination = Position.new(0, 4)
+      expect(pawn.is_valid?(destination)).to eq false
+
+    end
+
     it 'determines that a pawn cant move out of bounds' do
 
       # 0,0,0,0,0,0,0,0 --> Destination is invalid
