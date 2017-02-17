@@ -4,6 +4,24 @@ require 'rails_helper'
 RSpec.describe "Pawn" do
   describe 'pawn#is_obstructed' do
 
+    it 'makes sure no diagonal movement is made unless a capture can be made' do
+
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,x,0
+      # 0,0,0,0,0,0,D,0 --> Destination cant be captured
+      # 0,0,0,0,0,P,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+
+      pawn = Pawn.new(:white, Position.new(5, 2))
+      pieces = [pawn, ChessPiece.new(:black, Position.new(6, 4))]
+      destination = Position.new(6, 3)
+      expect(pawn.is_obstructed?(pieces, destination)).to eq true
+
+    end
+
     it 'makes sure diagonal capture move is not considered to be obstructed' do
 
       # 0,0,0,0,0,0,0,0
@@ -171,7 +189,7 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'determines that a pawn cannot move diagonally' do
+    it 'determines that a pawn can move diagonally' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -185,7 +203,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(6, 3))]
       destination = Position.new(6, 3)
-      expect(pawn.is_valid?(destination)).to eq false
+      expect(pawn.is_valid?(destination)).to eq true
 
     end
 

@@ -35,12 +35,16 @@ class Pawn < ChessPiece
   end
 
   # checks if there is a piece in between the pawn and the destination
+  # checks for invalid diagonal movement
   def obstruction_check(piece, destination)
+    return true if !piece.position.equals?(destination) &&  (destination.y - position.y == 1 && (position.x - destination.x).abs == 1 || position.y - destination.y == 1 && (position.x - destination.x).abs == 1)
+
     if color == :white
       piece.position.y == (destination.y - 1) && piece.position.x == destination.x && pawn_not_moved? && (position.y - destination.y).abs > 1
-    else
+    else color == :black && piece != nil
       piece.position.y == (destination.y + 1) && piece.position.x == destination.x && pawn_not_moved? && (position.y - destination.y).abs > 1
     end
+
   end
 
   # checks for invalid backwards move for pawns
@@ -50,7 +54,7 @@ class Pawn < ChessPiece
 
   # checks for non vertical invalid moves
   def invalid_non_vertical_move_check(destination)
-    destination.x != position.x && (destination.y == position.y || (destination.y - position.y).abs > 0)
+    destination.x != position.x && (destination.y == position.y || (destination.y - position.y).abs > 1)
   end
 
   # checks if the pawn movement from starting position is valid or not
