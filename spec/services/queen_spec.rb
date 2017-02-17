@@ -42,12 +42,148 @@ RSpec.describe "Queen" do
       expect(queen.is_obstructed?(pieces, destination)).to eq false
     end
 
-    it 'determines a piece of opposite color at the destination is not an obstruction' do
+    it 'determines a piece of opposite color at the destination is an obstruction' do
       queen = Queen.new(:white, Position.new(5, 0))
       destination = Position.new(2, 0)
-      pieces = [queen, ChessPiece.new(:black, destination)]
+      pieces = [queen, Pawn.new(:black, destination)]
 
-      expect(queen.is_obstructed?(pieces, destination)).to eq false
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving west.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,D,x,0,Q,0,0
+      queen = Queen.new(:white, Position.new(5, 0))
+      destination = Position.new(2, 0)
+      obstructed_position = Position.new(destination.x+1, 0)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving East.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,Q,x,0,D,0,0
+      queen = Queen.new(:white, Position.new(2, 0))
+      destination = Position.new(5, 0)
+      obstructed_position = Position.new(queen.position.x+1, 0)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving North.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,D,0,0,0,0,0
+      # 0,0,x,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,Q,0,0,0,0,0
+      queen = Queen.new(:white, Position.new(2, 0))
+      destination = Position.new(2, 5)
+      obstructed_position = Position.new(destination.x, destination.y-1)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving South.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,Q,0,0,0,0,0
+      # 0,0,x,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,D,0,0,0,0,0
+      queen = Queen.new(:white, Position.new(2, 5))
+      destination = Position.new(2, 0)
+      obstructed_position = Position.new(destination.x, destination.y+1)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving South East.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,Q,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,x,0,0,0
+      # 0,0,0,0,0,D,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      queen = Queen.new(:white, Position.new(2, 5))
+      destination = Position.new(5,2)
+      obstructed_position = Position.new(4,3)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving North West.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,D,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,x,0,0,0
+      # 0,0,0,0,0,Q,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      queen = Queen.new(:white, Position.new(5, 2))
+      destination = Position.new(2, 5)
+      obstructed_position = Position.new(4,3)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving North East.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,D
+      # 0,0,0,0,0,0,x,0
+      # 0,0,0,0,0,Q,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      queen = Queen.new(:white, Position.new(5, 2))
+      destination = Position.new(7, 4)
+      obstructed_position = Position.new(6, 3)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction. Moving South West.' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,Q,0,0
+      # 0,0,0,0,x,0,0,0
+      # 0,0,0,D,0,0,0,0
+      queen = Queen.new(:white, Position.new(5, 2))
+      destination = Position.new(3, 0)
+      obstructed_position = Position.new(4, 1)
+      pieces = [queen, Pawn.new(:black, obstructed_position)]
+
+      expect(queen.is_obstructed?(pieces, destination)).to eq true
     end
   end
 
