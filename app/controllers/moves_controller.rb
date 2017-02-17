@@ -11,11 +11,15 @@ class MovesController < ApplicationController
 
   def create
     new_move  = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
-    # binding.pry
-    # CheckDeterminer.new(new_move).checks_exist?
     if new_move.valid?
       @move = @game.moves.create(move_params)
-      redirect_to game_board_path(@game)
+          # binding.pry
+      checks = CheckDeterminer.new(new_move).checks_exist?
+      if checks.nil?
+        redirect_to game_board_path(@game)
+      else
+        redirect_to game_board_path(@game), alert: checks.alerts.join(" \n")
+      end
     else
       redirect_to game_board_path(@game), notice: new_move.errors
     end

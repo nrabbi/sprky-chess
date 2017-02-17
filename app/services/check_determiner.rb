@@ -43,21 +43,26 @@ class CheckDeterminer
         end
       end
       unvalidated_check_moves.each do |move|
+        move[:game_id] = current_game.id
+        move[:id] = 99999
+        binding.pry
         if move.valid?
           validated_check_moves << move
         end
       end
     end
     if validated_check_moves.any?
-      true
-    else
-      false
+      alerts = []
+      validated_check_moves.each do |move|
+        alerts << "#{piece.color.to_s.capitalize} #{piece.class} is checking opponent King"
+      end
+      alerts
       # TODO send piece name and destination as error message
     end
   end
 
   def puts_self_into_check
-    
+
   end
 
   def puts_opponent_into_check(after_move_pieces, to)
