@@ -62,12 +62,13 @@ class PieceMover
       captured_piece.position = Position.new_from_int(capture_int)
     end
 
-    if is_obstructed
-      result.error_message += 'Invalid move. The piece is obstructed. '
-      result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
-    end
     unless is_valid
       result.error_message += 'Invalid move. The move is invalid for that piece, it is not allowed to move there. '
+      result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
+    end
+
+    if is_obstructed
+      result.error_message += 'Invalid move. The piece is obstructed. '
       result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
     end
 
