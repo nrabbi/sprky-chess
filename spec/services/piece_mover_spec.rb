@@ -27,9 +27,6 @@ describe 'PieceMover' do
       expect(move_resolution.pieces[1].position.equals?(white_capture_area_pos)).to eq true
       # ???????????????????
 
-
-
-
       # 2 moves should exist in db. The move to to_pos and captured piece off board. ORDER MATTERS
       # inserted = Move.last(2)
       # expect(inserted.length).to eq(2)

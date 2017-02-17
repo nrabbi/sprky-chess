@@ -34,8 +34,8 @@ class GamesController < ApplicationController
     black_capture_area_pos = Position.new_from_int(Position::BLACK_CAPTURE_INT)
     white_capture_area_pos = Position.new_from_int(Position::WHITE_CAPTURE_INT)
 
-    @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos)}
-    @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos)}
+    @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
+    @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
 
   end
 
