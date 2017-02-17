@@ -10,7 +10,7 @@ class Pawn < ChessPiece
   end
 
   def is_valid?(destination)
-    return false if invalid_non_starting_move_check(destination) || invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination)
+    return false if invalid_non_starting_move_check(destination) || invalid_starting_move_check(destination) || !inside_board_boundaries?(destination.x, destination.y) || invalid_backwards_move_check(destination) || invalid_non_vertical_move_check(destination) || invalid_horizontal_limit_check(destination)
 
     true
   end
@@ -64,7 +64,7 @@ class Pawn < ChessPiece
 
   # checks if the pawn movement from non starting position is valid or not
   def invalid_non_starting_move_check(destination)
-    pawn_not_moved? == false && (position.y - destination.y).abs > 1
+    pawn_not_moved? == false && (destination.y - position.y).abs > 1
   end
 
   # diagonal one block capture logic for pawns
@@ -74,6 +74,11 @@ class Pawn < ChessPiece
     elsif piece.color == :white && color == :black
       position.y - destination.y == 1 && (position.x - destination.x).abs == 1
     end
+  end
+
+  # checks if the diagonal movement does not exceed 1 blocks
+  def invalid_horizontal_limit_check(destination)
+    return true if (position.y - destination.y).abs == 1 && (position.x - destination.x).abs > 1
   end
 
 end
