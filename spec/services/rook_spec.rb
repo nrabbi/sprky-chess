@@ -107,10 +107,26 @@ RSpec.describe "Rook" do
 
     it 'determines a piece of opposite color at the destination is not an obstruction' do
       rook = Rook.new(:white, Position.new(5, 0))
-      destination = Position.new(2, 3)
+      destination = Position.new(1, 0)
       pieces = [rook, ChessPiece.new(:black, destination)]
 
       expect(rook.is_obstructed?(pieces, destination)).to eq false
+    end
+
+    it 'determines a piece of same color is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, ChessPiece.new(:white, Position.new(2, 0))]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, ChessPiece.new(:black, Position.new(2, 0))]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
     end
   end
 end
