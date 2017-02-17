@@ -40,6 +40,30 @@ RSpec.describe "Pawn" do
 
     end
 
+    it 'determines a piece of opposite color at the destination is not an obstruction, case 1' do
+      from = Position.new(3, 4)
+      pawn = Pawn.new(:white, from)
+      destination = Position.new(4, 5)
+
+      expect(pawn.is_valid?(destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color at the destination is not an obstruction, case 2' do
+      pawn = Pawn.new(:white, Position.new(5, 1))
+      destination = Position.new(6, 2)
+      pieces = [pawn, Pawn.new(:black, destination)]
+
+      expect(pawn.is_obstructed?(pieces, destination)).to eq false
+    end
+
+    it 'determines a piece of same color is an obstruction' do
+      pawn = Pawn.new(:white, Position.new(5, 1))
+      destination = Position.new(5, 2)
+      pieces = [pawn, ChessPiece.new(:white, destination)]
+
+      expect(pawn.is_obstructed?(pieces, destination)).to eq true
+    end
+
     it 'determines that there is nothing between a pawn and a square' do
 
       # 0,0,0,0,0,0,0,0

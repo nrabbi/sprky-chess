@@ -25,6 +25,7 @@ describe 'PieceMover' do
       expect(move_resolution.ok?).to eq true
       # check that the black pawn is captured
       expect(move_resolution.pieces[1].position.equals?(white_capture_area_pos)).to eq true
+
       # ???????????????????
 
       # 2 moves should exist in db. The move to to_pos and captured piece off board. ORDER MATTERS
@@ -51,6 +52,132 @@ describe 'PieceMover' do
 
     end
 
+    it "a pawn captures another chess piece" do
+      game
+      from_pos = Position.new(3, 4)
+      to_pos = Position.new(4, 5)
+
+      white_pawn = Pawn.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_pawn, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
+    it "a rook captures another chess piece" do
+      game
+      from_pos = Position.new(1, 0)
+      to_pos = Position.new(3, 0)
+
+      white_rook = Rook.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_rook, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
+    it "a queen captures another chess piece" do
+      game
+      from_pos = Position.new(1, 0)
+      to_pos = Position.new(3, 0)
+
+      white_queen = Queen.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_queen, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
+    it "a king captures another chess piece" do
+      game
+      from_pos = Position.new(1, 0)
+      to_pos = Position.new(2, 0)
+
+      white_king = King.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_king, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
+    it "a bishop captures another chess piece" do
+      game
+      from_pos = Position.new(1, 0)
+      to_pos = Position.new(7, 6)
+
+      white_bishop = Bishop.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_bishop, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
+    it "a knight captures another chess piece" do
+      game
+      from_pos = Position.new(1, 0)
+      to_pos = Position.new(0, 2)
+
+      white_knight = Knight.new(:white, from_pos)
+      black_pawn = Pawn.new(:black, to_pos)
+
+      pieces = [white_knight, black_pawn]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      if !move_resolution.ok?
+        puts "Move Resolution: #{move_resolution.error_message}"
+      end
+      expect(move_resolution.ok?).to eq true
+      expect(move_resolution.pieces.count).to eq(pieces.count)
+      expect(move_resolution.pieces[1].position.equals?(Position.new_from_int(Position::WHITE_CAPTURE_INT))).to eq true
+    end
+
     it "returns false if move is obstructed" do
       game
       from_pos = Position.new(0, 0)
@@ -62,7 +189,6 @@ describe 'PieceMover' do
 
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
-      # OBSTRUCTED MOVE
       move_resolution = PieceMover.move_to!(pieces, game.moves)
       expect(move_resolution.ok?).to eq false
     end
@@ -96,6 +222,86 @@ describe 'PieceMover' do
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
       expect(move_resolution.ok?).to eq true
+    end
+  end
+
+  describe 'PieceMover#is_in_check?' do
+    it "checks manual movement" do
+      # 0,0,K,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,B,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,R,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      #
+      # King: white
+      # Bishop: white
+      # Rook: black
+      #
+      white_king = King.new(:white, Position.new(2, 7))
+      white_bishop = Bishop.new(:white, Position.new(2, 5))
+      black_rook = Rook.new(:black, Position.new(2, 2))
+
+      pieces = [white_king, white_bishop, black_rook]
+
+      expect(PieceMover.is_in_check?(:black, pieces)).to eq false
+
+
+
+      # moving the bishop away will bring the King into check
+      white_bishop = Bishop.new(:white, Position.new(1, 4))
+
+      pieces = [white_king, white_bishop, black_rook]
+
+      expect(PieceMover.is_in_check?(:black, pieces)).to eq true
+    end
+  end
+
+  describe "PieceMover#checks_exist?" do
+    it "it determines check, 1" do
+      # 0,0,K,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,B,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,R,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      #
+      # King: white
+      # Bishop: white
+      # Rook: black
+      #
+      white_king = King.new(:white, Position.new(2, 7))
+      white_bishop = Bishop.new(:white, Position.new(2, 5))
+      black_rook = Rook.new(:black, Position.new(2, 2))
+
+      pieces = [white_king, white_bishop, black_rook]
+
+      expect(PieceMover.checks_exist?(pieces) ).to eq true
+    end
+
+    it "it determines check, 2" do
+      # 0,0,K,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # B,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      #
+      # King: black
+      # Bishop: white
+      #
+      black_king = King.new(:black, Position.new(2, 7))
+      white_bishop = Bishop.new(:white, Position.new(0, 5))
+
+      pieces = [black_king, white_bishop]
+
+      expect(PieceMover.checks_exist?(pieces) ).to eq true
     end
   end
 

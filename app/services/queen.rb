@@ -14,12 +14,10 @@ class Queen < ChessPiece
       # 2) collect all touched cells
       n = difference_x > difference_x ? difference_x : difference_y
 
-      # cellsTouched << destination
-
       inc_x = (destination.x > position.x) ? 1 : -1
       inc_y = (destination.y > position.y) ? 1 : -1
 
-      n.times do |i|
+      (n-1).times do |i|
           cellsTouched << Position.new(position.x + ((i+1)*inc_x), position.y + ((i+1)*inc_y))
       end
     else
@@ -35,7 +33,7 @@ class Queen < ChessPiece
 
         inc = (destination.x > position.x) ? 1 : -1
 
-        n.times do |i|
+        (n-1).times do |i|
           cellsTouched << Position.new(position.x + ((i+1)*inc), position.y)
         end
 
@@ -45,11 +43,11 @@ class Queen < ChessPiece
 
         inc = (destination.y > position.y) ? 1 : -1
 
-        n.times do |i|
+        (n-1).times do |i|
           cellsTouched << Position.new(position.x, position.y + ((i+1)*inc))
         end
       else
-        raise "This queen is not moving anywhere, but should."
+        false
       end
     end
 

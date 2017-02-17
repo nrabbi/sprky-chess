@@ -17,5 +17,5 @@ class Game < ApplicationRecord
     draw: DRAW
   }
 
-  has_many :moves
+  has_many :moves, dependent: :destroy
 end
