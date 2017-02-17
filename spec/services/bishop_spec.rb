@@ -62,6 +62,13 @@ RSpec.describe "Bishop" do
       expect(bishop.is_valid?(destination4)).to eq(false)
       expect(bishop.is_valid?(destination5)).to eq(false)
     end
+
+    it "checks the positions for the obstruction tests" do
+      bishop = Bishop.new(:white, Position.new(5, 0))
+      destination = Position.new(2, 3)
+
+      expect(bishop.is_valid?(destination)).to eq(true)
+    end
   end
 
   describe 'bishop#is_obstructed' do # Assuming move is valid
@@ -116,6 +123,22 @@ RSpec.describe "Bishop" do
       pieces = [bishop, ChessPiece.new(:black, destination)]
 
       expect(bishop.is_obstructed?(pieces, destination)).to eq false
+    end
+
+    it 'determines a piece of opposite color is an obstruction' do
+      bishop = Bishop.new(:white, Position.new(5, 0))
+      destination = Position.new(2, 3)
+      pieces = [bishop, ChessPiece.new(:black, Position.new(4,1))]
+
+      expect(bishop.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of same color is an obstruction' do
+      bishop = Bishop.new(:white, Position.new(5, 0))
+      destination = Position.new(2, 3)
+      pieces = [bishop, ChessPiece.new(:white, Position.new(4,1))]
+
+      expect(bishop.is_obstructed?(pieces, destination)).to eq true
     end
   end
 end

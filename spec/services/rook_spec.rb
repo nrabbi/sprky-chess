@@ -63,6 +63,13 @@ RSpec.describe "Rook" do
       expect(rook.is_valid?(destination3)).to eq(false)
       expect(rook.is_valid?(destination4)).to eq(false)
     end
+
+    it "checks the positions for the obstruction tests" do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+
+      expect(rook.is_valid?(destination)).to eq true
+    end
   end
 
   describe 'rook#is_obstructed' do # Assuming move is valid
