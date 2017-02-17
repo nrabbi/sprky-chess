@@ -50,7 +50,7 @@ class Pawn < ChessPiece
 
   # checks for non vertical invalid moves
   def invalid_non_vertical_move_check(destination)
-    destination.x != position.x && destination.y == position.y || destination.x != position.x && (destination.y - position.y).abs > 1
+    destination.x != position.x && (destination.y == position.y || (destination.y - position.y).abs > 0)
   end
 
   # checks if the pawn movement from starting position is valid or not
