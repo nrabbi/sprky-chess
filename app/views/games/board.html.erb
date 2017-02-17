@@ -1,6 +1,6 @@
 <div class="container">
   <br />
-    <div class="chessboard">
+    <div id="chessboard" data-game-id="<%= @current_game.id %>">
       <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
       row_index = 7
       col_index = 0 %>
@@ -9,7 +9,7 @@
         <% 8.times do %>
           <tr>
             <% 8.times do %>
-              <td>
+              <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
                 <div><%= col[col_index] + (row_index+1).to_s %></div>
                 <% piece = get_piece_at(col_index, row_index) %>
                 <% if piece %>
@@ -29,16 +29,8 @@
   </div>
 
   <div class="row">
-      <div class="col-md-4">
-          <h3>Move a Piece</h3>
-          <%= simple_form_for Move.new, url: game_moves_path(@game) do |f| %>
-            <%= f.input :from, collection: (0..63), as: :select %>
-            <%= f.input :to, collection: (0..63), as: :select %>
-            <%= f.submit "Create Move", class: 'btn btn-primary' %>
-          <% end %>
-      </div>
 
-      <div class="col-md-4">
+      <div class="col-md-8">
         <% if @game.moves.count > 0 %>
           <h3><%= pluralize(@game.moves.count, 'move') %>, newest first</h3>
         <% else %>
@@ -93,3 +85,51 @@
 <br />
 <br />
 <br />
+
+    </div>
+    
+</div>
+
+<script>
+  $(document).ready(function(){
+    var gameId = $('#chessboard').data('game-id');
+    var from, to;
+
+    var selectedCount = 0;
+    $('.square').click(function(ev){
+      var square = $(this);
+      selectedCount++;
+      // 1st or 2nd Selection?
+      if(selectedCount == 2){
+        //  2nd. Post move
+        square.addClass('selected');
+        to =  integerConversion(square.data('x'), square.data('y'));
+        var payload = {
+          move: {
+            game_id: gameId,
+            from: from,
+            to: to
+          }
+        };
+        $.post('/games/' + gameId + "/moves", payload).success(function(data){
+          console.log(data);
+        });
+        selectedCount = 0;
+      }else{
+        //  1st. Make sure square contains piece
+        if(square.find('.pieces').length != 0){
+          square.addClass('selected');
+          from = integerConversion(square.data('x'), square.data('y'));
+        }else{
+          alert('Select a piece!');
+          selectedCount = 0;
+        }
+      }
+    });
+
+    function integerConversion(x, y){
+      console.log(y);
+      return (y * 8) + x;
+    }
+  });
+</script>

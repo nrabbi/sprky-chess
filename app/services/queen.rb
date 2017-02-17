@@ -8,14 +8,17 @@ class Queen < ChessPiece
     difference_y = (position.y - destination.y).abs
     valid_diagonal_move = (difference_x > 0 || difference_y > 0) && (difference_x == difference_y)
 
-    cellsTouched = [destination]
+    cellsTouched = []
 
     if valid_diagonal_move
       # 2) collect all touched cells
       n = difference_x > difference_x ? difference_x : difference_y
 
-      (n - 1).times do |i|
-        cellsTouched << Position.new(position.x + i + 1, position.y + i + 1)
+      inc_x = (destination.x > position.x) ? 1 : -1
+      inc_y = (destination.y > position.y) ? 1 : -1
+
+      (n-1).times do |i|
+          cellsTouched << Position.new(position.x + ((i+1)*inc_x), position.y + ((i+1)*inc_y))
       end
     else
       moving_along_x = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
@@ -27,15 +30,21 @@ class Queen < ChessPiece
 
         # 2) collect all touched cells
         n = destination.x > position.x ? destination.x - position.x : position.x - destination.x
-        (n - 1).times do |i|
-          cellsTouched << Position.new(position.x + i + 1, position.y)
+
+        inc = (destination.x > position.x) ? 1 : -1
+
+        (n-1).times do |i|
+          cellsTouched << Position.new(position.x + ((i+1)*inc), position.y)
         end
 
       elsif moving_along_y
         # 2) collect all touched cells
         n = destination.y > position.y ? destination.y - position.y : position.y - destination.y
-        (n - 1).times do |i|
-          cellsTouched << Position.new(position.x, position.y + i + 1)
+
+        inc = (destination.y > position.y) ? 1 : -1
+
+        (n-1).times do |i|
+          cellsTouched << Position.new(position.x, position.y + ((i+1)*inc))
         end
       else
         raise "This queen is not moving anywhere, but should."
@@ -45,7 +54,7 @@ class Queen < ChessPiece
     # 3) check all touched cells for pieces on them
     pieces.each do |piece|
       cellsTouched.each do |position|
-        return true if (piece.position.x == position.x) && (piece.position.y == position.y) && piece.color == color
+        return true if (piece.position.x == position.x) && (piece.position.y == position.y)
       end
     end
 

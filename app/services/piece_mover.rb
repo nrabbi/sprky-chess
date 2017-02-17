@@ -1,15 +1,15 @@
 class MoveResolution
-    attr_accessor :error_message
-    attr_accessor :pieces
+  attr_accessor :error_message
+  attr_accessor :pieces
 
-    def initialize
-      @error_message = ""
-      @pieces = nil
-    end
+  def initialize
+    @error_message = ""
+    @pieces = nil
+  end
 
-    def ok?
-      @error_message.length == 0
-    end
+  def ok?
+    @error_message.empty?
+  end
 end
 
 class PieceMover
@@ -42,7 +42,7 @@ class PieceMover
       # result.error_message += "No piece found at #{from.to_chess_position}."
       return result
     elsif pieces.count > 1
-      result.error_message +=  "Invalid number of chess pieces when moving: #{pieces.count}. Should be 1 piece."
+      result.error_message += "Invalid number of chess pieces when moving: #{pieces.count}. Should be 1 piece."
       return result
     end
     thisChessPiece = pieces[0]
@@ -57,8 +57,8 @@ class PieceMover
     can_capture = thisChessPiece.can_capture?(result.pieces, to)
 
     if can_capture && is_valid && !is_obstructed
-      capture_int = (thisChessPiece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
-      captured_piece = result.pieces.select { |piece| piece.position.equals?(to)}[0]
+      capture_int = thisChessPiece.color == :black ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+      captured_piece = result.pieces.select { |piece| piece.position.equals?(to) }[0]
       captured_piece.position = Position.new_from_int(capture_int)
     end
 
@@ -71,16 +71,17 @@ class PieceMover
     #   result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
     # end
 
-    if is_obstructed
-      result.error_message += 'Invalid move. The piece is obstructed. '
-      result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
-    end
-    if !is_valid
+    unless is_valid
       result.error_message += 'Invalid move. The move is invalid for that piece, it is not allowed to move there. '
       result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
     end
 
-    return result
+    if is_obstructed
+      result.error_message += 'Invalid move. The piece is obstructed. '
+      result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
+    end
+
+    result
   end
 
   def self.apply_moves(_pieces, _moves)
@@ -92,9 +93,11 @@ class PieceMover
       this_piece = find_piece_for_coordinate(new_pieces, move_position_from(move))
 
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
+
           # binding.pry
       if !this_piece.nil? && to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
         capture_int = (to_piece.color == :black) ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
+
         to_piece.position = Position.new_from_int(capture_int)
       end
       unless this_piece.nil?

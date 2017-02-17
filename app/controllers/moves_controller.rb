@@ -2,15 +2,15 @@ class MovesController < ApplicationController
 
   before_action :current_game, only: [:index, :new, :create]
 
-  def index
-  end
+  def index; end
 
   def new
     @move = Move.new
   end
 
   def create
-    new_move  = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+
     if new_move.valid?
       @move = @game.moves.create(move_params)
           # binding.pry
@@ -36,10 +36,11 @@ class MovesController < ApplicationController
   end
 
   def from_position
-    @from_position ||=  Position.new_from_int(move_params[:from].to_i)
+    @from_position ||= Position.new_from_int(move_params[:from].to_i)
   end
+
   def to_position
-    @to_position ||=  Position.new_from_int(move_params[:to].to_i)
+    @to_position ||= Position.new_from_int(move_params[:to].to_i)
 end
 
 end
