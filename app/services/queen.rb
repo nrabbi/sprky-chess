@@ -47,7 +47,7 @@ class Queen < ChessPiece
           cellsTouched << Position.new(position.x, position.y + ((i+1)*inc))
         end
       else
-        raise "This queen is not moving anywhere, but should."
+        false
       end
     end
 

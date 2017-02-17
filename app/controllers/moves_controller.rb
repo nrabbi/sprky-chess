@@ -12,7 +12,8 @@ class MovesController < ApplicationController
     new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
 
     if new_move.valid?
-      @move = @game.moves.create(move_params)
+      # @move = @game.moves.create(move_params)
+      new_move.save
       redirect_to game_board_path(@game)
     else
       redirect_to game_board_path(@game), notice: new_move.errors

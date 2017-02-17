@@ -43,7 +43,7 @@ class Rook < ChessPiece
         cellsTouched << Position.new(position.x, position.y + ((i + 1) * inc))
       end
     else
-      raise "This rook is not moving anywhere, but should."
+      false
     end
 
     pieces.each do |piece|
