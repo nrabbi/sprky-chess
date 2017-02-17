@@ -153,13 +153,13 @@ RSpec.describe "Pawn" do
 
     end
 
-    it 'determines that a pawn can move diagonally' do
+    it 'determines that a pawn cannot move diagonally' do
 
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,P,0,0
-      # 0,0,0,0,0,0,D,0 --> Destination is valid
+      # 0,0,0,0,0,0,D,0 --> Destination is invalid
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -167,7 +167,7 @@ RSpec.describe "Pawn" do
       pawn = Pawn.new(:black, Position.new(5, 4))
       pieces = [pawn, ChessPiece.new(:white, Position.new(6, 3))]
       destination = Position.new(6, 3)
-      expect(pawn.is_valid?(destination)).to eq true
+      expect(pawn.is_valid?(destination)).to eq false
 
     end
 
