@@ -120,6 +120,14 @@ RSpec.describe "Rook" do
       expect(rook.is_obstructed?(pieces, destination)).to eq false
     end
 
+    it 'determines a piece of same color at the destination is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, Pawn.new(:white, destination)]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
+    end
+
     it 'determines a piece of same color is an obstruction' do
       rook = Rook.new(:white, Position.new(5, 0))
       destination = Position.new(1, 0)

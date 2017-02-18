@@ -50,6 +50,11 @@ class Rook < ChessPiece
       cellsTouched.each do |position|
         return true if (piece.position.x == position.x) && (piece.position.y == position.y)
       end
+
+      # check for a piece at the destination separately: 
+      # only pieces of the same color are an obstruction. Opposite
+      # colored pieces can be captured.
+      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == self.color)
     end
 
     false
