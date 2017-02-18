@@ -42,6 +42,7 @@ class CheckDeterminer
           unvalidated_check_moves << move
         end
       end
+      binding.pry
       unvalidated_check_moves.each do |move|
         move[:game_id] = current_game.id
         move[:id] = 99999
@@ -57,7 +58,6 @@ class CheckDeterminer
         alerts << "#{piece.color.to_s.capitalize} #{piece.class} is checking opponent King"
       end
       alerts
-      # TODO send piece name and destination as error message
     end
   end
 

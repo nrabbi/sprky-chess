@@ -11,6 +11,9 @@ end
 
 class Move < ApplicationRecord
   belongs_to :game
+
+  default_scope { order(created_at: :asc) }
+  
   validates :from, presence: true
   validates :to, presence: true
   validates_inclusion_of :from, in: (Position::BLACK_CAPTURE_INT..Position::WHITE_CAPTURE_INT)
