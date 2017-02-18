@@ -36,7 +36,7 @@ class GamesController < ApplicationController
 
     @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
     @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
-
+    @player_turn = player_turn(current_game)
   end
 
   def available
@@ -52,6 +52,10 @@ class GamesController < ApplicationController
     else
       render :available, status: :unauthorized
     end
+  end
+
+  def player_turn(current_game)
+    current_game.moves.count % 2 == 0 ? "White" : "Black"
   end
 
   # x in [0, 7]
