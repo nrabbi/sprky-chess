@@ -23,14 +23,17 @@ RSpec.describe MovesController, type: :controller do
   end
   describe 'moves#create action' do
     it 'successfully create a valid move' do
-      # game
-      # # move pawn from A2 to A3
-      # # post :create, params: { game_id: game, move: { from: 8, to: 16 } }
-      # post :create, params: { move: { game_id: game.id, from: 8, to: 16 } }
-      # expect(response).to redirect_to game_board_path(game)
-      # move = Move.last
-      # expect(move.from).to eq(8)
+      player
+      player2
+      sign_in_player
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
+      # move pawn from A2 to A3
+      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+      expect(response).to redirect_to game_board_path(game)
+      move = Move.last
+      expect(move.from).to eq(8)
     end
+    
     it 'does not create a move with invalid params' do
       game
       move_count = Move.count
@@ -39,21 +42,30 @@ RSpec.describe MovesController, type: :controller do
     end
 
     it "lets the player who has current turn create a move" do
-      # binding.pry
-      # player
-      # sign_in_player
-      # game = FactoryGirl.create(:game, player_1_id: player.id)
-      # move_count = Move.count
-      # post :create, move: { game_id: game.id, from: 8, to: 16 }
-      # expect(Move.count).to eq 1
-      # # player2
-      # # sign_in_player2
-      # # game.update(player_2_id: player2.id)
+      player
+      player2
+      sign_in_player
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
+      move_count = Move.count
+      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+      expect(Move.count).to eq 1
+      sign_out player
+      sign_in_player2
+      post :create, params: { game_id: game.id, move: { from: 48, to: 32 } }
+      expect(game.moves.count).to eq 2
     end
 
     it "prohibits the player who does not have current turn from creating a move" do
+      player
+      player2
+      sign_in_player
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
+      move_count = Move.count
+      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+      expect(Move.count).to eq 1
+      post :create, params: { game_id: game.id, move: { from: 16, to: 24 } }
+      expect(Move.count).to eq 1
     end
-
   end
 
 end
