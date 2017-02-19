@@ -14,11 +14,11 @@ class Queen < ChessPiece
       # 2) collect all touched cells
       n = difference_x > difference_x ? difference_x : difference_y
 
-      inc_x = (destination.x > position.x) ? 1 : -1
-      inc_y = (destination.y > position.y) ? 1 : -1
+      inc_x = destination.x > position.x ? 1 : -1
+      inc_y = destination.y > position.y ? 1 : -1
 
-      (n-1).times do |i|
-          cellsTouched << Position.new(position.x + ((i+1)*inc_x), position.y + ((i+1)*inc_y))
+      (n - 1).times do |i|
+        cellsTouched << Position.new(position.x + ((i + 1) * inc_x), position.y + ((i + 1) * inc_y))
       end
     else
       moving_along_x = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
@@ -31,20 +31,20 @@ class Queen < ChessPiece
         # 2) collect all touched cells
         n = destination.x > position.x ? destination.x - position.x : position.x - destination.x
 
-        inc = (destination.x > position.x) ? 1 : -1
+        inc = destination.x > position.x ? 1 : -1
 
-        (n-1).times do |i|
-          cellsTouched << Position.new(position.x + ((i+1)*inc), position.y)
+        (n - 1).times do |i|
+          cellsTouched << Position.new(position.x + ((i + 1) * inc), position.y)
         end
 
       elsif moving_along_y
         # 2) collect all touched cells
         n = destination.y > position.y ? destination.y - position.y : position.y - destination.y
 
-        inc = (destination.y > position.y) ? 1 : -1
+        inc = destination.y > position.y ? 1 : -1
 
-        (n-1).times do |i|
-          cellsTouched << Position.new(position.x, position.y + ((i+1)*inc))
+        (n - 1).times do |i|
+          cellsTouched << Position.new(position.x, position.y + ((i + 1) * inc))
         end
       else
         false
@@ -57,10 +57,10 @@ class Queen < ChessPiece
         return true if (piece.position.x == position.x) && (piece.position.y == position.y)
       end
 
-      # check for a piece at the destination separately: 
+      # check for a piece at the destination separately:
       # only pieces of the same color are an obstruction. Opposite
       # colored pieces can be captured.
-      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == self.color)
+      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == color)
     end
 
     false

@@ -287,7 +287,6 @@ RSpec.describe "Queen" do
         expect(queen.is_obstructed?(pieces, destination)).to eq true
       end
 
-
       it 'determines a piece of opposite color is an obstruction' do
         queen = Queen.new(:white, Position.new(5, 0))
         destination = Position.new(1, 0)

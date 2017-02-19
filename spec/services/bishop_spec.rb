@@ -128,7 +128,7 @@ RSpec.describe "Bishop" do
     it 'determines a piece of opposite color is an obstruction' do
       bishop = Bishop.new(:white, Position.new(5, 0))
       destination = Position.new(2, 3)
-      pieces = [bishop, ChessPiece.new(:black, Position.new(4,1))]
+      pieces = [bishop, ChessPiece.new(:black, Position.new(4, 1))]
 
       expect(bishop.is_obstructed?(pieces, destination)).to eq true
     end
@@ -136,7 +136,7 @@ RSpec.describe "Bishop" do
     it 'determines a piece of same color is an obstruction' do
       bishop = Bishop.new(:white, Position.new(5, 0))
       destination = Position.new(2, 3)
-      pieces = [bishop, ChessPiece.new(:white, Position.new(4,1))]
+      pieces = [bishop, ChessPiece.new(:white, Position.new(4, 1))]
 
       expect(bishop.is_obstructed?(pieces, destination)).to eq true
     end

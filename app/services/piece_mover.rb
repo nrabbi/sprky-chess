@@ -81,7 +81,7 @@ class PieceMover
       return false
     end
 
-    my_pieces = pieces.select {|piece| piece.color == my_color }
+    my_pieces = pieces.select { |piece| piece.color == my_color }
 
     my_pieces.each do |piece|
       is_valid = piece.is_valid?(opposite_king.position)
@@ -91,7 +91,7 @@ class PieceMover
       is_in_check = is_valid && !is_obstructed && can_capture
 
       if is_in_check
-        #byebug
+        # byebug
         return true
       end
 
@@ -166,15 +166,15 @@ class PieceMover
   end
 
   def self.pick_white_king(pieces)
-    pieces.select {|piece| piece.class.to_s == "King" && piece.color == :white } [0]
+    pieces.select { |piece| piece.class.to_s == "King" && piece.color == :white } [0]
   end
 
   def self.pick_black_king(pieces)
-    pieces.select {|piece| piece.class.to_s == "King" && piece.color == :black } [0]
+    pieces.select { |piece| piece.class.to_s == "King" && piece.color == :black } [0]
   end
 
   def self.pick_opposite_king(color, pieces)
-    (color == :black) ? pick_white_king(pieces) : pick_black_king(pieces)
+    color == :black ? pick_white_king(pieces) : pick_black_king(pieces)
   end
 
   def self.apply_moves(_pieces, _moves)

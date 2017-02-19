@@ -65,7 +65,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -86,7 +86,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -107,7 +107,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -128,7 +128,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -149,7 +149,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -170,7 +170,7 @@ describe 'PieceMover' do
       new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
-      if !move_resolution.ok?
+      unless move_resolution.ok?
         puts "Move Resolution: #{move_resolution.error_message}"
       end
       expect(move_resolution.ok?).to eq true
@@ -248,8 +248,6 @@ describe 'PieceMover' do
 
       expect(PieceMover.is_in_check?(:black, pieces)).to eq false
 
-
-
       # moving the bishop away will bring the King into check
       white_bishop = Bishop.new(:white, Position.new(1, 4))
 
@@ -280,7 +278,7 @@ describe 'PieceMover' do
 
       pieces = [white_king, white_bishop, black_rook]
 
-      expect(PieceMover.checks_exist?(pieces) ).to eq true
+      expect(PieceMover.checks_exist?(pieces)).to eq true
     end
 
     it "it determines check, 2" do
@@ -301,7 +299,7 @@ describe 'PieceMover' do
 
       pieces = [black_king, white_bishop]
 
-      expect(PieceMover.checks_exist?(pieces) ).to eq true
+      expect(PieceMover.checks_exist?(pieces)).to eq true
     end
   end
 
