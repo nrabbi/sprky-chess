@@ -11,12 +11,9 @@ class King < ChessPiece
 
     return true unless inside_board_boundaries?(destination.x, destination.y)
 
-    # i guess the first piece is always the king we want to move...
-    king = pieces[0]
-
     # first check if the destination is 1 square away
-    absX = (destination.x - king.position.x).abs
-    absY = (destination.y - king.position.y).abs
+    absX = (destination.x - position.x).abs
+    absY = (destination.y - position.y).abs
 
     return true if absX > 1 || absY > 1
 
@@ -24,7 +21,7 @@ class King < ChessPiece
     otherPieces = pieces.slice(1, pieces.count - 1)
 
     otherPieces.each do |piece|
-      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y)
+      return true if (piece.position.x == destination.x) && (piece.position.y == destination.y) && (piece.color == color)
     end
 
     false

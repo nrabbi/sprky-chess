@@ -63,6 +63,13 @@ RSpec.describe "Rook" do
       expect(rook.is_valid?(destination3)).to eq(false)
       expect(rook.is_valid?(destination4)).to eq(false)
     end
+
+    it "checks the positions for the obstruction tests" do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+
+      expect(rook.is_valid?(destination)).to eq true
+    end
   end
 
   describe 'rook#is_obstructed' do # Assuming move is valid
@@ -103,6 +110,38 @@ RSpec.describe "Rook" do
       pieces = [rook, Pawn.new(:white, Position.new(2, 1)), Pawn.new(:white, Position.new(3, 4))]
 
       expect(rook.is_obstructed?(pieces, destination)).to eq false
+    end
+
+    it 'determines a piece of opposite color at the destination is not an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, ChessPiece.new(:black, destination)]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq false
+    end
+
+    it 'determines a piece of same color at the destination is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, Pawn.new(:white, destination)]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of same color is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, ChessPiece.new(:white, Position.new(2, 0))]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
+    end
+
+    it 'determines a piece of opposite color is an obstruction' do
+      rook = Rook.new(:white, Position.new(5, 0))
+      destination = Position.new(1, 0)
+      pieces = [rook, ChessPiece.new(:black, Position.new(2, 0))]
+
+      expect(rook.is_obstructed?(pieces, destination)).to eq true
     end
   end
 end

@@ -131,7 +131,7 @@ RSpec.describe "King" do
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
-      # 0,0,0,K,x,0,0,0 --> Destination is occupied
+      # 0,0,0,K,x,0,0,0 --> Destination is free
       # 0,0,0,x,D,0,0,0
       # 0,0,0,0,0,0,0,0
       # 0,0,0,0,0,0,0,0
@@ -142,6 +142,14 @@ RSpec.describe "King" do
       pieces = [king, Pawn.new(:white, Position.new(3, 2)), Pawn.new(:white, Position.new(4, 3))]
 
       expect(king.is_obstructed?(pieces, destination)).to eq(false)
+    end
+
+    it 'determines a piece of opposite color at the destination is not an obstruction' do
+      king = King.new(:white, Position.new(5, 0))
+      destination = Position.new(5, 1)
+      pieces = [king, ChessPiece.new(:black, destination)]
+
+      expect(king.is_obstructed?(pieces, destination)).to eq false
     end
   end
 end

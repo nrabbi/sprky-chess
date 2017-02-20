@@ -118,5 +118,13 @@ RSpec.describe "Knight" do
 
       expect(knight.is_obstructed?(pieces, destination)).to eq false
     end
+
+    it 'determines a piece of opposite color at the destination is not an obstruction' do
+      knight = Knight.new(:white, Position.new(5, 0))
+      destination = Position.new(2, 3)
+      pieces = [knight, ChessPiece.new(:black, destination)]
+
+      expect(knight.is_obstructed?(pieces, destination)).to eq false
+    end
   end
 end

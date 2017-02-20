@@ -29,8 +29,14 @@ class GamesController < ApplicationController
     @game = current_game
     pieces = StartingPositions::STARTING_POSITIONS
 
-    piece_mover = PieceMover.new
-    @after_move_pieces = piece_mover.move_pieces(pieces, @game.moves)
+    @after_move_pieces = PieceMover.apply_moves(pieces, @game.moves)
+
+    black_capture_area_pos = Position.new_from_int(Position::BLACK_CAPTURE_INT)
+    white_capture_area_pos = Position.new_from_int(Position::WHITE_CAPTURE_INT)
+
+    @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
+    @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
+
   end
 
   def available

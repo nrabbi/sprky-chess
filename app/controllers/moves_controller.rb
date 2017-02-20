@@ -1,20 +1,22 @@
 class MovesController < ApplicationController
-  def index
-    set_game
-  end
+
+  before_action :current_game, only: [:index, :new, :create]
+
+  def index; end
 
   def new
-    set_game
     @move = Move.new
   end
 
   def create
-    set_game
-    @move = @game.moves.create(move_params)
-    if @move.valid?
+    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+
+    if new_move.valid?
+      # @move = @game.moves.create(move_params)
+      new_move.save
       redirect_to game_board_path(@game)
     else
-      render :new, status: :unprocessable_entity
+      redirect_to game_board_path(@game), notice: new_move.errors
     end
   end
 
@@ -24,8 +26,16 @@ class MovesController < ApplicationController
     params.require(:move).permit(:from, :to)
   end
 
-  def set_game
-    @game = Game.find(params[:game_id])
+  def current_game
+    @game ||= Game.find(params[:game_id])
   end
+
+  def from_position
+    @from_position ||= Position.new_from_int(move_params[:from].to_i)
+  end
+
+  def to_position
+    @to_position ||= Position.new_from_int(move_params[:to].to_i)
+end
 
 end
