@@ -4,7 +4,7 @@
 #chessboard {
   width: 680px;
   height: 680px;
-  margin: 20px 20% 20px 20%;
+  margin: 0 auto;
   border: 20px solid #333;
 
   .square:hover{
@@ -32,7 +32,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   font-size: 10px;
   text-align: center;
   display: table-cell;
-  vertical-align:middle;
+  vertical-align: middle;
 }
 
 .pieces {
