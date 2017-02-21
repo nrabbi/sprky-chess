@@ -1,5 +1,9 @@
 </br>
 <h1 class="text-center">Sprky Chess Home</h1>
 
-<h2 class="text-center"><%= link_to "View All Games", games_path %></h2>
-<h2 class="text-center"><%= link_to "Start a New Game", new_game_path %></h2>
+<% if player_signed_in? %>
+  <h2 class="text-center"><%= link_to "View All Games", games_path %></h2>
+  <h2 class="text-center"><%= link_to "Start a New Game", new_game_path %></h2>
+  <% else %>
+  <h3 class="text-center" style="color: red;">Please Log In to Continue...</h3>
+<% end %>
