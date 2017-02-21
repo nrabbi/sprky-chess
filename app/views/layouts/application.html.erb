@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sprky</title>
+    <title>Sprky Chess</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
 
@@ -34,7 +34,7 @@
 
           <ul class="nav navbar-nav navbar-right">
             <% if player_signed_in? %>
-              <li style="color: white; margin-top: 15px;">Welcome <%= current_player.email %></li>
+              <li style="color: white; margin-top: 15px; margin-left: 1em; ">Welcome <%= current_player.email %></li>
               <li><%= link_to 'Sign out', destroy_player_session_path, method: :delete %></li>
             <% else %>
               <li><%= link_to 'Sign in', new_player_session_path %></li>
