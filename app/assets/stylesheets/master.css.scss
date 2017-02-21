@@ -55,3 +55,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 .selected{
   background: rgba(0, 255, 255, .5) !important;
 }
+
+body {
+    background-image: url("bg.png");
+}
