@@ -37,6 +37,9 @@ class GamesController < ApplicationController
     @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
     @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
     @player_turn = player_turn(current_game)
+    @current_player_color = current_player_color(current_game)
+    @opposite_player = opposite_player(current_game)
+    @opposite_player_color = opposite_color(@current_player_color)
   end
 
   def available
@@ -45,17 +48,13 @@ class GamesController < ApplicationController
 
   def update
     current_game.update_attributes(player_2_id: current_player.id)
-    current_game.update_attributes(player_2_color: opposite_color(current_game))
+    current_game.update_attributes(player_2_color: opposite_color(current_game.player_1_color))
     if current_game.save
       current_game.started!
       redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
     else
       render :available, status: :unauthorized
     end
-  end
-
-  def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
   end
 
   # x in [0, 7]
@@ -70,6 +69,10 @@ class GamesController < ApplicationController
     nil
   end
 
+  def player_turn(current_game)
+    current_game.moves.count % 2 == 0 ? "White" : "Black"
+  end
+
   private
 
   def game_params
@@ -80,12 +83,21 @@ class GamesController < ApplicationController
     @current_game ||= Game.find(params[:id])
   end
 
-  def opposite_color(current_game)
-    if current_game.player_1_color == "Black"
+  def opposite_color(color)
+    if color == "Black"
       "White"
-    elsif current_game.player_1_color == "White"
+    elsif color == "White"
       "Black"
     end
+  end
+
+  def opposite_player(current_game)
+    current_player.id == current_game.player_1_id ? opp_player = current_game.player_2_id : opp_player = current_game.player_1_id
+    Player.find(opp_player)
+  end
+
+  def current_player_color(current_game)
+    current_player.id == current_game.player_1_id ? current_game.player_1_color : current_game.player_2_color
   end
 
 end

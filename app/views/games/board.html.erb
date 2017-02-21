@@ -1,6 +1,10 @@
 <div class="container">
   <br />
-  <h3>It is currently <%= @player_turn %>'s turn</h3>
+  <h3><%= @current_game.name %></h3>
+  <h4><%= current_player.email %> vs <%= @opposite_player.email %></h4>
+  <h4>You are playing as <%= @current_player_color %></h4>
+  <h4>Your opponent is playing as <%= @opposite_player_color %></h4>
+  <h4>It is currently <%= @player_turn %>'s turn</h4>
     <div id="chessboard" data-game-id="<%= @current_game.id %>">
       <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
       row_index = 7
