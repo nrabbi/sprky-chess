@@ -1,12 +1,14 @@
-<div class="container">
-<br />
-<h1 class="text-center">Start a New Game</h1>
-<%= simple_form_for @game do |f| %>
-  <%= f.input :name %>
-  <%= f.input :player_1_color, label: "Choose Your Piece Color", include_blank: false, 
-  collection: ["White", "Black"], as: :select %>
+<br/><br/>
+
+<div class="card col-xs-10 col-xs-offset-1">
   <br />
-  <%= f.submit "Create Game", class: 'btn btn-primary' %>
-  <br />
-<% end %>
+  <h2 class="text-center">Start a New Game</h2>
+  <%= simple_form_for @game do |f| %>
+    <%= f.input :name %>
+    <%= f.input :player_1_color, label: "Choose Your Piece Color", include_blank: false,
+    collection: ["White", "Black"], as: :select %>
+    <br />
+    <%= f.submit "Start Game!", class: 'btn btn-success center-block' %>
+    <br />
+  <% end %><br/>
 </div>
