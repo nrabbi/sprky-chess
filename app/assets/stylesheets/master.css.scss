@@ -58,7 +58,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 
 body {
     background-image: url("bg.png");
-    width: 90%;
+    width: 80%;
     margin: 0 auto;
     font-family: 'Gloria Hallelujah', cursive;
 }
@@ -70,4 +70,17 @@ body {
   -o-background-size: cover;
   background-size: cover;
   box-shadow: 0px 3px 8px #2a2a2a;
+}
+
+.navbar {
+  border-radius:0;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 200;
+  box-shadow: 0px 1px 3px #2a2a2a;
+}
+
+.navbar-inverse a.navbar-brand {
+  font-weight: 100;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
 }
