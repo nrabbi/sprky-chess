@@ -44,8 +44,29 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   clear: both;
 }
 
-.moves-list {
-  float: right;
+.moves-list{
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.moves-right {
+  display: block;
+}
+
+.moves-bottom{
+  display: none;
+}
+
+
+@media screen and (max-width: 1024px) {
+  //  Move list of moves from side of board to bottom on medium screens and below
+  .moves-right {
+    display: none;
+  }
+
+  .moves-bottom{
+    display: block;
+  }
 }
 
 .alignedbutton {

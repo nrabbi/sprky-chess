@@ -1,85 +1,111 @@
 <div class="container">
   <br />
-    <div id="chessboard" data-game-id="<%= @current_game.id %>">
-      <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
-      row_index = 7
-      col_index = 0 %>
-
-      <table>
-        <% 8.times do %>
-          <tr>
-            <% 8.times do %>
-              <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
-                <div><%= col[col_index] + (row_index+1).to_s %></div>
-                <% piece = get_piece_at(col_index, row_index) %>
-                <% if piece %>
-                  <div class="pieces"><%= piece.html_icon.html_safe %></div>
-                <% end %>
-              </td>
-              <% col_index += 1 %>
-
-            <% end %>
-          </tr>
-
-          <% row_index -= 1 %>
-          <% col_index = 0 %>
-        <% end %>
-      </table>
-      <br />
-  </div>
-
   <div class="row">
-
-      <div class="col-md-8">
-        <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
-        <% else %>
-          <h3>No moves yet.</h3>
-        <% end %>
+    <div class="col-md-4">
+      <% if @black_captured_pieces.count == 0 %>
+          <h3>Black has not captured anything yet.</h3>
+      <% else %>
+          <h3>Black's captured pieces:</h3>
           <ul>
-            <% @game.moves.each do |move| %>
+            <% @black_captured_pieces.each do |piece| %>
+                <li>
+                  <%= piece.class.name %>
+                </li>
+            <% end %>
+          </ul>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div id="chessboard" data-game-id="<%= @current_game.id %>">
+          <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
+          row_index = 7
+          col_index = 0 %>
+
+          <table>
+            <% 8.times do %>
+              <tr>
+                <% 8.times do %>
+                  <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
+                    <div><%= col[col_index] + (row_index+1).to_s %></div>
+                    <% piece = get_piece_at(col_index, row_index) %>
+                    <% if piece %>
+                      <div class="pieces"><%= piece.html_icon.html_safe %></div>
+                    <% end %>
+                  </td>
+                  <% col_index += 1 %>
+
+                <% end %>
+              </tr>
+
+              <% row_index -= 1 %>
+              <% col_index = 0 %>
+            <% end %>
+          </table>
+          <br />
+      </div>
+    </div>
+    <!--  large(> 1024px screens)-->
+    <div class="col-md-4 moves-right">
+      <% if @game.moves.count > 0 %>
+          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
+      <% else %>
+          <h3>No moves yet.</h3>
+      <% end %>
+      <div class="moves-list">
+        <ul>
+          <% @game.moves.each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
                 From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
                 <%  position = Position.new_from_int(move.to) %>
                 To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
-              <% end %>
-            </ul>
+          <% end %>
+        </ul>
       </div>
     </div>
+  </div>
 
-    <div class="row">
-      <div class="col-md-4">
-        <% if @black_captured_pieces.count == 0 %>
-          <h3>Black has not captured anything yet.</h3>
-        <% else %>
-          <h3>Black's captured pieces:</h3>
-          <ul>
-            <% @black_captured_pieces.each do |piece| %>
-              <li>
-                <%= piece.class.name %>
-              </li>
-              <% end %>
-          </ul>
-        <% end %>
-      </div>
-
-      <div class="col-md-4">
-          <% if @white_captured_pieces.count == 0 %>
+  <div class="row">
+    <div class="col-md-4">
+      <% if @white_captured_pieces.count == 0 %>
           <h3>White has not captured anything yet.</h3>
-        <% else %>
+      <% else %>
           <h3>White's captured pieces:</h3>
           <ul>
             <% @white_captured_pieces.each do |piece| %>
-              <li>
-                <%= piece.class.name %>
-              </li>
-              <% end %>
+                <li>
+                  <%= piece.class.name %>
+                </li>
+            <% end %>
           </ul>
-        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <!-- Medium(< 1024px screens -->
+  <div class="row moves-bottom">
+    <div class="col-md-4">
+      <% if @game.moves.count > 0 %>
+          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
+      <% else %>
+          <h3>No moves yet.</h3>
+      <% end %>
+      <div class="moves-list">
+        <ul>
+          <% @game.moves.each do |move| %>
+              <li>
+                <%  position = Position.new_from_int(move.from) %>
+                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <%  position = Position.new_from_int(move.to) %>
+                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+              </li>
+          <% end %>
+        </ul>
       </div>
     </div>
+  </div>
 
 </div>
 <br />
