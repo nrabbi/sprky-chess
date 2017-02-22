@@ -137,3 +137,14 @@ body {
   }
 }
 
+.game-header {
+  background: cornflowerblue;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  .game-name{
+    font-weight: bold;
+    font-size: 20px;
+  }
+}
+

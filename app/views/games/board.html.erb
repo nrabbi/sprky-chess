@@ -1,6 +1,15 @@
 <div class="container-fluid arena">
   <div class="row game-header">
-    <%= @current_game %>
+    <span class="game-name"><%= @current_game.name %></span>
+    <br>
+    <% if @black_player != nil && @white_player != nil %>
+        <!--Both players-->
+    <span><%= @black_player.email %> vs  <%= @white_player.email %></span>
+    <% elsif @black_player != nil && @white_player == nil %>
+        <span>Waiting for White</span>
+    <% elsif @white_player != nil && @black_player == nil %>
+        <span>Waiting for Black</span>
+    <% end %>
   </div>
   <div class="row capture-zone">
     <div class="col-md-4">
@@ -14,9 +23,13 @@
   </div>
   <div class="row player-info">
     <div class="col-md-8">
-      <%= @black_player.email %>
-      <% if @black_player.id == @current_player.id %>
-          (you)
+      <% if @black_player != nil %>
+        <%= @black_player.email %>
+        <% if @black_player.id == @current_player.id %>
+            (you)
+        <% end %>
+      <% else %>
+        Awaiting Player
       <% end %>
     </div>
   </div>
@@ -73,9 +86,13 @@
   </div>
   <div class="row player-info">
     <div class="col-md-8">
-      <%= @white_player.email %>
-      <% if @white_player.id == @current_player.id %>
-        (you)
+      <% if @white_player != nil %>
+        <%= @white_player.email %>
+        <% if @white_player.id == @current_player.id %>
+          (you)
+        <% end %>
+      <% else %>
+        Awaiting Player
       <% end %>
     </div>
   </div>
