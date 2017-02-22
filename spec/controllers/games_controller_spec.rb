@@ -36,11 +36,11 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to new_player_session_path
     end
 
-    it "successfullies create a new game in the database" do
+    it "successfully create a new game in the database" do
       player
       sign_in_player
       post_valid_game
-      expect(response).to redirect_to game_path(Game.last)
+      expect(response).to redirect_to game_board_path(Game.last)
 
       game = Game.last
       expect(game.name).to eq("Test Game")
