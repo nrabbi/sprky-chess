@@ -17,10 +17,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def show
-    @game = current_game
-  end
-
   def index
     @games = Game.all
   end
