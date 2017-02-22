@@ -51,12 +51,12 @@
     <!--  large(> 1024px screens)-->
     <div class="col-md-4 moves-right">
       <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
+          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
       <% else %>
           <h3>No moves yet.</h3>
       <% end %>
       <div class="moves-list">
-        <ul>
+        <ol>
           <% @game.moves.each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
@@ -65,7 +65,7 @@
                 To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
           <% end %>
-        </ul>
+        </ol>
       </div>
     </div>
   </div>
@@ -91,12 +91,12 @@
   <div class="row moves-bottom">
     <div class="col-md-4">
       <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
+          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
       <% else %>
           <h3>No moves yet.</h3>
       <% end %>
       <div class="moves-list">
-        <ul>
+        <ol>
           <% @game.moves.each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
@@ -105,7 +105,7 @@
                 To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
           <% end %>
-        </ul>
+        </ol>
       </div>
     </div>
   </div>
