@@ -11,7 +11,7 @@ class GamesController < ApplicationController
     @game = Game.create(game_params)
     if @game.valid?
       @game.created!
-      redirect_to game_path(@game)
+      redirect_to game_board_path(@game)    
     else
       render :new, status: :unprocessable_entity
     end
