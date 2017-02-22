@@ -64,11 +64,13 @@
         <div class="col-xs-12 col-sm-3 text-center">
           <u><b>Players</b></u>
           <br/>
-          <%= link_to 'Home', root_path %>        
-          <br />
-          <%= link_to 'New Game', new_game_path %>
-          <br/>
-          <%= link_to 'Available Games', games_path %>
+          <%= link_to 'Home', root_path %>
+          <% if player_signed_in? %>        
+            <br />
+            <%= link_to 'New Game', new_game_path %>
+            <br/>
+            <%= link_to 'Available Games', games_path %>
+          <% end %>
         </div>
 
         <div class="col-xs-12 col-sm-3 text-center">
