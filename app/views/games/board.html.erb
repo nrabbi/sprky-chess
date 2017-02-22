@@ -1,5 +1,17 @@
 <div class="container">
   <br />
+  <h3><%= @current_game.name %></h3>
+  <h4><%= @player_1_email %> vs <%= @player_2_email %></h4>
+  <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
+    <h4>You are playing as <%= @current_player_color %></h4>
+    <h4>Your opponent is playing as <%= @opposite_player_color %></h4>
+    <h4>It is currently <%= @player_turn %>'s turn</h4>
+  <% else %>
+    <h4><%= @player_1_email %> is playing as <%= @current_game.player_1_color %></h4>
+    <h4><%= @player_2_email %> is playing as <%= @current_game.player_2_color %></h4>
+    <h4>It is currently <%= @player_turn %>'s turn</h4>
+    <% end %>
+
     <div id="chessboard" data-game-id="<%= @current_game.id %>">
       <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
       row_index = 7
