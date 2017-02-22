@@ -1,5 +1,7 @@
-<div class="container">
-  <br />
+<div class="container-fluid arena">
+  <div class="row game-header">
+    <%= @current_game %>
+  </div>
   <div class="row capture-zone">
     <div class="col-md-4">
       <% if @black_captured_pieces.count == 0 %>
