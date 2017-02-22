@@ -3,11 +3,18 @@
   <div class="row capture-zone">
     <div class="col-md-4">
       <% if @black_captured_pieces.count == 0 %>
-          <h3>Black has not captured anything yet.</h3>
       <% else %>
             <% @black_captured_pieces.each do |piece| %>
                 <span class="pieces"><%= piece.html_icon.html_safe %></span>
             <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row player-info">
+    <div class="col-md-8">
+      <%= @black_player.email %>
+      <% if @black_player.id == @current_player.id %>
+          (you)
       <% end %>
     </div>
   </div>
@@ -62,11 +69,17 @@
       </div>
     </div>
   </div>
-
+  <div class="row player-info">
+    <div class="col-md-8">
+      <%= @white_player.email %>
+      <% if @white_player.id == @current_player.id %>
+        (you)
+      <% end %>
+    </div>
+  </div>
   <div class="row capture-zone">
     <div class="col-md-4">
       <% if @white_captured_pieces.count == 0 %>
-          <h3>White has not captured anything yet.</h3>
       <% else %>
           <% @white_captured_pieces.each do |piece| %>
             <span class="pieces"><%= piece.html_icon.html_safe %></span>

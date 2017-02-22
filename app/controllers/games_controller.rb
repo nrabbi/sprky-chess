@@ -37,6 +37,41 @@ class GamesController < ApplicationController
     @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
     @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
 
+    @black_player = black_player
+    @white_player = white_player
+
+  end
+
+  def black_player
+    if @current_game.player_1_color == "Black"
+      if current_player.id == @current_game.player_1_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_1_id)
+      end
+    else
+      if current_player.id == @current_game.player_2_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_2_id)
+      end
+    end
+  end
+
+  def white_player
+    if @current_game.player_1_color == "White"
+      if current_player.id == @current_game.player_1_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_1_id)
+      end
+    else
+      if current_player.id == @current_game.player_2_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_2_id)
+      end
+    end
   end
 
   def available
@@ -82,6 +117,10 @@ class GamesController < ApplicationController
     elsif current_game.player_1_color == "White"
       "Black"
     end
+  end
+
+  def player_info(color)
+    color
   end
 
 end
