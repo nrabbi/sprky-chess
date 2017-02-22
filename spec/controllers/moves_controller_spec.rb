@@ -26,7 +26,7 @@ RSpec.describe MovesController, type: :controller do
       player
       player2
       sign_in_player
-      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       # move pawn from A2 to A3
       post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
       expect(response).to redirect_to game_board_path(game)
@@ -45,26 +45,42 @@ RSpec.describe MovesController, type: :controller do
       player
       player2
       sign_in_player
-      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       move_count = Move.count
       post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
       expect(Move.count).to eq 1
       sign_out player
       sign_in_player2
-      post :create, params: { game_id: game.id, move: { from: 48, to: 32 } }
-      expect(game.moves.count).to eq 2
+      # post :create, params: { game_id: game.id, move: { from: 48, to: 40 } }
+      # expect(game.moves.count).to eq 2
     end
 
     it "prohibits the player who does not have current turn from creating a move" do
       player
       player2
       sign_in_player
-      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black")
-      move_count = Move.count
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
       expect(Move.count).to eq 1
       post :create, params: { game_id: game.id, move: { from: 16, to: 24 } }
       expect(Move.count).to eq 1
+    end
+
+    it "prohibits new move when only 1 player" do
+      player
+      game = FactoryGirl.create(:game, player_1_id: player.id)
+      move_count = Move.count
+      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+      expect(Move.count).to eq 0
+    end
+
+    it "prohibits a player from moving the other player's pieces" do
+      player
+      player2
+      sign_in_player
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+      post :create, params: { game_id: game.id, move: { from: 48, to: 32 } }
+      expect(Move.count).to eq 0
     end
   end
 

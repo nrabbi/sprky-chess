@@ -40,6 +40,8 @@ class GamesController < ApplicationController
     @current_player_color = current_player_color(current_game)
     @opposite_player = opposite_player(current_game)
     @opposite_player_color = opposite_color(@current_player_color)
+    @player_1_email = player_1_email
+    @player_2_email = player_2_email
   end
 
   def available
@@ -91,13 +93,33 @@ class GamesController < ApplicationController
     end
   end
 
-  def opposite_player(current_game)
-    current_player.id == current_game.player_1_id ? opp_player = current_game.player_2_id : opp_player = current_game.player_1_id
-    Player.find(opp_player)
+  def current_player_color(current_game)
+    if current_player && current_player.id == current_game.player_1_id
+      current_game.player_1_color
+    elsif current_player && current_player.id == current_game.player_2_id
+      current_game.player_2_color
+    else
+      # current_player is not playing this game or no current_player
+      return
+    end
   end
 
-  def current_player_color(current_game)
-    current_player.id == current_game.player_1_id ? current_game.player_1_color : current_game.player_2_color
+  def opposite_player(current_game)
+    if current_game.started? && current_player
+      current_player.id == current_game.player_1_id ? opp_player = current_game.player_2_id : opp_player = current_game.player_1_id
+      Player.find(opp_player)
+    else 
+      # current_player is not playing this game or no current_player
+      return
+    end
+  end
+
+  def player_1_email
+    Player.find(current_game.player_1_id).email
+  end
+
+  def player_2_email
+    current_game.player_2_id.nil? ? "(no opponent has joined yet)" : Player.find(current_game.player_2_id).email
   end
 
 end
