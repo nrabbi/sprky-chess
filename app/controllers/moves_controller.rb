@@ -53,11 +53,11 @@ class MovesController < ApplicationController
   end
 
   def from_position
-    @from_position ||= Position.new_from_int(move_params[:from].to_i)
+    Position.new_from_int(move_params[:from].to_i)
   end
 
   def to_position
-    @to_position ||= Position.new_from_int(move_params[:to].to_i)
+    Position.new_from_int(move_params[:to].to_i)
   end
 
   def current_player_color(current_game)

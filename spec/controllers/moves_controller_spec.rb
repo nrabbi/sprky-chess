@@ -22,6 +22,7 @@ RSpec.describe MovesController, type: :controller do
     end
   end
   describe 'moves#create action' do
+
     it 'successfully create a valid move' do
       player
       player2
@@ -41,6 +42,20 @@ RSpec.describe MovesController, type: :controller do
       expect(Move.count).to eq move_count
     end
 
+    # context 'lets the player who has current turn create a move' do
+    #   let(:game) { FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")}
+    #   let(:move_count) { game.moves.count }
+    #   before do
+    #     sign_in_player
+    #     post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+    #     sign_out player
+    #     sign_in_player2
+    #   end
+    #   it 'has 2 moves' do
+    #     expect { post :create, params: { game_id: game.id, move: { from: 48, to: 40 } } }.to change { move_count }.by(1)
+    #   end
+    # end
+
     it "lets the player who has current turn create a move" do
       player
       player2
@@ -51,8 +66,8 @@ RSpec.describe MovesController, type: :controller do
       expect(Move.count).to eq 1
       sign_out player
       sign_in_player2
-      # post :create, params: { game_id: game.id, move: { from: 48, to: 40 } }
-      # expect(game.moves.count).to eq 2
+      post :create, params: { game_id: game.id, move: { from: 48, to: 40 } } #
+      expect(game.moves.count).to eq 2
     end
 
     it "prohibits the player who does not have current turn from creating a move" do
