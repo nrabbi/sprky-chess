@@ -55,5 +55,58 @@
     <% end %>
 
     <%= yield %>
+
+    <br style="clear: both;"></br>
+  
+    <div id="footer">
+      <div class="container">
+
+        <div class="col-xs-12 col-sm-3 text-center">
+          <u><b>Players</b></u>
+          <br/>
+          <%= link_to 'Home', root_path %>        
+          <br />
+          <%= link_to 'New Game', new_game_path %>
+          <br/>
+          <%= link_to 'Available Games', games_path %>
+        </div>
+
+        <div class="col-xs-12 col-sm-3 text-center">
+          <u><b>About</b></u>
+          <br />
+          <%= link_to 'Team', '#' %>
+          <br />
+          <%= link_to 'Privacy Policy', '#' %>
+        </div>
+
+        <div class="col-xs-12 col-sm-3 text-center">
+          <u><b>Contact</b></u>
+          <br />
+          support@snowcoders.com
+          <br />
+          World Wide Web
+        </div>
+
+        <div class="col-xs-12 col-sm-3 text-center">
+          <b class="">Social</b>
+          <br />
+          
+          <%= link_to 'http://github.com/thesnowcoders-fh' do %>
+            <%= image_tag 'github.png', class: 'social-button' %>
+          <% end %>
+
+          <%= link_to '#' do %>
+            <%= image_tag 'linkedin.png', class: 'social-button' %>
+          <% end %>
+
+          <%= link_to '#' do %>
+            <%= image_tag 'twitter.png', class: 'social-button' %>
+          <% end %>
+
+        </div>
+
+    </div>
+
+
   </body>
 </html>
