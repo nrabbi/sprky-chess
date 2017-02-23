@@ -59,58 +59,58 @@
   <%= yield %>
 
   <br style="clear: both;"></br>
+  <br style="clear: both;"></br>
 
-  <div id="footer">
-    <div class="container">
+  <div class="footer">
+    <div class="col-xs-12 col-md-3 col-sm-4 text-center link">
+      <u><b>Players</b></u>
+      <br/>
+      <%= link_to 'Home', root_path %>
+      <% if player_signed_in? %>
+          <br/>
+          <%= link_to 'New Game', new_game_path %>
+          <br/>
+          <%= link_to 'Available Games', games_path %>
+      <% end %>
+    </div>
 
-      <div class="col-xs-12 col-md-3 col-sm-4 text-center">
-        <u><b>Players</b></u>
-        <br/>
-        <%= link_to 'Home', root_path %>
-        <% if player_signed_in? %>
-            <br/>
-            <%= link_to 'New Game', new_game_path %>
-            <br/>
-            <%= link_to 'Available Games', games_path %>
-        <% end %>
-      </div>
+    <div class="col-xs-12 col-md-3 col-sm-2 text-center link">
+      <u><b>About</b></u>
+      <br/>
+      <%= link_to 'Team', '#' %>
+      <br/>
+      <%= link_to 'Privacy Policy', '#' %>
+    </div>
 
-      <div class="col-xs-12 col-md-3 col-sm-2 text-center">
-        <u><b>About</b></u>
-        <br/>
-        <%= link_to 'Team', '#' %>
-        <br/>
-        <%= link_to 'Privacy Policy', '#' %>
-      </div>
+    <div class="col-xs-12 col-md-3 col-sm-2 text-center">
+      <u><b>Contact</b></u>
+      <br/>
+      support@snowcoders.com
+      <br/>
+      World Wide Web
+    </div>
 
-      <div class="col-xs-12 col-md-3 col-sm-2 text-center">
-        <u><b>Contact</b></u>
-        <br/>
-        support@snowcoders.com
-        <br/>
-        World Wide Web
-      </div>
+    <div class="col-xs-12 col-md-3 col-sm-4 text-center">
+      <b class="">Social</b>
+      <br/>
 
-      <div class="col-xs-12 col-md-3 col-sm-4 text-center">
-        <b class="">Social</b>
-        <br/>
+      <%= link_to 'http://github.com/thesnowcoders-fh' do %>
+          <%= image_tag 'github.png', class: 'social-button' %>
+      <% end %>
 
-        <%= link_to 'http://github.com/thesnowcoders-fh' do %>
-            <%= image_tag 'github.png', class: 'social-button' %>
-        <% end %>
+      <%= link_to '#' do %>
+          <%= image_tag 'linkedin.png', class: 'social-button' %>
+      <% end %>
 
-        <%= link_to '#' do %>
-            <%= image_tag 'linkedin.png', class: 'social-button' %>
-        <% end %>
-
-        <%= link_to '#' do %>
-            <%= image_tag 'twitter.png', class: 'social-button' %>
-        <% end %>
-
-      </div>
+      <%= link_to '#' do %>
+          <%= image_tag 'twitter.png', class: 'social-button' %>
+      <% end %>
 
     </div>
+
   </div>
+
+
 </div>
 </body>
 </html>
