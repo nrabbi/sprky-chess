@@ -133,11 +133,17 @@ body {
 }
 
 .player-info {
-  padding: 10px;
   margin: auto;
-  .col-md-8{
+  color: red;
+  .col-md-8 {
+    padding: 5px;
     text-align: center;
   }
+}
+
+
+.turn{
+  color: green;
 }
 
 .game-header {

@@ -10,6 +10,10 @@
     <% elsif @white_player != nil && @black_player == nil %>
         <span>Waiting for Black</span>
     <% end %>
+
+    <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
+        <h4>You are playing as <%= @current_player_color %></h4>
+    <% end %>
   </div>
   <div class="row capture-zone">
     <div class="col-md-4">
@@ -17,12 +21,14 @@
       <% else %>
             <% @black_captured_pieces.each do |piece| %>
                 <span class="pieces"><%= piece.html_icon.html_safe %></span>
+
             <% end %>
       <% end %>
     </div>
   </div>
-  <div class="row player-info">
+  <div class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
     <div class="col-md-8">
+      <span><%= 'Turn - ' if @player_turn == 'Black' %></span>
       <% if @black_player != nil %>
         <%= @black_player.email %>
         <% if @black_player.id == @current_player.id %>
@@ -84,7 +90,8 @@
       </div>
     </div>
   </div>
-  <div class="row player-info">
+  <div class="row player-info <%= 'turn' if @player_turn == 'White' %>">
+    <span><%= 'Turn - ' if @player_turn == 'White' %></span>
     <div class="col-md-8">
       <% if @white_player != nil %>
         <%= @white_player.email %>
