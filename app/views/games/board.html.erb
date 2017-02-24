@@ -147,6 +147,12 @@
 
 <script>
   $(document).ready(function(){
+    if($('.alert').length){
+      var elem = $('.alert').first().clone();
+      elem.find('button:first').remove();
+      toastr.error(elem.text());
+      $('.alert').first().remove();
+    }
     var gameId = $('#chessboard').data('game-id');
     var from, to;
 
