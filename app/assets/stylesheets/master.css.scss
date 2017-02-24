@@ -67,7 +67,6 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   display: none;
 }
 
-
 @media screen and (max-width: 1024px) {
   //  Move list of moves from side of board to bottom on medium screens and below
   .moves-right {
@@ -114,7 +113,7 @@ body {
 }
 
 .navbar {
-  border-radius:0;
+  border-radius: 0;
   font-weight: 200;
   box-shadow: 0px 1px 3px #2a2a2a;
   margin-bottom: 0;
@@ -141,7 +140,6 @@ body {
     text-align: center;
   }
 }
-
 
 .turn{
   color: green;
