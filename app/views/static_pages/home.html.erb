@@ -6,10 +6,11 @@
     <br />
     <h1>Sprky Chess</h1>
     <br />
-    <h2>The most innovative chess game in the world.<h2>
+    <h2>The most innovative chess game in the world.</h2>
     <br />
     <% if player_signed_in? %>
-      <%= link_to "View All Games", games_path, class: 'btn btn-info' %>
+      <%= link_to "Join Game", available_games_path, class: 'btn btn-info' %>
+      <%= link_to "All Games", games_path, class: 'btn btn-info' %>
       <%= link_to "Start a New Game", new_game_path, class: 'btn btn-success' %>
       <% else %>
       <%= link_to 'Register to Get Started!', new_player_registration_path ,class: 'btn btn-warning' %>

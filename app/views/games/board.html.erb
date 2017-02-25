@@ -147,6 +147,15 @@
 
 <script>
   $(document).ready(function(){
+    //    Show toast on flash message existence
+    if($('.alert').length){
+      //  Get message and show
+      var elem = $('.alert').first().clone();
+      elem.find('button:first').remove();
+      toastr.error(elem.text());
+      //  Don't show flash
+      $('.alert').first().remove();
+    }
     var gameId = $('#chessboard').data('game-id');
     var from, to;
 
