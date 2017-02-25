@@ -86,6 +86,9 @@ class GamesController < ApplicationController
     if current_game.save
       current_game.started!
       redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
+      ActionCable.server.broadcast 'game',
+        notification: "#{player_2_email} has joined #{current_game.name}. The game has started" 
+      # head :ok
     else
       render :available, status: :unauthorized
     end

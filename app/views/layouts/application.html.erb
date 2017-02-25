@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= action_cable_meta_tag %>
   <title>Sprky Chess</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
@@ -70,7 +71,7 @@
           <br/>
           <%= link_to 'New Game', new_game_path %>
           <br/>
-          <%= link_to 'Available Games', games_path %>
+          <%= link_to 'Available Games', available_games_path %>
       <% end %>
     </div>
 
