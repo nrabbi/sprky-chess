@@ -164,13 +164,6 @@
         if(data.event && (data.event === "MOVE_CREATED" || data.event === "JOINED_GAME")){
           window.location.reload();
         }
-//        $("#game").removeClass('hidden');
-//        return $('#game').append(this.renderNotification(data));
-      },
-
-      renderNotification: function(data) {
-        console.log(data.notification);
-        return "<p>" + data.notification + "</p";
       }
     });
 
