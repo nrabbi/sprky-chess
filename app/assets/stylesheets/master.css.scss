@@ -129,13 +129,13 @@ $letter-size: 10px;
     tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
       width: $square-size * 1.5;
       height: $square-size * 1.5;
-      font-size: 10px * 1.5;
+      font-size: $letter-size * 1.5;
     }
 
     tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
       width: $square-size * 1.5;
       height: $square-size * 1.5;
-      font-size: 10px * 1.5;
+      font-size: $letter-size * 1.5;
     }
 
     .pieces {
