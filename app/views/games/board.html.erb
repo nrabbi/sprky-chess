@@ -12,6 +12,10 @@
     <h4>It is currently <%= @player_turn %>'s turn</h4>
     <% end %>
 
+    <% if @is_in_check %>
+      <h2>You are in check!</h2>
+    <% end %>
+
     <div id="chessboard" data-game-id="<%= @current_game.id %>">
       <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
       row_index = 7
