@@ -37,7 +37,6 @@ class GamesController < ApplicationController
     @white_player = white_player
 
 
-    # JESSE
     @player_turn = player_turn(current_game)
     @current_player_color = current_player_color(current_game)
     @opposite_player = opposite_player(current_game)
@@ -86,8 +85,11 @@ class GamesController < ApplicationController
     if current_game.save
       current_game.started!
       redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
-      ActionCable.server.broadcast 'game',
-        notification: "#{player_2_email} has joined #{current_game.name}. The game has started" 
+      ActionCable.server.broadcast  "game-#{current_game.id}",
+                                    event: 'JOINED_GAME',
+                                    player: current_player,
+                                    game: current_game,
+                                    message: "#{@current_player.email} has joined the game"
       # head :ok
     else
       render :available, status: :unauthorized

@@ -22,9 +22,13 @@ class MovesController < ApplicationController
     elsif current_player_color(@game) != color_of_piece_to_be_moved
       redirect_to game_board_path(@game), alert: "You can only move your own pieces."
     elsif @new_move.valid?
-      # @move = @game.moves.create(move_params)
-      @new_move.save
-      redirect_to game_board_path(@game)
+      if @new_move.save
+        ActionCable.server.broadcast "game-#{current_game.id}",
+                                     event: 'MOVE_CREATED',
+                                     player: current_player,
+                                     game: current_game,
+                                     message: "#{current_player_color(current_game)} has moved"
+      end
     else
       redirect_to game_board_path(@game), notice: @new_move.errors
     end

@@ -148,8 +148,32 @@
 
 <script>
   $(document).ready(function(){
+
     var gameId = $('#chessboard').data('game-id');
     var from, to;
+
+    App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
+      connected: function(data){
+        console.log("Connected to channel");
+      },
+      disconnected: function(data){
+        console.log("Disconnected from channel");
+      },
+      received: function(data) {
+        console.log("Received", data);
+        if(data.event && (data.event === "MOVE_CREATED" || data.event === "JOINED_GAME")){
+          window.location.reload();
+        }
+//        $("#game").removeClass('hidden');
+//        return $('#game').append(this.renderNotification(data));
+      },
+
+      renderNotification: function(data) {
+        console.log(data.notification);
+        return "<p>" + data.notification + "</p";
+      }
+    });
+
 
     var selectedCount = 0;
     $('.square').click(function(ev){
