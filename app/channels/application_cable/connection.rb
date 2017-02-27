@@ -6,7 +6,7 @@ module ApplicationCable
       self.current_player = find_verified_player
       logger.add_tags 'ActionCable', current_player.email
     end
-    
+
     private
 
     def find_verified_player
