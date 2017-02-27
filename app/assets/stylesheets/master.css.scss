@@ -1,23 +1,153 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-#chessboard {
-  width: 680px;
-  height: 680px;
-  margin: 20px;
-  border: 20px solid #333;
+.container-fluid.arena{
+  background: white;
+  box-shadow: 0px -8px 25px -10px #000000;
+}
 
-  .square:hover{
-    background: rgba(255, 255, 0, 0.5);
+#footer{
+  height: auto;
+  min-height: 100px;
+}
+
+#chessboard .square:hover{
+  background: rgba(255, 255, 0, 0.5);
+  cursor: pointer;
+}
+
+$board-size: 600px;
+$square-size: 70px;
+$piece-size: 50px;
+$board-border-size: 20px;
+$letter-size: 10px;
+
+
+@media (min-width:320px)  {
+  .container-fluid{
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size / 2;
+    height: $board-size /2;
+    margin: 0 auto;
+    border: $board-border-size/2 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size / 2;
+      height: $square-size / 2;
+      font-size: $letter-size / 2;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size / 2;
+      height: $square-size / 2;
+      font-size: $letter-size / 2;
+    }
+
+    .pieces {
+      font-size: $piece-size / 2;
+      margin-top: -$letter-size / 2;
+    }
+    .capture-zone .pieces {
+      font-size: $piece-size * .5;
+    }
+  }
+}
+@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size / 1.5;
+    height: $board-size /1.5;
+    margin: 0 auto;
+    border: $board-border-size/1.5 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size / 1.5;
+      height: $square-size / 1.5;
+      font-size: $letter-size / 1.5;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size / 1.5;
+      height: $square-size / 1.5;
+      font-size: $letter-size / 1.5;
+    }
+
+    .pieces {
+      font-size: $piece-size / 1.5;
+      margin-top: -$letter-size/1.5;
+    }
+
+  }
+}
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size;
+    height: $board-size;
+    margin: 0 auto;
+    border: $board-border-size solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size;
+      height: $square-size;
+      font-size: $letter-size;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size;
+      height: $square-size;
+      font-size: $letter-size;
+    }
+
+    .pieces {
+      font-size: $piece-size;
+      margin-top: -$letter-size;
+    }
+  }
+
+  .capture-zone .pieces {
+    font-size: $piece-size * .75;
+  }
+}
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+  body{
+    width: 80%;
+  }
+}
+@media (min-width:1440px) { /* hi-res laptops and desktops */
+  #chessboard {
+    width: $board-size * 1.5;
+    height: $board-size * 1.5;
+    margin: 0 auto;
+    border: $board-border-size * 1.5 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size * 1.5;
+      height: $square-size * 1.5;
+      font-size: $letter-size * 1.5;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size * 1.5;
+      height: $square-size * 1.5;
+      font-size: $letter-size * 1.5;
+    }
+
+    .pieces {
+      font-size: $piece-size * 1.5;
+      margin-top: -$letter-size * 1.5;
+    }
   }
 }
 
 tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
   float: left;
-  width: 80px;
-  height: 80px;
   background-color: #fff;
-  font-size: 10px;
   text-align: center;
   display: table-cell;
   vertical-align: middle;
@@ -25,26 +155,50 @@ tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
 
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   float: left;
-  width: 80px;
-  height: 80px;
   background-color: #999;
-  font-size: 10px;
   text-align: center;
   display: table-cell;
-  vertical-align:middle;
+  vertical-align: middle;
 }
 
-.pieces {
-  font-size: 60px;
-  margin-top: -10px;
-}
 
 .clear {
   clear: both;
 }
 
-.moves-list {
-  float: right;
+.moves-list{
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.moves-right {
+  display: block;
+  h3{
+    margin-left: 10px;
+  }
+}
+
+.moves-bottom {
+  display: none;
+  h3{
+    margin-left: 10px;
+  }
+}
+
+.capture-zone {
+  text-align: center;
+  padding: 10px;
+}
+
+@media screen and (max-width: 1024px) {
+  //  Move list of moves from side of board to bottom on medium screens and below
+  .moves-right {
+    display: none;
+  }
+
+  .moves-bottom{
+    display: block;
+  }
 }
 
 .alignedbutton {
@@ -54,4 +208,70 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 
 .selected{
   background: rgba(0, 255, 255, .5) !important;
+}
+
+body {
+  margin: 0 auto;
+  font-family: 'Exo', sans-serif;
+  background: url('bg.png');
+}
+
+.card {
+  background: url('tron.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  box-shadow: 0px 3px 8px #2a2a2a;
+}
+
+.card-fixed {
+  height: 400px;
+}
+
+.card-compressed {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.navbar {
+  border-radius: 0;
+  font-weight: 200;
+  box-shadow: 0px 1px 3px #2a2a2a;
+  margin-bottom: 0;
+  background-color: rgba(36,32,33,0.9);
+}
+
+.navbar-inverse a.navbar-brand {
+  font-weight: 100;
+  color: khaki;
+  margin-left: 10px;
+}
+
+
+
+.player-info {
+  margin: auto;
+  color: red;
+  .col-md-8 {
+    padding: 5px;
+    text-align: center;
+  }
+}
+
+.turn{
+  color: green;
+}
+
+.game-header {
+  margin-left: 0;
+  margin-right: 0;
+  background: cornflowerblue;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  .game-name {
+    font-weight: bold;
+    font-size: 20px;
+  }
 }

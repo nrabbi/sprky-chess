@@ -11,14 +11,10 @@ class GamesController < ApplicationController
     @game = Game.create(game_params)
     if @game.valid?
       @game.created!
-      redirect_to game_path(@game)
+      redirect_to game_board_path(@game)
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def show
-    @game = current_game
   end
 
   def index
@@ -36,12 +32,47 @@ class GamesController < ApplicationController
 
     @black_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(black_capture_area_pos) }
     @white_captured_pieces = @after_move_pieces.select { |piece| piece.position.equals?(white_capture_area_pos) }
+
+    @black_player = black_player
+    @white_player = white_player
+
+    # JESSE
     @player_turn = player_turn(current_game)
     @current_player_color = current_player_color(current_game)
     @opposite_player = opposite_player(current_game)
     @opposite_player_color = opposite_color(@current_player_color)
-    @player_1_email = player_1_email
-    @player_2_email = player_2_email
+  end
+
+  def black_player
+    if @current_game.player_1_color == "Black"
+      if current_player.id == @current_game.player_1_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_1_id)
+      end
+    else
+      if current_player.id == @current_game.player_2_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_2_id)
+      end
+    end
+  end
+
+  def white_player
+    if @current_game.player_1_color == "White"
+      if current_player.id == @current_game.player_1_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_1_id)
+      end
+    else
+      if current_player.id == @current_game.player_2_id
+        current_player
+      else
+        Player.find_by(id: @current_game.player_2_id)
+      end
+    end
   end
 
   def available
@@ -72,7 +103,7 @@ class GamesController < ApplicationController
   end
 
   def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
+    current_game.moves.count.even? ? "White" : "Black"
   end
 
   private
@@ -93,24 +124,22 @@ class GamesController < ApplicationController
     end
   end
 
+  def player_info(color)
+    color
+  end
+
   def current_player_color(current_game)
     if current_player && current_player.id == current_game.player_1_id
       current_game.player_1_color
     elsif current_player && current_player.id == current_game.player_2_id
       current_game.player_2_color
-    else
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 
   def opposite_player(current_game)
     if current_game.started? && current_player
-      current_player.id == current_game.player_1_id ? opp_player = current_game.player_2_id : opp_player = current_game.player_1_id
+      opp_player = current_player.id == current_game.player_1_id ? current_game.player_2_id : current_game.player_1_id
       Player.find(opp_player)
-    else 
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 

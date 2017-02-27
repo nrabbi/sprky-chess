@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'games/available', to: 'games#available', as: 'available_games'
   # change this later to '/games/:id/board'
   resources :games do
-    resources :moves, only: [:new, :create, :show, :index]
+    resources :moves, only: [:new, :create, :index]
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
