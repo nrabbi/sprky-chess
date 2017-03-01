@@ -16,8 +16,8 @@
         <h4>You are playing as <%= @current_player_color %></h4>
     <% end %>
   </div>
-  <div class="row capture-zone">
-    <div class="col-md-4">
+  <div class="row capture-zone" >
+    <div class="col-md-4" id="black-capture-zone">
       <% if @black_captured_pieces.count == 0 %>
       <% else %>
             <% @black_captured_pieces.each do |piece| %>
@@ -105,7 +105,7 @@
     </div>
   </div>
   <div class="row capture-zone">
-    <div class="col-md-4">
+    <div class="col-md-4" id="white-capture-zone">
       <% if @white_captured_pieces.count == 0 %>
       <% else %>
           <% @white_captured_pieces.each do |piece| %>
@@ -147,7 +147,61 @@
 </div>
 
 <script>
+
+  function movePiece(move, color) {
+    var from = toCoords(move.from);
+    var fromSq = getSquare(from);
+    var fromPiece = getPiece(fromSq);
+    console.log('from', fromSq.html());
+    console.log('piece', fromPiece.html());
+
+    var to = toCoords(move.to);
+    var toSq = getSquare(to);
+    var toPiece = toSq.children('.pieces').first();
+    if(toPiece.length){
+      console.log('CAPTURE PIECE!');
+      moveToCapture(toPiece, color);
+    }
+    toSq.append(fromPiece);
+    console.log('to', toSq.html());
+    console.log('piece', toPiece);
+  }
+
+  function changeTurn() {
+
+  }
+  function addToList(move) {
+
+  }
+
+  function getSquare(pos){
+    return $("td[data-x='" + pos.x +"'][data-y='" + pos.y + "']");
+  }
+
+  function getPiece(square){
+    return square.children('.pieces').first();
+  }
+
+  function moveToCapture(piece, color){
+    var spanPiece = '<span class="pieces">' + piece.html() + '</span>';
+    piece.remove();
+    if(color.toUpperCase() === "WHITE"){
+      $(spanPiece).appendTo($('#white-capture-zone'));
+    }else{
+      $(spanPiece).appendTo($('#black-capture-zone'));
+    }
+  }
+
   $(document).ready(function(){
+
+    var move = {
+      from: 18,
+      to: 58
+    };
+    movePiece(move, "White");
+    addToList(move);
+    changeTurn();
+
 
     var gameId = $('#chessboard').data('game-id');
     var from, to;
@@ -162,7 +216,11 @@
       received: function(data) {
         console.log("Received", data);
         if(data.event && (data.event === "MOVE_CREATED" || data.event === "JOINED_GAME")){
-          window.location.reload();
+//          window.location.reload();
+          movePiece(data.move, data.color);
+          addToList(data.move);
+          changeTurn(data.color);
+          console.log("Move", from,  to);
         }
       }
     });
@@ -200,9 +258,20 @@
       }
     });
 
-    function integerConversion(x, y){
-      console.log(y);
-      return (y * 8) + x;
-    }
+
+
+
   });
+
+  function integerConversion(x, y){
+    console.log(y);
+    return (y * 8) + x;
+  }
+
+  function toCoords(positionInt){
+    return{
+      x: positionInt % 8,
+      y: Math.floor(positionInt / 8)
+    }
+  }
 </script>

@@ -26,6 +26,8 @@ class MovesController < ApplicationController
         ActionCable.server.broadcast "game-#{current_game.id}",
                                      event: 'MOVE_CREATED',
                                      player: current_player,
+                                     color: current_player_color(current_game),
+                                     move: @new_move,
                                      game: current_game,
                                      message: "#{current_player_color(current_game)} has moved"
       end
