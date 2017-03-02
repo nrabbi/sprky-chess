@@ -21,4 +21,11 @@ class Move < ApplicationRecord
 
   validates_with MovesValidator
 
+  def self.castling_moves
+    coords = [[0, 4], [4, 7], [56, 60], [60, 63]]
+    moves = []
+    moves << coords << coords.each { |coord| moves << coord.reverse }
+    moves.flatten!(1)
+  end
+
 end

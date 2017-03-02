@@ -9,17 +9,17 @@ class MovesController < ApplicationController
   end
 
   def create
-    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+    @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
     this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
 
     pieces = StartingPositions::STARTING_POSITIONS
     after_move_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
 
     # pick the one being moved for error checking below
-    piece = piece_to_be_moved(after_move_pieces, new_move)
+    piece = piece_to_be_moved(after_move_pieces, @new_move)
 
     # TODO if the enemy player is in check, send a notification
-
+    binding.pry
     if current_player.nil?
       redirect_to game_board_path(@game), alert: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
@@ -30,12 +30,14 @@ class MovesController < ApplicationController
       redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
     elsif current_player_color(@game) != piece.color.to_s.capitalize
       redirect_to game_board_path(@game), alert: "You can only move your own pieces."
-    elsif new_move.valid?
-      new_move.save
+    elsif castling_move?
+      # Castler.new.call
+    elsif @new_move.valid?
+      @new_move.save
 
       redirect_to game_board_path(@game)
     else
-      redirect_to game_board_path(@game), notice: new_move.errors
+      redirect_to game_board_path(@game), notice: @new_move.errors
     end
   end
 
@@ -82,6 +84,10 @@ class MovesController < ApplicationController
 
   def piece_to_be_moved(_pieces, _move)
     _pieces.detect{ |piece| piece.position.to_integer == _move.from }
+  end
+
+  def castling_move?
+    Move.castling_moves.include?([@new_move.from, @new_move.to])
   end
 
 end
