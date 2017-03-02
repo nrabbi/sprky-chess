@@ -19,7 +19,7 @@ class MovesController < ApplicationController
     piece = piece_to_be_moved(after_move_pieces, @new_move)
 
     # TODO if the enemy player is in check, send a notification
-    binding.pry
+    # binding.pry
     if current_player.nil?
       redirect_to game_board_path(@game), alert: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
@@ -31,7 +31,14 @@ class MovesController < ApplicationController
     elsif current_player_color(@game) != piece.color.to_s.capitalize
       redirect_to game_board_path(@game), alert: "You can only move your own pieces."
     elsif castling_move?
+      # pick the two pieces to be moved for a castling move
+      castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
+      # binding.pry
+      if pieces_unmoved?
       # Castler.new.call
+      # @new_move.save(validate: false)
+      # redirect_to game_board_path(@game), notice: "#{}"
+      end
     elsif @new_move.valid?
       @new_move.save
 
@@ -86,8 +93,21 @@ class MovesController < ApplicationController
     _pieces.detect{ |piece| piece.position.to_integer == _move.from }
   end
 
+  def pieces_to_be_castled(pieces, move)
+    castlers = []
+    castlers << pieces.detect{ |piece| piece.position.to_integer == move.from }
+    castlers << pieces.detect{ |piece| piece.position.to_integer == move.to }
+  end
+
   def castling_move?
     Move.castling_moves.include?([@new_move.from, @new_move.to])
+  end
+
+  def pieces_unmoved?
+    saved_moves = @game.moves.select(&:persisted?)
+    prior = saved_moves.select { |move| move.from == (@new_move.from || @new_move.to) }
+    return true if prior.nil?
+    false
   end
 
 end
