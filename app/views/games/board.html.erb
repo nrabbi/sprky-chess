@@ -27,9 +27,9 @@
       <% end %>
     </div>
   </div>
-  <div class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
+  <div id="black-player-info" class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
     <div class="col-md-8">
-      <span><%= 'Turn - ' if @player_turn == 'Black' %></span>
+      <span id="black-turn"><%= 'Turn - ' if @player_turn == 'Black' %></span>
       <% if @black_player != nil %>
         <%= @black_player.email %>
         <% if @black_player.id == @current_player.id %>
@@ -91,9 +91,9 @@
       </div>
     </div>
   </div>
-  <div class="row player-info <%= 'turn' if @player_turn == 'White' %>">
-    <span><%= 'Turn - ' if @player_turn == 'White' %></span>
+  <div id="white-player-info" class="row player-info <%= 'turn' if @player_turn == 'White' %>">
     <div class="col-md-8">
+      <span id="white-turn"><%= 'Turn - ' if @player_turn == 'White' %></span>
       <% if @white_player != nil %>
         <%= @white_player.email %>
         <% if @white_player.id == @current_player.id %>
@@ -148,12 +148,11 @@
 
 <script>
 
+  //  Append piece to square and move occupying piece to capture zone if present
   function movePiece(move, color) {
     var from = toCoords(move.from);
     var fromSq = getSquare(from);
     var fromPiece = getPiece(fromSq);
-    console.log('from', fromSq.html());
-    console.log('piece', fromPiece.html());
 
     var to = toCoords(move.to);
     var toSq = getSquare(to);
@@ -163,25 +162,48 @@
       moveToCapture(toPiece, color);
     }
     toSq.append(fromPiece);
-    console.log('to', toSq.html());
-    console.log('piece', toPiece);
   }
 
-  function changeTurn() {
-
+  //  Toggle turn indication
+  function changeTurn(moveColor) {
+    if(moveColor.toUpperCase() === "BLACK"){
+      //  Switch black to white
+      $('#white-turn').text('Turn - ');
+      $('#black-turn').text('');
+      $('#white-player-info').addClass('turn');
+      $('#black-player-info').removeClass('turn');
+    }else{
+      //  Switch white to black
+      $('#black-turn').text('Turn - ');
+      $('#white-turn').text('');
+      $('#black-player-info').addClass('turn');
+      $('#white-player-info').removeClass('turn');
+    }
   }
-  function addToList(move) {
 
+  //  Append move text to moves list
+  function addToList(data) {
+    var move = data.move;
+
+    var from = toCoords(move.from);
+    var to = toCoords(move.to);
+    var li = '<li>' + 'From: ' + data.from_letter + '(' + from.x + ',' +  from.y + ') ' +
+        'To: ' + data.to_letter + '(' + to.x + ',' +  to.y + ')' + '</li>';
+
+    $('.moves-list ol').append($(li));
   }
 
+  //  Get td element in chessboard
   function getSquare(pos){
     return $("td[data-x='" + pos.x +"'][data-y='" + pos.y + "']");
   }
 
+  //  Get piece element
   function getPiece(square){
     return square.children('.pieces').first();
   }
 
+  //  Append piece to capture zone
   function moveToCapture(piece, color){
     var spanPiece = '<span class="pieces">' + piece.html() + '</span>';
     piece.remove();
@@ -193,14 +215,6 @@
   }
 
   $(document).ready(function(){
-
-    var move = {
-      from: 18,
-      to: 58
-    };
-    movePiece(move, "White");
-    addToList(move);
-    changeTurn();
 
 
     var gameId = $('#chessboard').data('game-id');
@@ -216,11 +230,9 @@
       received: function(data) {
         console.log("Received", data);
         if(data.event && (data.event === "MOVE_CREATED" || data.event === "JOINED_GAME")){
-//          window.location.reload();
           movePiece(data.move, data.color);
-          addToList(data.move);
+          addToList(data);
           changeTurn(data.color);
-          console.log("Move", from,  to);
         }
       }
     });
@@ -243,7 +255,7 @@
           }
         };
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
-          console.log(data);
+          console.log("Post result", data);
         });
         selectedCount = 0;
       }else{

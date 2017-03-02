@@ -28,6 +28,8 @@ class MovesController < ApplicationController
                                      player: current_player,
                                      color: current_player_color(current_game),
                                      move: @new_move,
+                                     from_letter: from_position.to_chess_position,
+                                     to_letter: to_position.to_chess_position,
                                      game: current_game,
                                      message: "#{current_player_color(current_game)} has moved"
       end
