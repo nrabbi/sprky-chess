@@ -215,11 +215,22 @@
   }
 
   $(document).ready(function(){
-
-
+    //    Show toast on flash message existence
+    if($('.alert').length){
+      //  Get message and show
+      var elem = $('.alert').first().clone();
+      elem.find('button:first').remove();
+      toastr.error(elem.text());
+      //  Don't show flash
+      $('.alert').first().remove();
+    }
     var gameId = $('#chessboard').data('game-id');
     var from, to;
 
+    /*
+      Action cable
+      Subscribe to game updates
+    */
     App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
       connected: function(data){
         console.log("Connected to channel");
@@ -238,6 +249,9 @@
     });
 
 
+    /*
+    * Movement logic
+    * */
     var selectedCount = 0;
     $('.square').click(function(ev){
       var square = $(this);
@@ -247,6 +261,8 @@
         //  2nd. Post move
         square.addClass('selected');
         to =  integerConversion(square.data('x'), square.data('y'));
+
+        /*  Post to move#create  */
         var payload = {
           move: {
             game_id: gameId,
@@ -256,8 +272,10 @@
         };
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
           console.log("Post result", data);
+          $('.selected').removeClass('selected');
         });
         selectedCount = 0;
+
       }else{
         //  1st. Make sure square contains piece
         if(square.find('.pieces').length != 0){

@@ -11,24 +11,143 @@
   min-height: 100px;
 }
 
-#chessboard {
-  width: 600px;
-  height: 600px;
-  margin: 0 auto;
-  border: 20px solid #333;
+#chessboard .square:hover{
+  background: rgba(255, 255, 0, 0.5);
+  cursor: pointer;
+}
 
-  .square:hover{
-    background: rgba(255, 255, 0, 0.5);
-    cursor: pointer;
+$board-size: 600px;
+$square-size: 70px;
+$piece-size: 50px;
+$board-border-size: 20px;
+$letter-size: 10px;
+
+
+@media (min-width:320px)  {
+  .container-fluid{
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size / 2;
+    height: $board-size /2;
+    margin: 0 auto;
+    border: $board-border-size/2 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size / 2;
+      height: $square-size / 2;
+      font-size: $letter-size / 2;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size / 2;
+      height: $square-size / 2;
+      font-size: $letter-size / 2;
+    }
+
+    .pieces {
+      font-size: $piece-size / 2;
+      margin-top: -$letter-size / 2;
+    }
+    .capture-zone .pieces {
+      font-size: $piece-size * .5;
+    }
+  }
+}
+@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size / 1.5;
+    height: $board-size /1.5;
+    margin: 0 auto;
+    border: $board-border-size/1.5 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size / 1.5;
+      height: $square-size / 1.5;
+      font-size: $letter-size / 1.5;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size / 1.5;
+      height: $square-size / 1.5;
+      font-size: $letter-size / 1.5;
+    }
+
+    .pieces {
+      font-size: $piece-size / 1.5;
+      margin-top: -$letter-size/1.5;
+    }
+
+  }
+}
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  /* smartphones, iPhone, portrait 480x320 phones */
+  #chessboard {
+    width: $board-size;
+    height: $board-size;
+    margin: 0 auto;
+    border: $board-border-size solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size;
+      height: $square-size;
+      font-size: $letter-size;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size;
+      height: $square-size;
+      font-size: $letter-size;
+    }
+
+    .pieces {
+      font-size: $piece-size;
+      margin-top: -$letter-size;
+    }
+  }
+
+  .capture-zone .pieces {
+    font-size: $piece-size * .75;
+  }
+}
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+  body{
+    width: 80%;
+  }
+}
+@media (min-width:1440px) { /* hi-res laptops and desktops */
+  #chessboard {
+    width: $board-size * 1.5;
+    height: $board-size * 1.5;
+    margin: 0 auto;
+    border: $board-border-size * 1.5 solid #333;
+
+    tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+      width: $square-size * 1.5;
+      height: $square-size * 1.5;
+      font-size: $letter-size * 1.5;
+    }
+
+    tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+      width: $square-size * 1.5;
+      height: $square-size * 1.5;
+      font-size: $letter-size * 1.5;
+    }
+
+    .pieces {
+      font-size: $piece-size * 1.5;
+      margin-top: -$letter-size * 1.5;
+    }
   }
 }
 
 tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
   float: left;
-  width: 70px;
-  height: 70px;
   background-color: #fff;
-  font-size: 10px;
   text-align: center;
   display: table-cell;
   vertical-align: middle;
@@ -36,19 +155,12 @@ tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
 
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   float: left;
-  width: 70px;
-  height: 70px;
   background-color: #999;
-  font-size: 10px;
   text-align: center;
   display: table-cell;
   vertical-align: middle;
 }
 
-.pieces {
-  font-size: 50px;
-  margin-top: -10px;
-}
 
 .clear {
   clear: both;
@@ -61,12 +173,22 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 
 .moves-right {
   display: block;
+  h3{
+    margin-left: 10px;
+  }
 }
 
-.moves-bottom{
+.moves-bottom {
   display: none;
+  h3{
+    margin-left: 10px;
+  }
 }
 
+.capture-zone {
+  text-align: center;
+  padding: 10px;
+}
 
 @media screen and (max-width: 1024px) {
   //  Move list of moves from side of board to bottom on medium screens and below
@@ -89,7 +211,6 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 }
 
 body {
-  width: 80%;
   margin: 0 auto;
   font-family: 'Exo', sans-serif;
   background: url('bg.png');
@@ -114,7 +235,7 @@ body {
 }
 
 .navbar {
-  border-radius:0;
+  border-radius: 0;
   font-weight: 200;
   box-shadow: 0px 1px 3px #2a2a2a;
   margin-bottom: 0;
@@ -124,14 +245,10 @@ body {
 .navbar-inverse a.navbar-brand {
   font-weight: 100;
   color: khaki;
+  margin-left: 10px;
 }
 
-.capture-zone{
-  text-align: center;
-  .pieces{
-    font-size: 40px;
-  }
-}
+
 
 .player-info {
   margin: auto;
@@ -142,17 +259,18 @@ body {
   }
 }
 
-
 .turn{
   color: green;
 }
 
 .game-header {
+  margin-left: 0;
+  margin-right: 0;
   background: cornflowerblue;
   padding: 10px;
   text-align: center;
   color: white;
-  .game-name{
+  .game-name {
     font-weight: bold;
     font-size: 20px;
   }

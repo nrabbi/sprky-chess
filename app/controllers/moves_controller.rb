@@ -10,7 +10,7 @@ class MovesController < ApplicationController
 
   def create
     @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
-    this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
+    this_game_players = [current_game.player_1_id, current_game.player_2_id]
     if current_player.nil?
       redirect_to game_board_path(@game), alert: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
@@ -39,13 +39,14 @@ class MovesController < ApplicationController
   end
 
   def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
+    current_game.moves.count.even? ? "White" : "Black"
   end
+
   def correct_player_turn?
     if player_turn(current_game) == current_game.player_1_color
       player_turn_id = current_game.player_1_id
     else player_turn(current_game) == current_game.player_2_color
-      player_turn_id = current_game.player_2_id 
+         player_turn_id = current_game.player_2_id
     end
     player_turn_id == current_player.id ? true : false
   end
@@ -73,16 +74,14 @@ class MovesController < ApplicationController
       current_game.player_1_color
     elsif current_player && current_player.id == current_game.player_2_id
       current_game.player_2_color
-    else
-      # current_player is not playing this game or no current_player
-      return
     end
   end
+
   def color_of_piece_to_be_moved
     pieces = StartingPositions::STARTING_POSITIONS
     saved_game_moves = @game.moves.select(&:persisted?)
     @after_move_pieces = PieceMover.apply_moves(pieces, saved_game_moves)
-    @after_move_pieces.detect{ |piece| piece.position.to_integer == @new_move.from }.color.to_s.capitalize
+    @after_move_pieces.detect { |piece| piece.position.to_integer == @new_move.from }.color.to_s.capitalize
   end
 
 end

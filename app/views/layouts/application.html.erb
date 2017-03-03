@@ -58,9 +58,10 @@
   <% end %>
 
   <%= yield %>
-<% 6.times do %>
-  <br style="clear: both;"></br>
-<% end %>
+
+  <% 6.times do %>
+    <br class="clear"></br>
+  <% end %>
 
   <div class="footer">
     <div class="col-xs-12 col-md-3 col-sm-4 text-center link">
@@ -71,7 +72,7 @@
           <br/>
           <%= link_to 'New Game', new_game_path %>
           <br/>
-          <%= link_to 'Available Games', available_games_path %>
+          <%= link_to 'Join Game', available_games_path %>
       <% end %>
     </div>
 
@@ -113,5 +114,6 @@
 
 
 </div>
+
 </body>
 </html>

@@ -11,7 +11,7 @@ class GamesController < ApplicationController
     @game = Game.create(game_params)
     if @game.valid?
       @game.created!
-      redirect_to game_board_path(@game)    
+      redirect_to game_board_path(@game)
     else
       render :new, status: :unprocessable_entity
     end
@@ -109,7 +109,7 @@ class GamesController < ApplicationController
   end
 
   def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
+    current_game.moves.count.even? ? "White" : "Black"
   end
 
   private
@@ -139,19 +139,13 @@ class GamesController < ApplicationController
       current_game.player_1_color
     elsif current_player && current_player.id == current_game.player_2_id
       current_game.player_2_color
-    else
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 
   def opposite_player(current_game)
     if current_game.started? && current_player
-      current_player.id == current_game.player_1_id ? opp_player = current_game.player_2_id : opp_player = current_game.player_1_id
+      opp_player = current_player.id == current_game.player_1_id ? current_game.player_2_id : current_game.player_1_id
       Player.find(opp_player)
-    else 
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 
