@@ -34,7 +34,16 @@ class MovesController < ApplicationController
                                      message: "#{current_player_color(current_game)} has moved"
       end
     else
-      redirect_to game_board_path(@game), notice: @new_move.errors
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'MOVE_INVALID',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: @new_move.errors.full_messages
+      # redirect_to game_board_path(@game), notice: @new_move.errors
     end
   end
 

@@ -73,9 +73,9 @@
     <!--  large(> 1024px screens)-->
     <div class="col-md-4 moves-right">
       <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
+          <h3><span class="moves-count"><%= @game.moves.count %> move<% if @game.moves.count > 1 %>s<% end %></span></h3>
       <% else %>
-          <h3>No moves yet.</h3>
+          <h3 class="no-moves">No moves yet.</h3>
       <% end %>
       <div class="moves-list">
         <ol>
@@ -118,9 +118,9 @@
   <div class="row moves-bottom">
     <div class="col-md-5">
       <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
+          <h3><span class="moves-count"><%= @game.moves.count %> move<% if @game.moves.count > 1 %>s<% end %></span></h3>
       <% else %>
-          <h3>No moves yet.</h3>
+          <h3 class="no-moves">No moves yet.</h3>
       <% end %>
       <div class="moves-list">
         <ol>
@@ -158,7 +158,7 @@
     var toSq = getSquare(to);
     var toPiece = toSq.children('.pieces').first();
     if(toPiece.length){
-      console.log('CAPTURE PIECE!');
+      console.log('CAPTURE PIECE!', toPiece);
       moveToCapture(toPiece, color);
     }
     toSq.append(fromPiece);
@@ -181,20 +181,35 @@
     }
   }
 
-  //  Append move text to moves list
+  //  Append move text to moves list and increment move count
   function addToList(data) {
     var move = data.move;
 
     var from = toCoords(move.from);
     var to = toCoords(move.to);
-    var li = '<li>' + 'From: ' + data.from_letter + '(' + from.x + ',' +  from.y + ') ' +
-        'To: ' + data.to_letter + '(' + to.x + ',' +  to.y + ')' + '</li>';
+    var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
+        'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
 
     $('.moves-list ol').append($(li));
+    var movesCountElem = $('.moves-count');
+    var count = 0;
+    if(movesCountElem.length){
+      count = parseInt(movesCountElem.html());
+      count++;
+      if(count > 1) {
+        movesCountElem.html(count + " moves");
+      }else{
+        movesCountElem.html(count + " move");
+      }
+    }else{
+      var noMovesElem = $('.no-moves');
+      noMovesElem.html("<span class='moves-count'>1 move</span>")
+    }
   }
 
   //  Get td element in chessboard
   function getSquare(pos){
+    console.log('getSquare', pos);
     return $("td[data-x='" + pos.x +"'][data-y='" + pos.y + "']");
   }
 
@@ -231,6 +246,9 @@
       Action cable
       Subscribe to game updates
     */
+    if (App.cable.subscriptions['subscriptions'].length > 1) {
+      App.cable.subscriptions.remove(App.cable.subscriptions['subscriptions'][1])
+    };
     App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
       connected: function(data){
         console.log("Connected to channel");
@@ -240,10 +258,18 @@
       },
       received: function(data) {
         console.log("Received", data);
-        if(data.event && (data.event === "MOVE_CREATED" || data.event === "JOINED_GAME")){
-          movePiece(data.move, data.color);
-          addToList(data);
-          changeTurn(data.color);
+        if(data.event) {
+          switch(data.event) {
+            case "MOVE_CREATED" : case "JOINED_GAME" :
+                movePiece(data.move, data.color);
+                addToList(data);
+                changeTurn(data.color);
+                toastr.success(data.message);
+                break;
+            case "MOVE_INVALID":
+              toastr.error(data.message);
+              break;
+          }
         }
       }
     });
