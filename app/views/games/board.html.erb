@@ -36,13 +36,15 @@
             (you)
         <% end %>
       <% else %>
-        Awaiting Player
+        <span id="black-awaiting">
+          Awaiting Player
+        </span>
       <% end %>
     </div>
   </div>
   <div class="row">
     <div class="col-md-8">
-      <div id="chessboard" data-game-id="<%= @current_game.id %>">
+      <div id="chessboard" data-game-id="<%= @current_game.id %>" data-current-player-id="<%= @current_player.id %>">
           <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
           row_index = 7
           col_index = 0 %>
@@ -227,6 +229,7 @@
     }else{
       $(spanPiece).appendTo($('#black-capture-zone'));
     }
+    toastr.info('Piece Captured!');
   }
 
   $(document).ready(function(){
@@ -235,11 +238,12 @@
       //  Get message and show
       var elem = $('.alert').first().clone();
       elem.find('button:first').remove();
-      toastr.error(elem.text());
+      toastr.info(elem.text());
       //  Don't show flash
       $('.alert').first().remove();
     }
     var gameId = $('#chessboard').data('game-id');
+    var currentPlayerId = $('#chessboard').data('current-player-id');
     var from, to;
 
     /*
@@ -260,14 +264,23 @@
         console.log("Received", data);
         if(data.event) {
           switch(data.event) {
-            case "MOVE_CREATED" : case "JOINED_GAME" :
+            case "MOVE_CREATED" :
                 movePiece(data.move, data.color);
                 addToList(data);
                 changeTurn(data.color);
                 toastr.success(data.message);
                 break;
-            case "MOVE_INVALID":
-              toastr.error(data.message);
+            case "MOVE_INVALID": case "NOT_ALLOWED":
+              //  Don't show failed attempt to other player
+              if(data.player.id === currentPlayerId){
+                toastr.error(data.message);
+              }
+              break;
+            case "JOINED_GAME":
+              if(data.player.id !== currentPlayerId){
+                toastr.info(data.message);
+                joinGame(data.player, data.color);
+              }
               break;
           }
         }
@@ -314,10 +327,16 @@
       }
     });
 
-
-
-
   });
+
+  function joinGame(player, color){
+    if(color.toUpperCase() === "BLACK"){
+      $('#black-turn').html(player.email);
+      $('#black-awaiting').html('');
+    }else{
+      $('#white-turn').html(player.email);
+    }
+  }
 
   function integerConversion(x, y){
     console.log(y);

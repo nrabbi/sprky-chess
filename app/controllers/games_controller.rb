@@ -80,8 +80,9 @@ class GamesController < ApplicationController
   end
 
   def update
+    color = opposite_color(current_game.player_1_color)
     current_game.update_attributes(player_2_id: current_player.id)
-    current_game.update_attributes(player_2_color: opposite_color(current_game.player_1_color))
+    current_game.update_attributes(player_2_color: color)
     if current_game.save
       current_game.started!
       redirect_to game_board_path(current_game), notice: "Welcome! Let the game begin!"
@@ -89,6 +90,7 @@ class GamesController < ApplicationController
                                     event: 'JOINED_GAME',
                                     player: current_player,
                                     game: current_game,
+                                    color: color,
                                     message: "#{@current_player.email} has joined the game"
       # head :ok
     else

@@ -12,15 +12,60 @@ class MovesController < ApplicationController
     @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
     this_game_players = [current_game.player_1_id, current_game.player_2_id]
     if current_player.nil?
-      redirect_to game_board_path(@game), alert: "You must be signed in to play."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You must be signed in to play."
+      # redirect_to game_board_path(@game), alert: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
-      redirect_to game_board_path(@game), alert: "You must be a player in this game to make a move."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You must be a player in this game to make a move."
+      # redirect_to game_board_path(@game), alert: "You must be a player in this game to make a move."
     elsif !current_game.started?
-      redirect_to game_board_path(@game), alert: "Sorry, this game hasn't started yet. Waiting for another player to join."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Sorry, this game hasn't started yet. Waiting for another player to join."
+      # redirect_to game_board_path(@game), alert: "Sorry, this game hasn't started yet. Waiting for another player to join."
     elsif !correct_player_turn?
-      redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Hey, it's not your turn!"
+      # redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
     elsif current_player_color(@game) != color_of_piece_to_be_moved
-      redirect_to game_board_path(@game), alert: "You can only move your own pieces."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You can only move your own pieces."
+      # redirect_to game_board_path(@game), alert: "You can only move your own pieces."
     elsif @new_move.valid?
       if @new_move.save
         ActionCable.server.broadcast "game-#{current_game.id}",
