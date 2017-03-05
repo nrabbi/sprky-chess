@@ -33,11 +33,11 @@ class MovesController < ApplicationController
     elsif castling_move?
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
-      # binding.pry
+      binding.pry
       if pieces_unmoved?
-      # Castler.new.call
+      Castler.new(castle_pieces, after_move_pieces)
       # @new_move.save(validate: false)
-      # redirect_to game_board_path(@game), notice: "#{}"
+      # redirect_to game_board_path(@game), notice: "Rook at #{@rook.position} and King at #{@king.position} have been castled."
       end
     elsif @new_move.valid?
       @new_move.save
@@ -106,7 +106,7 @@ class MovesController < ApplicationController
   def pieces_unmoved?
     saved_moves = @game.moves.select(&:persisted?)
     prior = saved_moves.select { |move| move.from == (@new_move.from || @new_move.to) }
-    return true if prior.nil?
+    return true if prior.empty?
     false
   end
 
