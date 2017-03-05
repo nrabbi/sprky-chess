@@ -1,18 +1,22 @@
 class Castler
+  attr_accessor :castle_error
 
   def initialize(castle_pieces, after_move_pieces)
-    binding.pry
     @king = castle_pieces.detect{|p| p.class == King }
     @rook = castle_pieces.detect{|p| p.class == Rook }
     @after_move_pieces = after_move_pieces
   end
 
   def call
-    binding.pry
-    # @rook.is_obstructed?
-    # @king doesn't get into check?
-    set_castled_positions
-    # return updated move to moves_controller to be saved
+    if castle_obstructed?
+      castle_error = "The castling move is obstructed."
+    # elsif castle_contains_checks?
+    #   castle_error = "The castling move puts your king into check."
+    else
+      set_castled_positions and return
+    end
+    # binding.pry
+    return castle_error unless castle_error.empty?
   end
 
   private
@@ -52,5 +56,30 @@ class Castler
     @rook.position.to_integer == 63 && @king.position.to_integer == 60
   end
 
+  def castle_obstructed?
+    obstructors = []
+    if left_white_castle
+      (1..3).each do |square|
+        obstructors << @after_move_pieces.select { |piece| piece.position.to_integer == square }
+      end
+    elsif right_white_castle
+      (5..6).each do |square|
+        obstructors << @after_move_pieces.select { |piece| piece.position.to_integer == square }
+      end
+    elsif left_black_castle
+      (57..59).each do |square|
+        obstructors << @after_move_pieces.select { |piece| piece.position.to_integer == square }
+      end
+    elsif right_black_castle
+      (61..62).each do |square|
+        obstructors << @after_move_pieces.select { |piece| piece.position.to_integer == square }
+      end
+    end
+    obstructors.empty? ? false : true
+  end
+
+  def castle_contains_checks?
+    # check if king does not move into check
+  end
 
 end

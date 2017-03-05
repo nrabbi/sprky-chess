@@ -33,11 +33,17 @@ class MovesController < ApplicationController
     elsif castling_move?
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
-      binding.pry
+      # binding.pry
       if pieces_unmoved?
-      Castler.new(castle_pieces, after_move_pieces)
-      # @new_move.save(validate: false)
-      # redirect_to game_board_path(@game), notice: "Rook at #{@rook.position} and King at #{@king.position} have been castled."
+        castle = Castler.new(castle_pieces, after_move_pieces).call
+        if castle == true
+          # pass new positions to @new_move
+          @new_move.save(validate: false)
+          redirect_to game_board_path(@game), notice: "King at #{@king.position} has been castled with Rook at #{@rook.position}."
+        else
+          # binding.pry
+          redirect_to game_board_path(@game), alert: "Unable to castle. #{castle}"
+        end
       end
     elsif @new_move.valid?
       @new_move.save
