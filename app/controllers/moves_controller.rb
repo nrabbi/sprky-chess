@@ -36,12 +36,18 @@ class MovesController < ApplicationController
       # binding.pry
       if pieces_unmoved?
         castle = Castler.new(castle_pieces, after_move_pieces).call
-        if castle == true
-          # pass new positions to @new_move
-          @new_move.save(validate: false)
+        if castle
+          # binding.pry
+          # find the king matching @king and rook matching @rook returned from Castler
+          # update the positions
+          # save one move in DB which will show up in the moves list like "Castled A1 and E1"
+          # Something like this:
+          # new_king.position = Position.new_from_int(castle.first.position.to_integer)
+          # new_king.save(validate: false)
+          # new_rook.position = Position.new_from_int(castle.last.position.to_integer)
+          # new_rook.save(validate: false)
           redirect_to game_board_path(@game), notice: "King at #{@king.position} has been castled with Rook at #{@rook.position}."
         else
-          # binding.pry
           redirect_to game_board_path(@game), alert: "Unable to castle. #{castle}"
         end
       end

@@ -8,15 +8,15 @@ class Castler
   end
 
   def call
+    # binding.pry
     if castle_obstructed?
       castle_error = "The castling move is obstructed."
-    # elsif castle_contains_checks?
-    #   castle_error = "The castling move puts your king into check."
+    elsif castle_checks
+      castle_error = "The castling move puts your king into check, from the piece(s) at #{castle_checks}."
     else
-      set_castled_positions and return
+      # binding.pry
+      set_castled_positions
     end
-    # binding.pry
-    return castle_error unless castle_error.empty?
   end
 
   private
@@ -38,6 +38,7 @@ class Castler
       raise NoMethodError, 
       "Not a valid castling move for King at #{@king.position.to_integer} and Rook at #{@rook.position.to_integer}"
     end
+    castled_positions = [@king, @rook]
   end
 
   def left_white_castle
@@ -75,11 +76,51 @@ class Castler
         obstructors << @after_move_pieces.select { |piece| piece.position.to_integer == square }
       end
     end
-    obstructors.empty? ? false : true
+    obstructors.flatten.empty? ? false : true
   end
 
-  def castle_contains_checks?
-    # check if king does not move into check
+  def castle_checks
+    check_moves = []
+    black_pieces = @after_move_pieces.select { |piece| piece.color == :black }
+    white_pieces = @after_move_pieces.select { |piece| piece.color == :white }
+    if left_white_castle
+      black_pieces.each do |piece| 
+        (2..4).each do |square|
+          possible_move = find_check_moves(square, piece)
+          check_moves << possible_move unless possible_move.nil?
+        end
+      end
+    elsif right_white_castle
+      black_pieces.each do |piece| 
+        (4..6).each do |square|
+          find_check_moves(square, piece)
+          check_moves << possible_move unless possible_move.nil?
+        end
+      end
+    elsif left_black_castle 
+      white_pieces.each do |piece| 
+        (58..60).each do |square|
+          find_check_moves(square, piece)
+          check_moves << possible_move unless possible_move.nil?
+        end
+      end
+    elsif right_black_castle
+      white_pieces.each do |piece| 
+        (60..62).each do |square|
+          find_check_moves(square, piece)
+          check_moves << possible_move unless possible_move.nil?
+        end
+      end
+    end
+    check_moves.empty? ? nil : check_moves
+  end
+
+  def find_check_moves(square, piece)
+    @king.position = Position.new_from_int(square)
+    is_valid = piece.is_valid?(@king.position)
+    is_obstructed = piece.is_obstructed?(@after_move_pieces, @king.position)
+    can_capture = piece.can_capture?(@after_move_pieces, @king.position)
+    possible_move = piece.position.to_chess_position if is_valid && !is_obstructed && can_capture
   end
 
 end
