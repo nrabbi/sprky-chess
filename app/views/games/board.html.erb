@@ -53,10 +53,11 @@
           <h3>No moves yet.</h3>
         <% end %>
           <ul>
-            <% @game.moves.each do |move| %>
+            <% @game.moves.each_with_index do |move, i| %>
               <li>
-                <% position = Position.new_from_int(move.from) %>           
-                <% if ((move.from - move.to).abs == 2) && move.from == 4 %>
+                <% previous_moves = @game.moves[0..i] %>
+                <% moved = previous_moves.select { |old_move| (old_move.from == move.from) && (old_move != move) } %>
+                <% if ((move.from - move.to).abs == 2) && move.from == 4 && moved.blank? %>
                   <% if move.to == 2 %>
                     A1 (0, 0) and E1 (4, 0) Castle
                   <% elsif move.to == 6 %>
@@ -69,6 +70,7 @@
                     E8 (4, 7) and H8 (7, 7) Castle
                   <% end %>
                 <% else %>
+                  <% position = Position.new_from_int(move.from) %>
                   From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
                   <%  position = Position.new_from_int(move.to) %>
                   To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
