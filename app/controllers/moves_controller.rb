@@ -33,11 +33,11 @@ class MovesController < ApplicationController
     elsif castling_move?
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
-      if pieces_unmoved?
+      if castle_pieces && pieces_unmoved?
         castle = Castler.new(castle_pieces, after_move_pieces).call
         # TODO -- allow castle to return with attributes (instead of just string or array)
         if castle.is_a?(Array)
-          binding.pry
+          # binding.pry
           # update the positions
           # save one move in DB which will be rendered in moves list like "Castled A1 and E1"
           king_start = castle[0].position
@@ -47,10 +47,16 @@ class MovesController < ApplicationController
           @new_move.from = king_start.to_integer
           @new_move.to = king_finish.to_integer
           @new_move.save(validate: false)
+          # binding.pry
+          # instead of another move, just update positions. but then they won't persist. hm.
+          rook_move = current_game.moves.new(from: rook_start.to_integer, to: rook_finish.to_integer)
+          rook_move.save(validate: false)
           redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
         else
           redirect_to game_board_path(@game), alert: "Unable to castle. #{castle}"
         end
+      else 
+        redirect_to game_board_path(@game), alert: "Unable to castle. Pieces have been moved before."
       end
     elsif @new_move.valid?
       @new_move.save
@@ -110,6 +116,7 @@ class MovesController < ApplicationController
     castlers = []
     castlers << pieces.detect{ |piece| piece.position.to_integer == move.from }
     castlers << pieces.detect{ |piece| piece.position.to_integer == move.to }
+    [castlers[0].class, castlers[1].class].include?(Rook && King) ? castlers : false
   end
 
   def castling_move?

@@ -10,7 +10,7 @@ class Castler
   end
 
   def call
-    binding.pry
+    # binding.pry
     king_start = @king.dup
     rook_start = @rook.dup
     if castle_obstructed?
@@ -100,21 +100,21 @@ class Castler
     elsif right_white_castle
       black_pieces.each do |piece| 
         (4..6).each do |square|
-          find_check_moves(square, piece)
+          possible_move = find_check_moves(square, piece)
           check_moves << possible_move unless possible_move.nil?
         end
       end
     elsif left_black_castle 
       white_pieces.each do |piece| 
         (58..60).each do |square|
-          find_check_moves(square, piece)
+          possible_move = find_check_moves(square, piece)
           check_moves << possible_move unless possible_move.nil?
         end
       end
     elsif right_black_castle
       white_pieces.each do |piece| 
         (60..62).each do |square|
-          find_check_moves(square, piece)
+          possible_move = find_check_moves(square, piece)
           check_moves << possible_move unless possible_move.nil?
         end
       end
