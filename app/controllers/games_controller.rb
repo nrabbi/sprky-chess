@@ -36,7 +36,6 @@ class GamesController < ApplicationController
     @black_player = black_player
     @white_player = white_player
 
-
     @player_turn = player_turn(current_game)
     @current_player_color = current_player_color(current_game)
     @opposite_player = opposite_player(current_game)
