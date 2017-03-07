@@ -1,140 +1,101 @@
-<div class="container-fluid arena">
-  <div class="row game-header">
-    <span class="game-name"><%= @current_game.name %></span>
-    <br>
-    <% if @black_player != nil && @white_player != nil %>
-        <!--Both players-->
-    <span><%= @black_player.email %> vs  <%= @white_player.email %></span>
-    <% elsif @black_player != nil && @white_player == nil %>
-        <span>Waiting for White</span>
-    <% elsif @white_player != nil && @black_player == nil %>
-        <span>Waiting for Black</span>
+<div class="container">
+  <br />
+  <h3><%= @current_game.name %></h3>
+  <h4><%= @player_1_email %> vs <%= @player_2_email %></h4>
+  <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
+    <h4>You are playing as <%= @current_player_color %></h4>
+    <h4>Your opponent is playing as <%= @opposite_player_color %></h4>
+    <h4>It is currently <%= @player_turn %>'s turn</h4>
+  <% else %>
+    <h4><%= @player_1_email %> is playing as <%= @current_game.player_1_color %></h4>
+    <h4><%= @player_2_email %> is playing as <%= @current_game.player_2_color %></h4>
+    <h4>It is currently <%= @player_turn %>'s turn</h4>
     <% end %>
 
-    <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
-        <h4>You are playing as <%= @current_player_color %></h4>
+    <% if @is_in_check %>
+      <h2>You are in check!</h2>
     <% end %>
-  </div>
-  <div class="row capture-zone">
-    <div class="col-md-4">
-      <% if @black_captured_pieces.count == 0 %>
-      <% else %>
-            <% @black_captured_pieces.each do |piece| %>
-                <span class="pieces"><%= piece.html_icon.html_safe %></span>
 
-            <% end %>
-      <% end %>
-    </div>
-  </div>
-  <div class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
-    <div class="col-md-8">
-      <span><%= 'Turn - ' if @player_turn == 'Black' %></span>
-      <% if @black_player != nil %>
-        <%= @black_player.email %>
-        <% if @black_player.id == @current_player.id %>
-            (you)
-        <% end %>
-      <% else %>
-        Awaiting Player
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
-      <div id="chessboard" data-game-id="<%= @current_game.id %>">
-          <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
-          row_index = 7
-          col_index = 0 %>
+    <div id="chessboard" data-game-id="<%= @current_game.id %>">
+      <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
+      row_index = 7
+      col_index = 0 %>
 
-          <table>
+      <table>
+        <% 8.times do %>
+          <tr>
             <% 8.times do %>
-              <tr>
-                <% 8.times do %>
-                  <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
-                    <div><%= col[col_index] + (row_index+1).to_s %></div>
-                    <% piece = get_piece_at(col_index, row_index) %>
-                    <% if piece %>
-                      <div class="pieces"><%= piece.html_icon.html_safe %></div>
-                    <% end %>
-                  </td>
-                  <% col_index += 1 %>
-
+              <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
+                <div><%= col[col_index] + (row_index+1).to_s %></div>
+                <% piece = get_piece_at(col_index, row_index) %>
+                <% if piece %>
+                  <div class="pieces"><%= piece.html_icon.html_safe %></div>
                 <% end %>
-              </tr>
+              </td>
+              <% col_index += 1 %>
 
-              <% row_index -= 1 %>
-              <% col_index = 0 %>
             <% end %>
-          </table>
-          <br />
-      </div>
-    </div>
-    <!--  large(> 1024px screens)-->
-    <div class="col-md-4 moves-right">
-      <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
-      <% else %>
-          <h3>No moves yet.</h3>
-      <% end %>
-      <div class="moves-list">
-        <ol>
-          <% @game.moves.each do |move| %>
-              <li>
-                <%  position = Position.new_from_int(move.from) %>
-                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
-                <%  position = Position.new_from_int(move.to) %>
-                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
-              </li>
-          <% end %>
-        </ol>
-      </div>
-    </div>
-  </div>
-  <div class="row player-info <%= 'turn' if @player_turn == 'White' %>">
-    <div class="col-md-8">
-      <span><%= 'Turn - ' if @player_turn == 'White' %></span>
-      <% if @white_player != nil %>
-        <%= @white_player.email %>
-        <% if @white_player.id == @current_player.id %>
-          (you)
+          </tr>
+
+          <% row_index -= 1 %>
+          <% col_index = 0 %>
         <% end %>
-      <% else %>
-        Awaiting Player
-      <% end %>
-    </div>
+      </table>
+      <br />
   </div>
-  <div class="row capture-zone">
-    <div class="col-md-4">
-      <% if @white_captured_pieces.count == 0 %>
-      <% else %>
-          <% @white_captured_pieces.each do |piece| %>
-            <span class="pieces"><%= piece.html_icon.html_safe %></span>
-          <% end %>
-      <% end %>
-    </div>
-  </div>
-  <!-- Medium(< 1024px screens -->
-  <div class="row moves-bottom">
-    <div class="col-md-4">
-      <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %></h3>
-      <% else %>
+
+  <div class="row">
+
+      <div class="col-md-8">
+        <% if @game.moves.count > 0 %>
+          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
+        <% else %>
           <h3>No moves yet.</h3>
-      <% end %>
-      <div class="moves-list">
-        <ol>
-          <% @game.moves.each do |move| %>
+        <% end %>
+          <ul>
+            <% @game.moves.each do |move| %>
               <li>
                 <%  position = Position.new_from_int(move.from) %>
                 From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
                 <%  position = Position.new_from_int(move.to) %>
                 To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
-          <% end %>
-        </ol>
+              <% end %>
+            </ul>
       </div>
     </div>
-  </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <% if @black_captured_pieces.count == 0 %>
+          <h3>Black has not captured anything yet.</h3>
+        <% else %>
+          <h3>Black's captured pieces:</h3>
+          <ul>
+            <% @black_captured_pieces.each do |piece| %>
+              <li>
+                <%= piece.class.name %>
+              </li>
+              <% end %>
+          </ul>
+        <% end %>
+      </div>
+
+      <div class="col-md-4">
+          <% if @white_captured_pieces.count == 0 %>
+          <h3>White has not captured anything yet.</h3>
+        <% else %>
+          <h3>White's captured pieces:</h3>
+          <ul>
+            <% @white_captured_pieces.each do |piece| %>
+              <li>
+                <%= piece.class.name %>
+              </li>
+              <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
 
 </div>
 <br />
@@ -147,15 +108,6 @@
 
 <script>
   $(document).ready(function(){
-    //    Show toast on flash message existence
-    if($('.alert').length){
-      //  Get message and show
-      var elem = $('.alert').first().clone();
-      elem.find('button:first').remove();
-      toastr.error(elem.text());
-      //  Don't show flash
-      $('.alert').first().remove();
-    }
     var gameId = $('#chessboard').data('game-id');
     var from, to;
 

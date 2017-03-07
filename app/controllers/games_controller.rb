@@ -23,9 +23,14 @@ class GamesController < ApplicationController
 
   def board
     @game = current_game
-    pieces = StartingPositions::STARTING_POSITIONS
 
+    @current_player_color = current_player_color(@game)
+
+    pieces = StartingPositions::STARTING_POSITIONS
     @after_move_pieces = PieceMover.apply_moves(pieces, @game.moves)
+
+    player_color = @current_player_color == "Black" ? :black : :white
+    @is_in_check = PieceMover.is_in_check(player_color, @after_move_pieces)
 
     black_capture_area_pos = Position.new_from_int(Position::BLACK_CAPTURE_INT)
     white_capture_area_pos = Position.new_from_int(Position::WHITE_CAPTURE_INT)
@@ -38,7 +43,7 @@ class GamesController < ApplicationController
 
     # JESSE
     @player_turn = player_turn(current_game)
-    @current_player_color = current_player_color(current_game)
+    
     @opposite_player = opposite_player(current_game)
     @opposite_player_color = opposite_color(@current_player_color)
   end
