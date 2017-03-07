@@ -1,25 +1,32 @@
 class Castler
-  attr_accessor :castle_error
+
+  attr_accessor :results, :castle_error
 
   def initialize(castle_pieces, after_move_pieces)
     @king = castle_pieces.detect{|p| p.class == King }
     @rook = castle_pieces.detect{|p| p.class == Rook }
     @after_move_pieces = after_move_pieces
+    @results = []
   end
 
   def call
-    # binding.pry
+    binding.pry
+    king_start = @king.dup
+    rook_start = @rook.dup
     if castle_obstructed?
-      castle_error = "The castling move is obstructed."
+      @castle_error = "The castling move is obstructed."
     elsif castle_checks
-      castle_error = "The castling move puts your king into check, from the piece(s) at #{castle_checks}."
+      @castle_error = "The castling move puts your king into check, from the piece(s) at #{castle_checks}."
     else
-      # binding.pry
       set_castled_positions
+      @results << king_start << @king << rook_start << @rook
     end
   end
 
   private
+
+  # captured_piece = result.pieces.select { |piece| piece.position.equals?(to) }[0]
+  # captured_piece.position = Position.new_from_int(capture_int)
 
   def set_castled_positions
     if left_white_castle

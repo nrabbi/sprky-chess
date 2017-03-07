@@ -55,10 +55,24 @@
           <ul>
             <% @game.moves.each do |move| %>
               <li>
-                <%  position = Position.new_from_int(move.from) %>
-                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
-                <%  position = Position.new_from_int(move.to) %>
-                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <% position = Position.new_from_int(move.from) %>           
+                <% if ((move.from - move.to).abs == 2) && move.from == 4 %>
+                  <% if move.to == 2 %>
+                    A1 (0, 0) and E1 (4, 0) Castle
+                  <% elsif move.to == 6 %>
+                    E1 (4, 0) and H1 (0, 7) Castle
+                  <% end %>
+                <% elsif ((move.from - move.to).abs == 2) && move.from == 60 %>
+                  <% if move.to == 58 %>
+                    A8 (0, 7) and E8 (4, 7) Castle
+                  <% elsif move.to == 62 %>
+                    E8 (4, 7) and H8 (7, 7) Castle
+                  <% end %>
+                <% else %>
+                  From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                  <%  position = Position.new_from_int(move.to) %>
+                  To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <% end %>
               </li>
               <% end %>
             </ul>

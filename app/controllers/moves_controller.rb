@@ -33,20 +33,21 @@ class MovesController < ApplicationController
     elsif castling_move?
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
-      # binding.pry
       if pieces_unmoved?
         castle = Castler.new(castle_pieces, after_move_pieces).call
-        if castle
-          # binding.pry
-          # find the king matching @king and rook matching @rook returned from Castler
+        # TODO -- allow castle to return with attributes (instead of just string or array)
+        if castle.is_a?(Array)
+          binding.pry
           # update the positions
-          # save one move in DB which will show up in the moves list like "Castled A1 and E1"
-          # Something like this:
-          # new_king.position = Position.new_from_int(castle.first.position.to_integer)
-          # new_king.save(validate: false)
-          # new_rook.position = Position.new_from_int(castle.last.position.to_integer)
-          # new_rook.save(validate: false)
-          redirect_to game_board_path(@game), notice: "King at #{@king.position} has been castled with Rook at #{@rook.position}."
+          # save one move in DB which will be rendered in moves list like "Castled A1 and E1"
+          king_start = castle[0].position
+          king_finish = castle[1].position
+          rook_start = castle[2].position
+          rook_finish = castle[3].position
+          @new_move.from = king_start.to_integer
+          @new_move.to = king_finish.to_integer
+          @new_move.save(validate: false)
+          redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
         else
           redirect_to game_board_path(@game), alert: "Unable to castle. #{castle}"
         end
