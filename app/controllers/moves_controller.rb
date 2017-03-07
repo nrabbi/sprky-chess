@@ -40,13 +40,14 @@ class MovesController < ApplicationController
   end
 
   def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
+    current_game.moves.count.even? ? "White" : "Black"
   end
+
   def correct_player_turn?
     if player_turn(current_game) == current_game.player_1_color
       player_turn_id = current_game.player_1_id
     else player_turn(current_game) == current_game.player_2_color
-      player_turn_id = current_game.player_2_id 
+         player_turn_id = current_game.player_2_id
     end
     player_turn_id == current_player.id ? true : false
   end
@@ -74,9 +75,6 @@ class MovesController < ApplicationController
       current_game.player_1_color
     elsif current_player && current_player.id == current_game.player_2_id
       current_game.player_2_color
-    else
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 

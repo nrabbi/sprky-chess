@@ -34,7 +34,7 @@ RSpec.describe MovesController, type: :controller do
       move = Move.last
       expect(move.from).to eq(8)
     end
-    
+
     it 'does not create a move with invalid params' do
       game
       move_count = Move.count
