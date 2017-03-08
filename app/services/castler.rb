@@ -1,31 +1,30 @@
 class Castler
 
-  attr_accessor :results, :castle_error
+  attr_accessor :results, :error_message
 
   def initialize(castle_pieces, after_move_pieces)
     @king = castle_pieces.detect{|p| p.class == King }
     @rook = castle_pieces.detect{|p| p.class == Rook }
     @after_move_pieces = after_move_pieces
     @results = []
+    @error_message = ""
   end
 
   def call
-    king_start = @king.dup
-    rook_start = @rook.dup
     if castle_obstructed?
-      @castle_error = "The castling move is obstructed."
+      @error_message = "The castling move is obstructed."
     elsif castle_checks
-      @castle_error = "The castling move puts your king into check, from the piece(s) at #{castle_checks}."
+      @error_message = "The castling move puts your king into check, 
+      from the piece(s) at #{castle_checks}."
     else
+      king_start = @king.dup
+      rook_start = @rook.dup
       set_castled_positions
       @results << king_start << @king << rook_start << @rook
     end
   end
 
   private
-
-  # captured_piece = result.pieces.select { |piece| piece.position.equals?(to) }[0]
-  # captured_piece.position = Position.new_from_int(capture_int)
 
   def set_castled_positions
     if left_white_castle
@@ -41,8 +40,9 @@ class Castler
       @king.position = Position.new_from_int(62)
       @rook.position = Position.new_from_int(61)
     else 
-      raise NoMethodError, 
-      "Not a valid castling move for King at #{@king.position.to_integer} and Rook at #{@rook.position.to_integer}"
+      @error_message = "Not a valid castling move for 
+      King at #{@king.position.to_integer} and 
+      Rook at #{@rook.position.to_integer}"
     end
     castled_positions = [@king, @rook]
   end

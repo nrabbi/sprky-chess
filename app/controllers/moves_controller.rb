@@ -32,23 +32,22 @@ class MovesController < ApplicationController
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
       if castle_pieces && pieces_unmoved?
-        castle = Castler.new(castle_pieces, after_move_pieces).call
-        # TODO -- allow castle to return with attributes (instead of just string or array)
-        if castle.is_a?(Array)
-
-          # update the positions
+        castle = Castler.new(castle_pieces, after_move_pieces)
+        castle.call
+        castle.results
+        if castle.error_message.blank?
           # save one move in DB which will be rendered in moves list like "Castled A1 and E1"
-          king_start = castle[0].position
-          king_finish = castle[1].position
-          rook_start = castle[2].position
-          rook_finish = castle[3].position
+          king_start = castle.results[0].position
+          king_finish = castle.results[1].position
+          rook_start = castle.results[2].position
+          rook_finish = castle.results[3].position
           @new_move.from = king_start.to_integer
           @new_move.to = king_finish.to_integer
           @new_move.save(validate: false)
 
           redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
         else
-          redirect_to game_board_path(@game), alert: "Unable to castle. #{castle}"
+          redirect_to game_board_path(@game), alert: "Unable to castle. #{castle.error_message}"
         end
       else 
         redirect_to game_board_path(@game), alert: "Unable to castle. Pieces have been moved before."
