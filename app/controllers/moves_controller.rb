@@ -120,7 +120,7 @@ class MovesController < ApplicationController
 
   def pieces_unmoved?
     saved_moves = @game.moves.select(&:persisted?)
-    prior = saved_moves.select { |move| move.from == (@new_move.from || @new_move.to) }
+    prior = saved_moves.select { |move| (move.from == (@new_move.from || @new_move.to)) || (move.to == (@new_move.from || @new_move.to)) }
     return true if prior.empty?
     false
   end

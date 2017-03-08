@@ -10,7 +10,6 @@ class Castler
   end
 
   def call
-    # binding.pry
     king_start = @king.dup
     rook_start = @rook.dup
     if castle_obstructed?
