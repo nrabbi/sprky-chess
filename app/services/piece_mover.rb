@@ -87,11 +87,35 @@ class PieceMover
         capture_int = to_piece.color == :black ? Position::WHITE_CAPTURE_INT : Position::BLACK_CAPTURE_INT
         to_piece.position = Position.new_from_int(capture_int)
       end
+
       # move piece to new position
       this_piece.position = move_position_to(move)
+
+
+      # check promo move
+      if can_promote?(this_piece, move_position_to(move))
+        puts "PROMOTION! " + this_piece.inspect
+        promote(this_piece, Queen.new(this_piece.color, this_piece.position), new_pieces)
+      end
+
     end
 
     new_pieces
+  end
+
+  def self.promote(pawn, promo_piece, pieces)
+    # code here
+    pieces.delete(pawn)
+    pieces.push(promo_piece)
+  end
+
+
+  def self.can_promote?(piece, position)
+    piece.class == Pawn && promotion_position?(position)
+  end
+
+  def self.promotion_position?(position)
+    position.y == ChessPiece::BOARD_START || position.y == ChessPiece::BOARD_END
   end
 
   private
