@@ -31,18 +31,20 @@
   </div>
   <div id="black-player-info" class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
     <div class="col-md-8">
-      <span id="black-turn"><%= 'Turn - ' if @player_turn == 'Black' %></span>
-      <span id="black-player">
-        <% if @black_player != nil %>
-          <%= @black_player.email %>
-          <% if @black_player.id == @current_player.id %>
-              (you)
+      <span id="black-turn-bg" class="<%= 'turn-bg' if @player_turn == 'Black'  %>">
+        <span id="black-turn"><%= 'Turn - ' if @player_turn == 'Black' %></span>
+        <span id="black-player">
+          <% if @black_player != nil %>
+            <%= @black_player.email %>
+            <% if @black_player.id == @current_player.id %>
+                (you)
+            <% end %>
+          <% else %>
+            <span id="black-awaiting">
+              Awaiting Player
+            </span>
           <% end %>
-        <% else %>
-          <span id="black-awaiting">
-            Awaiting Player
-          </span>
-        <% end %>
+        </span>
       </span>
     </div>
   </div>
@@ -100,18 +102,20 @@
   </div>
   <div id="white-player-info" class="row player-info <%= 'turn' if @player_turn == 'White' %>">
     <div class="col-md-8">
-      <span id="white-turn"><%= 'Turn - ' if @player_turn == 'White' %></span>
-      <span id="white-player">
-        <% if @white_player != nil %>
-          <%= @white_player.email %>
-          <% if @white_player.id == @current_player.id %>
-            (you)
+      <span id="white-turn-bg" class="<%= 'turn-bg' if @player_turn == 'White'  %>">
+        <span id="white-turn"><%= 'Turn - ' if @player_turn == 'White' %></span>
+        <span id="white-player">
+          <% if @white_player != nil %>
+            <%= @white_player.email %>
+            <% if @white_player.id == @current_player.id %>
+              (you)
+            <% end %>
+          <% else %>
+            <span id="white-awaiting">
+              Awaiting Player
+            </span>
           <% end %>
-        <% else %>
-          <span id="white-awaiting">
-            Awaiting Player
-          </span>
-        <% end %>
+        </span>
       </span>
     </div>
   </div>
@@ -178,12 +182,16 @@
   //  Toggle turn indication
   function changeTurn(moveColor) {
     if(moveColor.toUpperCase() === "BLACK"){
+      $('.turn-bg').removeClass('turn-bg');
+      $('#white-turn-bg').addClass('turn-bg');
       //  Switch black to white
       $('#white-turn').html('Turn - ');
       $('#black-turn').html('');
       $('#white-player-info').addClass('turn');
       $('#black-player-info').removeClass('turn');
     }else{
+      $('.turn-bg').removeClass('turn-bg');
+      $('#black-turn-bg').addClass('turn-bg');
       //  Switch white to black
       $('#black-turn').html('Turn - ');
       $('#white-turn').html('');
