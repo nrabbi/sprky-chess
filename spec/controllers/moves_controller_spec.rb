@@ -83,34 +83,43 @@ RSpec.describe MovesController, type: :controller do
       expect(Move.count).to eq 0
     end
 
-    # context "when valid castle" do
-    #   it "sends to Castler" do
-    #   player
-    #   player2
-    #   sign_in_player
-    #   game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
-    #   move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
-    #   move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
-    #   move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
-    #   move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
-    #   move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
-    #   move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
-    #         binding.pry
-    #   expect(Castler).to receive(:new)
-    #   post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
-    #   end
-    # end
+    context "when Castler get valid castle" do
+      it "returns updated move" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
 
-    # context "when invalid castle" do
-    #   it "does not send to Castler" do
-    #   player
-    #   player2
-    #   sign_in_player
-    #   game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
-    #   post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
-    #   # expect(Castler).not_to receive(:new)
-    #   end
-    # end
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        # tests that Castler updated the move positions
+        expect(move.from).to eq(4)
+        expect(move.to).to eq(6)
+      end
+    end
+
+    context "when Castler get invalid castle" do
+      it "does not create move" do
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        # Castle is still obstructed. Should not create new move.
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(49)
+        expect(move.to).to eq(41)
+      end
+    end
   end
 
 end
