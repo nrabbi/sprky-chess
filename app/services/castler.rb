@@ -41,10 +41,9 @@ class Castler
       @rook.position = Position.new_from_int(61)
     else 
       @error_message = "Not a valid castling move for 
-      King at #{@king.position.to_integer} and 
-      Rook at #{@rook.position.to_integer}"
+      King at #{@king.position.to_chess_position} and 
+      Rook at #{@rook.position.to_chess_position}"
     end
-    castled_positions = [@king, @rook]
   end
 
   def left_white_castle
@@ -98,7 +97,7 @@ class Castler
       end
     elsif right_white_castle
       black_pieces.each do |piece| 
-        (4..6).each do |square|
+        6.downto(4).each do |square|
           possible_move = find_check_moves(square, piece)
           check_moves << possible_move unless possible_move.nil?
         end
@@ -112,7 +111,7 @@ class Castler
       end
     elsif right_black_castle
       white_pieces.each do |piece| 
-        (60..62).each do |square|
+        62.downto(60).each do |square|
           possible_move = find_check_moves(square, piece)
           check_moves << possible_move unless possible_move.nil?
         end

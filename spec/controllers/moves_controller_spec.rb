@@ -7,7 +7,7 @@ RSpec.describe MovesController, type: :controller do
   let(:sign_in_player) { sign_in player }
   let(:sign_in_player2) { sign_in player2 }
   describe "moves#index action" do
-    it "successfullies show the page" do
+    it "shows the page" do
       game
       get :index, params: { game_id: game }
       expect(response).to have_http_status(:success)
@@ -15,20 +15,19 @@ RSpec.describe MovesController, type: :controller do
   end
 
   describe "moves#new action" do
-    it "successfullies show the new form" do
+    it "shows the new form" do
       game
       get :new, params: { game_id: game }
       expect(response).to have_http_status(:success)
     end
   end
-  describe 'moves#create action' do
 
-    it 'successfully create a valid move' do
+  describe 'moves#create action' do
+    it 'creates a valid move' do
       player
       player2
       sign_in_player
       game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
-      # move pawn from A2 to A3
       post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
       expect(response).to redirect_to game_board_path(game)
       move = Move.last
@@ -41,20 +40,6 @@ RSpec.describe MovesController, type: :controller do
       expect { post :create, params: { game_id: -2, move: { from: 128, to: -43 } } }.to raise_error(ActiveRecord::RecordNotFound)
       expect(Move.count).to eq move_count
     end
-
-    # context 'lets the player who has current turn create a move' do
-    #   let(:game) { FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")}
-    #   let(:move_count) { game.moves.count }
-    #   before do
-    #     sign_in_player
-    #     post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
-    #     sign_out player
-    #     sign_in_player2
-    #   end
-    #   it 'has 2 moves' do
-    #     expect { post :create, params: { game_id: game.id, move: { from: 48, to: 40 } } }.to change { move_count }.by(1)
-    #   end
-    # end
 
     it "lets the player who has current turn create a move" do
       player
@@ -97,6 +82,35 @@ RSpec.describe MovesController, type: :controller do
       post :create, params: { game_id: game.id, move: { from: 48, to: 32 } }
       expect(Move.count).to eq 0
     end
+
+    # context "when valid castle" do
+    #   it "sends to Castler" do
+    #   player
+    #   player2
+    #   sign_in_player
+    #   game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+    #   move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+    #   move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+    #   move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+    #   move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+    #   move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+    #   move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+    #         binding.pry
+    #   expect(Castler).to receive(:new)
+    #   post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+    #   end
+    # end
+
+    # context "when invalid castle" do
+    #   it "does not send to Castler" do
+    #   player
+    #   player2
+    #   sign_in_player
+    #   game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+    #   post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+    #   # expect(Castler).not_to receive(:new)
+    #   end
+    # end
   end
 
 end
