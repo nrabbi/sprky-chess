@@ -9,14 +9,23 @@ class MovesController < ApplicationController
   end
 
   def create
-    @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
-    this_game_players = [current_game.player_1_id, current_game.player_2_id]
+    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+    this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
+
+    pieces = StartingPositions::STARTING_POSITIONS
+    after_move_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
+
+    # pick the one being moved for error checking below
+    piece = piece_to_be_moved(after_move_pieces, new_move)
+
+    # TODO if the enemy player is in check, send a notification
+
     if current_player.nil?
       ActionCable.server.broadcast "game-#{current_game.id}",
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
@@ -27,7 +36,7 @@ class MovesController < ApplicationController
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
@@ -38,7 +47,7 @@ class MovesController < ApplicationController
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
@@ -49,30 +58,30 @@ class MovesController < ApplicationController
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
                                    message: "Hey, it's not your turn!"
       # redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
-    elsif current_player_color(@game) != color_of_piece_to_be_moved
+    elsif current_player_color(@game) != piece.color.to_s.capitalize
       ActionCable.server.broadcast "game-#{current_game.id}",
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
                                    message: "You can only move your own pieces."
       # redirect_to game_board_path(@game), alert: "You can only move your own pieces."
-    elsif @new_move.valid?
-      if @new_move.save
+    elsif new_move.valid?
+      if new_move.save
         ActionCable.server.broadcast "game-#{current_game.id}",
                                      event: 'MOVE_CREATED',
                                      player: current_player,
                                      color: current_player_color(current_game),
-                                     move: @new_move,
+                                     move: new_move,
                                      from_letter: from_position.to_chess_position,
                                      to_letter: to_position.to_chess_position,
                                      game: current_game,
@@ -83,11 +92,11 @@ class MovesController < ApplicationController
                                    event: 'MOVE_INVALID',
                                    player: current_player,
                                    color: current_player_color(current_game),
-                                   move: @new_move,
+                                   move: new_move,
                                    from_letter: from_position.to_chess_position,
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
-                                   message: @new_move.errors.full_messages
+                                   message: new_move.errors.full_messages
       # redirect_to game_board_path(@game), notice: @new_move.errors
     end
   end
@@ -131,11 +140,8 @@ class MovesController < ApplicationController
     end
   end
 
-  def color_of_piece_to_be_moved
-    pieces = StartingPositions::STARTING_POSITIONS
-    saved_game_moves = @game.moves.select(&:persisted?)
-    @after_move_pieces = PieceMover.apply_moves(pieces, saved_game_moves)
-    @after_move_pieces.detect { |piece| piece.position.to_integer == @new_move.from }.color.to_s.capitalize
+  def piece_to_be_moved(_pieces, _move)
+    _pieces.detect{ |piece| piece.position.to_integer == _move.from }
   end
 
 end
