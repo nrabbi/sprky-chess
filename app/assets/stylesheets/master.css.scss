@@ -260,7 +260,7 @@ body {
 }
 
 .turn{
-  color: green;
+  color: darkgreen;
 }
 
 .game-header {
@@ -274,4 +274,17 @@ body {
     font-weight: bold;
     font-size: 20px;
   }
+}
+
+div.hidden { display: none; }
+
+.turn-bg{
+  padding: 5px;
+  background: lightgreen;
+  border-radius: 5px;
+}
+
+.player-info{
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
