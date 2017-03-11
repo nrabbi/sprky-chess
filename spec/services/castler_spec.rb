@@ -65,7 +65,7 @@ context 'when valid castle' do
 end
 
 context 'when invalid castle' do
-  # obstruction tests
+  # Castle is obstructed
   let(:after_move_pieces_a) { [castle_pieces_a[0], castle_pieces_a[1], 
                             Pawn.new(:black, Position.new(1, 0))] }
   let(:after_move_pieces_b) { [castle_pieces_b[0], castle_pieces_b[1], 
@@ -74,7 +74,7 @@ context 'when invalid castle' do
                             Pawn.new(:black, Position.new(1, 7))] }
   let(:after_move_pieces_d) { [castle_pieces_d[0], castle_pieces_d[1], 
                             Pawn.new(:black, Position.new(6, 7))] }
-  # king in check
+  # King moves into check
   let(:after_move_pieces_e) { [castle_pieces_a[0], castle_pieces_a[1], 
                             Queen.new(:black, Position.new(2, 1))] }
   let(:after_move_pieces_f) { [castle_pieces_b[0], castle_pieces_b[1], 

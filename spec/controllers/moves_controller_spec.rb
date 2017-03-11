@@ -105,7 +105,8 @@ RSpec.describe MovesController, type: :controller do
     end
 
     context "when Castler get invalid castle" do
-      it "does not create move" do
+      it "does not create move if obstructed" do
+        player
         player2
         sign_in_player
         game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
@@ -118,6 +119,48 @@ RSpec.describe MovesController, type: :controller do
         move = Move.last
         expect(move.from).to eq(49)
         expect(move.to).to eq(41)
+      end
+      it "does not create move if piece has moved before" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+        move7 = game.moves.new(game_id: game.id, from: 4, to: 5).save
+        move8 = game.moves.new(game_id: game.id, from: 51, to: 43).save
+        move9 = game.moves.new(game_id: game.id, from: 5, to: 4).save
+        move8 = game.moves.new(game_id: game.id, from: 52, to: 44).save
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(52)
+        expect(move.to).to eq(44)
+      end
+      it "does not create move if wrong pieces" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+
+        post :create, params: { game_id: game.id, move: { from: 4, to: 6 } }
+        move = Move.last
+        expect(move.from).to eq(50)
+        expect(move.to).to eq(42)
+        
+        post :create, params: { game_id: game.id, move: { from: 3, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(50)
+        expect(move.to).to eq(42)
       end
     end
   end
