@@ -292,6 +292,9 @@
               addToList(data);
               changeTurn(data.color);
               toastr.success(data.message);
+              if(data.check){
+                toastr.info("CHECK!")
+              }
               break;
             case "MOVE_INVALID": case "NOT_ALLOWED":
             //  Don't show failed attempt to other player

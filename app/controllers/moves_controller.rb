@@ -18,6 +18,8 @@ class MovesController < ApplicationController
     # pick the one being moved for error checking below
     piece = piece_to_be_moved(after_move_pieces, new_move)
 
+
+
     # TODO if the enemy player is in check, send a notification
 
     if current_player.nil?
@@ -77,6 +79,10 @@ class MovesController < ApplicationController
       # redirect_to game_board_path(@game), alert: "You can only move your own pieces."
     elsif new_move.valid?
       if new_move.save
+        after_save_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
+
+        PieceMover::is_in_check(opposite_color(piece.color), after_save_pieces) ? check = true : check = false
+
         ActionCable.server.broadcast "game-#{current_game.id}",
                                      event: 'MOVE_CREATED',
                                      player: current_player,
@@ -85,7 +91,8 @@ class MovesController < ApplicationController
                                      from_letter: from_position.to_chess_position,
                                      to_letter: to_position.to_chess_position,
                                      game: current_game,
-                                     message: "#{current_player_color(current_game)} has moved"
+                                     message: "#{current_player_color(current_game)} has moved",
+                                     check: check
       end
     else
       ActionCable.server.broadcast "game-#{current_game.id}",
@@ -142,6 +149,12 @@ class MovesController < ApplicationController
 
   def piece_to_be_moved(_pieces, _move)
     _pieces.detect{ |piece| piece.position.to_integer == _move.from }
+  end
+
+
+  def opposite_color(color)
+    return :black if color == :white
+    :white
   end
 
 end
