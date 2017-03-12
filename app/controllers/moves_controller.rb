@@ -9,8 +9,17 @@ class MovesController < ApplicationController
   end
 
   def create
-    @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
-    this_game_players = [current_game.player_1_id, current_game.player_2_id]
+    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+    this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
+
+    pieces = StartingPositions::STARTING_POSITIONS
+    after_move_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
+
+    # pick the one being moved for error checking below
+    piece = piece_to_be_moved(after_move_pieces, new_move)
+
+    # TODO if the enemy player is in check, send a notification
+
     if current_player.nil?
       redirect_to game_board_path(@game), alert: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
@@ -19,14 +28,14 @@ class MovesController < ApplicationController
       redirect_to game_board_path(@game), alert: "Sorry, this game hasn't started yet. Waiting for another player to join."
     elsif !correct_player_turn?
       redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
-    elsif current_player_color(@game) != color_of_piece_to_be_moved
+    elsif current_player_color(@game) != piece.color.to_s.capitalize
       redirect_to game_board_path(@game), alert: "You can only move your own pieces."
-    elsif @new_move.valid?
-      # @move = @game.moves.create(move_params)
-      @new_move.save
+    elsif new_move.valid?
+      new_move.save
+
       redirect_to game_board_path(@game)
     else
-      redirect_to game_board_path(@game), notice: @new_move.errors
+      redirect_to game_board_path(@game), notice: new_move.errors
     end
   end
 
@@ -69,11 +78,8 @@ class MovesController < ApplicationController
     end
   end
 
-  def color_of_piece_to_be_moved
-    pieces = StartingPositions::STARTING_POSITIONS
-    saved_game_moves = @game.moves.select(&:persisted?)
-    @after_move_pieces = PieceMover.apply_moves(pieces, saved_game_moves)
-    @after_move_pieces.detect { |piece| piece.position.to_integer == @new_move.from }.color.to_s.capitalize
+  def piece_to_be_moved(_pieces, _move)
+    _pieces.detect{ |piece| piece.position.to_integer == _move.from }
   end
 
 end

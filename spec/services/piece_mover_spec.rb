@@ -223,6 +223,31 @@ describe 'PieceMover' do
       move_resolution = PieceMover.move_to!(pieces, game.moves)
       expect(move_resolution.ok?).to eq true
     end
+
+    it 'detects I am moving myself into check' do 
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,D,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # K,0,0,x,0,0,R,0
+      game
+      from_pos = Position.new(3, 0)
+      to_pos = Position.new(3, 3)
+
+      white_rook = Rook.new(:white, Position.new(6, 0))
+      black_rook = Rook.new(:black, from_pos)
+      black_king = King.new(:black, Position.new(0, 0))
+
+      pieces = [white_rook, black_king, black_rook]
+
+      new_move = game.moves.new(from: from_pos.to_integer, to: to_pos.to_integer)
+
+      move_resolution = PieceMover.move_to!(pieces, game.moves)
+      expect(move_resolution.ok?).to eq false
+    end
   end
 
 end

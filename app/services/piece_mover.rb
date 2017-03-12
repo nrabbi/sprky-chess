@@ -32,7 +32,6 @@ class PieceMover
     # in order to check if the move is valid, it can't be applied here
     # and needs to be sliced off
     result.pieces = apply_moves(_pieces, _moves[0..-2])
-    # after_move_pieces is an array with all the chess pieces
 
     # 2) find the chess piece being moved
     pieces = result.pieces.select { |piece| piece.position.equals?(from) }
@@ -56,6 +55,9 @@ class PieceMover
     # 5)
     can_capture = thisChessPiece.can_capture?(result.pieces, to)
 
+    after_move_pieces = apply_moves(result.pieces, [_moves[-1]])
+    i_am_in_check = is_in_check(thisChessPiece.color, after_move_pieces)
+
     if can_capture && is_valid && !is_obstructed
       capture_int = thisChessPiece.color == :black ? Position::BLACK_CAPTURE_INT : Position::WHITE_CAPTURE_INT
       captured_piece = result.pieces.select { |piece| piece.position.equals?(to) }[0]
@@ -68,9 +70,39 @@ class PieceMover
     elsif is_obstructed
       result.error_message += 'Invalid move. The piece is obstructed. '
       result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
+    elsif i_am_in_check
+      result.error_message += 'Invalid move. This puts yourself into check.'
+      result.error_message += "When moving from #{from.to_chess_position} to #{to.to_chess_position}."
     end
 
     result
+  end
+
+  def self.is_in_check(color, pieces)
+    king = find_king(color, pieces)
+
+    if king.nil?
+      # happens in test cases, when there is only one king on the board.
+      return false
+    end
+
+    # for every piece of opposite color, check if it can capture this king
+    enemyPieces = pieces.select { |piece| piece.color != color }
+
+    enemyPieces.each do |piece| 
+      is_valid = piece.is_valid?(king.position)
+      is_obstructed = piece.is_obstructed?(pieces, king.position)
+      can_capture = piece.can_capture?(pieces, king.position)
+
+      if is_valid && !is_obstructed && can_capture
+        return true
+      end
+    end
+    false
+  end
+
+  def self.find_king(color, pieces)
+    return pieces.select { |piece| piece.class.name == 'King' && piece.color == color } [0]
   end
 
   def self.apply_moves(_pieces, _moves)
