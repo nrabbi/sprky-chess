@@ -19,15 +19,55 @@ class MovesController < ApplicationController
     piece = piece_to_be_moved(after_move_pieces, @new_move)
 
     if current_player.nil?
-      redirect_to game_board_path(@game), alert: "You must be signed in to play."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You must be signed in to play."
     elsif this_game_players.exclude? current_player.id
-      redirect_to game_board_path(@game), alert: "You must be a player in this game to make a move."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You must be a player in this game to make a move."
     elsif !current_game.started?
-      redirect_to game_board_path(@game), alert: "Sorry, this game hasn't started yet. Waiting for another player to join."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Sorry, this game hasn't started yet. Waiting for another player to join."
     elsif !correct_player_turn?
-      redirect_to game_board_path(@game), alert: "Hey, it's not your turn!"
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Hey, it's not your turn!"
     elsif current_player_color(@game) != piece.color.to_s.capitalize
-      redirect_to game_board_path(@game), alert: "You can only move your own pieces."
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "You can only move your own pieces."
     elsif castling_move?
       # pick the two pieces to be moved for a castling move
       castle_pieces = pieces_to_be_castled(after_move_pieces, @new_move)
@@ -44,31 +84,83 @@ class MovesController < ApplicationController
           @new_move.from = king_start.to_integer
           @new_move.to = king_finish.to_integer
           @new_move.save(validate: false)
-
-          redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
+      after_save_pieces = PieceMover.apply_moves(pieces, @game.moves)
+      PieceMover::is_in_check(opposite_color(piece.color), after_save_pieces) ? check = true : check = false
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                     event: 'MOVE_CREATED',
+                                     player: current_player,
+                                     color: current_player_color(current_game),
+                                     move: @new_move,
+                                     from_letter: from_position.to_chess_position,
+                                     to_letter: to_position.to_chess_position,
+                                     game: current_game,
+                                     message: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}.",
+                                     check: check
+          # redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
         else
-          redirect_to game_board_path(@game), alert: "Unable to castle. #{castle.error_message}"
+          ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Unable to castle. #{castle.error_message}"
+          # redirect_to game_board_path(@game), alert: "Unable to castle. #{castle.error_message}"
         end
       else 
-        redirect_to game_board_path(@game), alert: "Unable to castle. Pieces have been moved before."
+        ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "Unable to castle. Pieces have been moved before."
+        # redirect_to game_board_path(@game), alert: "Unable to castle. Pieces have been moved before."
       end
-    elsif @new_move.valid?
-      @new_move.save
 
-      redirect_to game_board_path(@game)
+    elsif @new_move.valid?
+      if @new_move.save
+        after_save_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
+
+        PieceMover::is_in_check(opposite_color(piece.color), after_save_pieces) ? check = true : check = false
+
+        ActionCable.server.broadcast "game-#{current_game.id}",
+                                     event: 'MOVE_CREATED',
+                                     player: current_player,
+                                     color: current_player_color(current_game),
+                                     move: @new_move,
+                                     from_letter: from_position.to_chess_position,
+                                     to_letter: to_position.to_chess_position,
+                                     game: current_game,
+                                     message: "#{current_player_color(current_game)} has moved",
+                                     check: check
+      end
     else
-      redirect_to game_board_path(@game), notice: @new_move.errors
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'MOVE_INVALID',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: @new_move.errors.full_messages
     end
   end
 
   def player_turn(current_game)
-    current_game.moves.count % 2 == 0 ? "White" : "Black"
+    current_game.moves.count.even? ? "White" : "Black"
   end
+
   def correct_player_turn?
     if player_turn(current_game) == current_game.player_1_color
       player_turn_id = current_game.player_1_id
     else player_turn(current_game) == current_game.player_2_color
-      player_turn_id = current_game.player_2_id 
+         player_turn_id = current_game.player_2_id
     end
     player_turn_id == current_player.id ? true : false
   end
@@ -96,9 +188,6 @@ class MovesController < ApplicationController
       current_game.player_1_color
     elsif current_player && current_player.id == current_game.player_2_id
       current_game.player_2_color
-    else
-      # current_player is not playing this game or no current_player
-      return
     end
   end
 
@@ -122,6 +211,11 @@ class MovesController < ApplicationController
     prior = saved_moves.select { |move| (move.from == (@new_move.from || @new_move.to)) || (move.to == (@new_move.from || @new_move.to)) }
     return true if prior.empty?
     false
+  end
+
+  def opposite_color(color)
+    return :black if color == :white
+    :white
   end
 
 end

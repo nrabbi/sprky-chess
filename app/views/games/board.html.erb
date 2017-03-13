@@ -1,58 +1,98 @@
-<div class="container">
-  <br />
-  <h3><%= @current_game.name %></h3>
-  <h4><%= @player_1_email %> vs <%= @player_2_email %></h4>
-  <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
-    <h4>You are playing as <%= @current_player_color %></h4>
-    <h4>Your opponent is playing as <%= @opposite_player_color %></h4>
-    <h4>It is currently <%= @player_turn %>'s turn</h4>
-  <% else %>
-    <h4><%= @player_1_email %> is playing as <%= @current_game.player_1_color %></h4>
-    <h4><%= @player_2_email %> is playing as <%= @current_game.player_2_color %></h4>
-    <h4>It is currently <%= @player_turn %>'s turn</h4>
+<div class="container-fluid arena">
+  <div id="game" class="hidden"> I should be hidden <%= %></div>
+  <div class="row game-header">
+    <span class="game-name"><%= @current_game.name %></span>
+    <br>
+    <span id="matchup">
+      <% if @black_player != nil && @white_player != nil %>
+        <!--Both players-->
+      <span><%= @black_player.email %> vs  <%= @white_player.email %></span>
+      <% elsif @black_player != nil && @white_player == nil %>
+          <span>Waiting for White</span>
+      <% elsif @white_player != nil && @black_player == nil %>
+          <span>Waiting for Black</span>
+      <% end %>
+    </span>
+
+    <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
+        <h4>You are playing as <%= @current_player_color %></h4>
     <% end %>
-
-    <% if @is_in_check %>
-      <h2>You are in check!</h2>
-    <% end %>
-
-    <div id="chessboard" data-game-id="<%= @current_game.id %>">
-      <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
-      row_index = 7
-      col_index = 0 %>
-
-      <table>
-        <% 8.times do %>
-          <tr>
-            <% 8.times do %>
-              <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
-                <div><%= col[col_index] + (row_index+1).to_s %></div>
-                <% piece = get_piece_at(col_index, row_index) %>
-                <% if piece %>
-                  <div class="pieces"><%= piece.html_icon.html_safe %></div>
-                <% end %>
-              </td>
-              <% col_index += 1 %>
-
-            <% end %>
-          </tr>
-
-          <% row_index -= 1 %>
-          <% col_index = 0 %>
-        <% end %>
-      </table>
-      <br />
   </div>
 
-  <div class="row">
+  <% if @is_in_check %>
+      <h2>You are in check!</h2>
+  <% end %>
 
-      <div class="col-md-8">
-        <% if @game.moves.count > 0 %>
-          <h3><%= pluralize(@game.moves.count, 'move') %>, oldest first</h3>
-        <% else %>
-          <h3>No moves yet.</h3>
-        <% end %>
-          <ul>
+  <div class="row capture-zone" >
+    <div class="col-md-4" id="black-capture-zone">
+      <% if @black_captured_pieces.count == 0 %>
+      <% else %>
+          <% @black_captured_pieces.each do |piece| %>
+              <span class="pieces"><%= piece.html_icon.html_safe %></span>
+
+          <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div id="black-player-info" class="row player-info <%= 'turn' if @player_turn == 'Black' %>">
+    <div class="col-md-8">
+      <span id="black-turn-bg" class="<%= 'turn-bg' if @player_turn == 'Black'  %>">
+        <span id="black-turn"><%= 'Turn - ' if @player_turn == 'Black' %></span>
+        <span id="black-player">
+          <% if @black_player != nil %>
+            <%= @black_player.email %>
+              <% if @black_player.id == @current_player.id %>
+                (you)
+            <% end %>
+          <% else %>
+            <span id="black-awaiting">
+              Awaiting Player
+            </span>
+          <% end %>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div id="chessboard" data-game-id="<%= @current_game.id %>" data-current-player-id="<%= @current_player.id %>"
+           data-current-player-email="<%= @current_player.email %>">
+        <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
+           row_index = 7
+           col_index = 0 %>
+
+        <table>
+          <% 8.times do %>
+              <tr>
+                <% 8.times do %>
+                    <td class="square" data-x="<%= col_index %>" data-y="<%= row_index %>">
+                      <div><%= col[col_index] + (row_index+1).to_s %></div>
+                      <% piece = get_piece_at(col_index, row_index) %>
+                      <% if piece %>
+                          <div class="pieces"><%= piece.html_icon.html_safe %></div>
+                      <% end %>
+                    </td>
+                    <% col_index += 1 %>
+
+                <% end %>
+              </tr>
+            <% row_index -= 1 %>
+            <% col_index = 0 %>
+          <% end %>
+        </table>
+        <br />
+      </div>
+    </div>
+
+    <!--  large(> 1024px screens)-->
+    <div class="col-md-4 moves-right">
+      <% if @game.moves.count > 0 %>
+          <h3><span class="moves-count"><%= @game.moves.count %> move<% if @game.moves.count > 1 %>s<% end %></span></h3>
+      <% else %>
+          <h3 class="no-moves">No moves yet.</h3>
+      <% end %>
+      <div class="moves-list">
+        <ol>
             <% @game.moves.each_with_index do |move, i| %>
               <li>
                 <% previous_moves = @game.moves[0..i] %>
@@ -76,57 +116,223 @@
                   To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
                 <% end %>
               </li>
-              <% end %>
-            </ul>
+          <% end %>
+        </ol>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        <% if @black_captured_pieces.count == 0 %>
-          <h3>Black has not captured anything yet.</h3>
-        <% else %>
-          <h3>Black's captured pieces:</h3>
-          <ul>
-            <% @black_captured_pieces.each do |piece| %>
+  </div>
+  <div id="white-player-info" class="row player-info <%= 'turn' if @player_turn == 'White' %>">
+    <div class="col-md-8">
+      <span id="white-turn-bg" class="<%= 'turn-bg' if @player_turn == 'White'  %>">
+        <span id="white-turn"><%= 'Turn - ' if @player_turn == 'White' %></span>
+        <span id="white-player">
+          <% if @white_player != nil %>
+            <%= @white_player.email %>
+              <% if @white_player.id == @current_player.id %>
+              (you)
+            <% end %>
+          <% else %>
+            <span id="white-awaiting">
+              Awaiting Player
+            </span>
+          <% end %>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="row capture-zone">
+    <div class="col-md-4" id="white-capture-zone">
+      <% if @white_captured_pieces.count == 0 %>
+      <% else %>
+          <% @white_captured_pieces.each do |piece| %>
+              <span class="pieces"><%= piece.html_icon.html_safe %></span>
+          <% end %>
+      <% end %>
+    </div>
+  </div>
+  <!-- Medium(< 1024px screens -->
+  <div class="row moves-bottom">
+    <div class="col-md-5">
+      <% if @game.moves.count > 0 %>
+          <h3><span class="moves-count"><%= @game.moves.count %> move<% if @game.moves.count > 1 %>s<% end %></span></h3>
+      <% else %>
+          <h3 class="no-moves">No moves yet.</h3>
+      <% end %>
+      <div class="moves-list">
+        <ol>
+          <% @game.moves.each do |move| %>
               <li>
-                <%= piece.class.name %>
+                <%  position = Position.new_from_int(move.from) %>
+                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <%  position = Position.new_from_int(move.to) %>
+                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
               </li>
-              <% end %>
-          </ul>
-        <% end %>
-      </div>
-
-      <div class="col-md-4">
-          <% if @white_captured_pieces.count == 0 %>
-          <h3>White has not captured anything yet.</h3>
-        <% else %>
-          <h3>White's captured pieces:</h3>
-          <ul>
-            <% @white_captured_pieces.each do |piece| %>
-              <li>
-                <%= piece.class.name %>
-              </li>
-              <% end %>
-          </ul>
-        <% end %>
+          <% end %>
+        </ol>
       </div>
     </div>
+  </div>
 
 </div>
 <br />
 <br />
 <br />
 
-    </div>
+</div>
 
 </div>
 
 <script>
+
+  //  Append piece to square and move occupying piece to capture zone if present
+  function movePiece(move, color) {
+    var from = toCoords(move.from);
+    var fromSq = getSquare(from);
+    var fromPiece = getPiece(fromSq);
+
+    var to = toCoords(move.to);
+    var toSq = getSquare(to);
+    var toPiece = toSq.children('.pieces').first();
+    if(toPiece.length){
+      console.log('CAPTURE PIECE!', toPiece);
+      moveToCapture(toPiece, color);
+    }
+    toSq.append(fromPiece);
+  }
+
+  //  Toggle turn indication
+  function changeTurn(moveColor) {
+    if(moveColor.toUpperCase() === "BLACK"){
+      $('.turn-bg').removeClass('turn-bg');
+      $('#white-turn-bg').addClass('turn-bg');
+      //  Switch black to white
+      $('#white-turn').html('Turn - ');
+      $('#black-turn').html('');
+      $('#white-player-info').addClass('turn');
+      $('#black-player-info').removeClass('turn');
+    }else{
+      $('.turn-bg').removeClass('turn-bg');
+      $('#black-turn-bg').addClass('turn-bg');
+      //  Switch white to black
+      $('#black-turn').html('Turn - ');
+      $('#white-turn').html('');
+      $('#black-player-info').addClass('turn');
+      $('#white-player-info').removeClass('turn');
+    }
+  }
+
+  //  Append move text to moves list and increment move count
+  function addToList(data) {
+    var move = data.move;
+
+    var from = toCoords(move.from);
+    var to = toCoords(move.to);
+    var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
+        'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
+
+    $('.moves-list ol').append($(li));
+    var movesCountElem = $('.moves-count');
+    var count = 0;
+    if(movesCountElem.length){
+      count = parseInt(movesCountElem.html());
+      count++;
+      if(count > 1) {
+        movesCountElem.html(count + " moves");
+      }else{
+        movesCountElem.html(count + " move");
+      }
+    }else{
+      var noMovesElem = $('.no-moves');
+      noMovesElem.html("<span class='moves-count'>1 move</span>")
+    }
+  }
+
+  //  Get td element in chessboard
+  function getSquare(pos){
+    console.log('getSquare', pos);
+    return $("td[data-x='" + pos.x +"'][data-y='" + pos.y + "']");
+  }
+
+  //  Get piece element
+  function getPiece(square){
+    return square.children('.pieces').first();
+  }
+
+  //  Append piece to capture zone
+  function moveToCapture(piece, color){
+    var spanPiece = '<span class="pieces">' + piece.html() + '</span>';
+    piece.remove();
+    if(color.toUpperCase() === "WHITE"){
+      $(spanPiece).appendTo($('#white-capture-zone'));
+    }else{
+      $(spanPiece).appendTo($('#black-capture-zone'));
+    }
+    toastr.info('Piece Captured!');
+  }
+
   $(document).ready(function(){
+    //    Show toast on flash message existence
+    if($('.alert').length){
+      //  Get message and show
+      var elem = $('.alert').first().clone();
+      elem.find('button:first').remove();
+      toastr.info(elem.text());
+      //  Don't show flash
+      $('.alert').first().remove();
+    }
     var gameId = $('#chessboard').data('game-id');
+    var currentPlayerId = $('#chessboard').data('current-player-id');
+    var currentPlayerEmail = $('#chessboard').data('current-player-email');
     var from, to;
 
+    /*
+     Action cable
+     Subscribe to game updates
+     */
+    if (App.cable.subscriptions['subscriptions'].length > 1) {
+      App.cable.subscriptions.remove(App.cable.subscriptions['subscriptions'][1])
+    };
+    App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
+      connected: function(data){
+        console.log("Connected to channel");
+      },
+      disconnected: function(data){
+        console.log("Disconnected from channel");
+      },
+      received: function(data) {
+        console.log("Received", data);
+        if(data.event) {
+          switch(data.event) {
+            case "MOVE_CREATED" :
+              movePiece(data.move, data.color);
+              addToList(data);
+              changeTurn(data.color);
+              toastr.success(data.message);
+              if(data.check){
+                toastr.info("CHECK!")
+              }
+              break;
+            case "MOVE_INVALID": case "NOT_ALLOWED":
+            //  Don't show failed attempt to other player
+            if(data.player.id === currentPlayerId){
+              toastr.error(data.message);
+            }
+            break;
+            case "JOINED_GAME":
+              if(data.player.id !== currentPlayerId){
+                toastr.info(data.message);
+                joinGame(data.player, data.color, currentPlayerEmail);
+              }
+              break;
+          }
+        }
+      }
+    });
+
+
+    /*
+     * Movement logic
+     * */
     var selectedCount = 0;
     $('.square').click(function(ev){
       var square = $(this);
@@ -136,6 +342,8 @@
         //  2nd. Post move
         square.addClass('selected');
         to =  integerConversion(square.data('x'), square.data('y'));
+
+        /*  Post to move#create  */
         var payload = {
           move: {
             game_id: gameId,
@@ -144,9 +352,11 @@
           }
         };
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
-          console.log(data);
+          console.log("Post result", data);
+          $('.selected').removeClass('selected');
         });
         selectedCount = 0;
+
       }else{
         //  1st. Make sure square contains piece
         if(square.find('.pieces').length != 0){
@@ -159,9 +369,31 @@
       }
     });
 
-    function integerConversion(x, y){
-      console.log(y);
-      return (y * 8) + x;
+    //  Update player info and matchup
+    function joinGame(player, color, currentPlayerEmail){
+      if(color.toUpperCase() === "BLACK"){
+        $('#black-player').html(player.email);
+        $('#black-awaiting').html('');
+      }else{
+        $('#white-turn').html("Turn - ");
+        $('#white-player').html(player.email);
+        $('#white-awaiting').html('')
+      }
+      $('#matchup').html(player.email + " vs " + currentPlayerEmail);
     }
+
   });
+
+
+  function integerConversion(x, y){
+    console.log(y);
+    return (y * 8) + x;
+  }
+
+  function toCoords(positionInt){
+    return{
+      x: positionInt % 8,
+      y: Math.floor(positionInt / 8)
+    }
+  }
 </script>
