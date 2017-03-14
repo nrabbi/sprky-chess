@@ -193,7 +193,18 @@
     var to = toCoords(move.to);
     var toSq = getSquare(to);
     var toPiece = toSq.children('.pieces').first();
-    if(toPiece.length){
+    // Move Rook to Castle position if castle move
+    if(castleMove(move, color)){
+      console.log('castle move', castleMove)
+
+      var rookTo = getRookTo(move.to);
+      var rookFrom = getRookFrom(move.to);
+      var rookFromSq = getSquare(rookFrom);
+      var rooktoSq = getSquare(rookTo);
+      var rookPiece = getPiece(rookFromSq);
+
+      rooktoSq.append(rookPiece);
+    } else if(toPiece.length){
       console.log('CAPTURE PIECE!', toPiece);
       moveToCapture(toPiece, color);
     }
@@ -227,6 +238,10 @@
 
     var from = toCoords(move.from);
     var to = toCoords(move.to);
+    // make conditional case for castle move here
+    // if(castleMove)
+    //   var li = '<li>A1 (0, 0) and E1 (4, 0) Castle</li>';
+
     var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
         'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
 
@@ -383,7 +398,7 @@
     }
 
   });
-
+     
 
   function integerConversion(x, y){
     console.log(y);
@@ -396,4 +411,66 @@
       y: Math.floor(positionInt / 8)
     }
   }
+
+  function getRookTo(kingToInt){
+    if(kingToInt === 2){
+      return{
+      x: 3,
+      y: 0
+      };
+    }else if(kingToInt === 6){
+      return{
+      x: 5,
+      y: 0
+      };
+    }else if(kingToInt === 58){
+      return{
+      x: 3,
+      y: 7
+      };
+    }else if(kingToInt === 62){
+      return{
+      x: 5,
+      y: 7
+      };
+    }
+  }
+  function getRookFrom(kingToInt){
+    if(kingToInt === 2){
+      return{
+      x: 0,
+      y: 0
+      };
+    }else if(kingToInt === 6){
+      return{
+      x: 7,
+      y: 0
+      };
+    }else if(kingToInt === 58){
+      return{
+      x: 0,
+      y: 7
+      };
+    }else if(kingToInt === 62){
+      return{
+      x: 7,
+      y: 7
+      };
+    }
+  }
+
+  function castleMove(move, color){
+    var from = toCoords(move.from);
+    var to = toCoords(move.to);
+    var fromSq = getSquare(from);
+    var fromPiece = getPiece(fromSq);
+    var distanceInt = Math.abs(from.x - to.x);
+    var pieceText = fromPiece[0].childNodes[0].textContent;
+    if((distanceInt === 2) && (pieceText === "♔") || (pieceText === "♚")){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 </script>
