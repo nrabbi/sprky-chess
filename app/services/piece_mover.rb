@@ -125,9 +125,9 @@ class PieceMover
 
 
       # check promo move
-      if can_promote?(this_piece, move_position_to(move))
+      if move.promo
         puts "PROMOTION! " + this_piece.inspect
-        promote(this_piece, Queen.new(this_piece.color, this_piece.position), new_pieces)
+        promote(this_piece, move.promo, new_pieces)
       end
 
     end
@@ -135,10 +135,26 @@ class PieceMover
     new_pieces
   end
 
-  def self.promote(pawn, promo_piece, pieces)
-    # code here
-    pieces.delete(pawn)
-    pieces.push(promo_piece)
+
+  # Replace piece on board with selected promotion
+  def self.promote(pawn, promo, pieces)
+    promo_piece = nil
+    case promo
+      when 'B'
+        promo_piece = Bishop.new(pawn.color, pawn.position)
+      when 'K'
+        promo_piece = Knight.new(pawn.color, pawn.position)
+      when 'R'
+        promo_piece = Rook.new(pawn.color, pawn.position)
+      when 'Q'
+        promo_piece = Queen.new(pawn.color, pawn.position)
+      else
+        return
+    end
+    if promo_piece != nil
+      pieces.delete(pawn)
+      pieces.push(promo_piece)
+    end
   end
 
 
