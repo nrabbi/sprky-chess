@@ -69,7 +69,7 @@
                       <div><%= col[col_index] + (row_index+1).to_s %></div>
                       <% piece = get_piece_at(col_index, row_index) %>
                       <% if piece %>
-                          <div class="pieces"><%= piece.html_icon.html_safe %></div>
+                          <div data-piece-type="<%= piece.class %>" class="pieces"><%= piece.html_icon.html_safe %></div>
                       <% end %>
                     </td>
                     <% col_index += 1 %>
@@ -168,6 +168,8 @@
 
 <script>
 
+  var BOARD_START = 0;
+  var BOARD_END = 7;
   //  Append piece to square and move occupying piece to capture zone if present
   function movePiece(move, color) {
     var from = toCoords(move.from);
@@ -267,7 +269,8 @@
     var gameId = $('#chessboard').data('game-id');
     var currentPlayerId = $('#chessboard').data('current-player-id');
     var currentPlayerEmail = $('#chessboard').data('current-player-email');
-    var from, to;
+    var from, to, fromSquare;
+
 
     /*
      Action cable
@@ -308,6 +311,13 @@
                 joinGame(data.player, data.color, currentPlayerEmail);
               }
               break;
+            case "PROMOTION":
+              if(data.player.id === currentPlayerId){
+                //  Ask for piece
+                var chosenPiece = prompt("Please specify piece to promote to (Q,KN,B,R,KG)");
+                console.log(chosenPiece);
+              }
+              break;
           }
         }
       }
@@ -318,6 +328,8 @@
      * Movement logic
      * */
     var selectedCount = 0;
+
+
     $('.square').click(function(ev){
       var square = $(this);
       selectedCount++;
@@ -335,9 +347,22 @@
             to: to
           }
         };
+        if(promotionMove(getPiece(fromSquare), square)){
+          var chosen = prompt("Specify one of {Q, B, R, K} to promote");
+          if(validPromo(chosen)){
+            payload.move.promo = chosen.toUpperCase();
+          }else{
+            toastr.error('Not a valid promo move! Type one of {Q, B, R, K}');
+            unhiliteSelected();
+            selectedCount = 0;
+            return;
+          }
+          console.log(payload.move);
+
+        }
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
           console.log("Post result", data);
-          $('.selected').removeClass('selected');
+          unhiliteSelected();
         });
         selectedCount = 0;
 
@@ -346,12 +371,38 @@
         if(square.find('.pieces').length != 0){
           square.addClass('selected');
           from = integerConversion(square.data('x'), square.data('y'));
+          fromSquare = square;
         }else{
           alert('Select a piece!');
           selectedCount = 0;
         }
       }
     });
+
+    //  Un-hilite square
+    function unhiliteSelected(){
+      $('.selected').removeClass('selected');
+    }
+
+    /*  Determines whether a move is a promotion */
+    function promotionMove(pieceSquare, destSquare) {
+      var pieceType = $(pieceSquare).data("piece-type");
+      var destSquareY = $(destSquare).data('y');
+      console.log(pieceType, destSquareY);
+
+      return (pieceType.toUpperCase() === "PAWN" && (destSquareY === BOARD_END || destSquareY === BOARD_START));
+    }
+
+    function validPromo(chosen){
+      if(!chosen){return false;}
+      switch(chosen.toUpperCase()){
+        case 'K': return true;
+        case 'Q': return true;
+        case 'B': return true;
+        case 'R': return true;
+        default: return false;
+      }
+    }
 
     //  Update player info and matchup
     function joinGame(player, color, currentPlayerEmail){
