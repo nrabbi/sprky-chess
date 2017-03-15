@@ -200,10 +200,10 @@
       var rookTo = getRookTo(move.to);
       var rookFrom = getRookFrom(move.to);
       var rookFromSq = getSquare(rookFrom);
-      var rooktoSq = getSquare(rookTo);
+      var rookToSq = getSquare(rookTo);
       var rookPiece = getPiece(rookFromSq);
 
-      rooktoSq.append(rookPiece);
+      rookToSq.append(rookPiece);
     } else if(toPiece.length){
       console.log('CAPTURE PIECE!', toPiece);
       moveToCapture(toPiece, color);
@@ -238,13 +238,20 @@
 
     var from = toCoords(move.from);
     var to = toCoords(move.to);
+    var message = data.message;
     // make conditional case for castle move here
-    // if(castleMove)
-    //   var li = '<li>A1 (0, 0) and E1 (4, 0) Castle</li>';
-
-    var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
-        'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
-
+    if(message.includes("castled" && "A1")){
+      var li = '<li>A1 (0, 0) and E1 (4, 0) Castle</li>';
+    }else if(message.includes("castled" && "H1")){
+      var li = '<li>E1 (4, 0) and H1 (0, 7) Castle</li>';
+    }else if(message.includes("castled" && "A8")){
+      var li = '<li>A8 (0, 7) and E8 (4, 7) Castle</li>';
+    }else if(message.includes("castled" && "H8")){
+      var li = '<li>E8 (4, 7) and H8 (7, 7) Castle</li>';
+    }else {
+      var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
+    'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
+    }
     $('.moves-list ol').append($(li));
     var movesCountElem = $('.moves-count');
     var count = 0;
