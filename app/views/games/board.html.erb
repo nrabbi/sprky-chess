@@ -170,6 +170,13 @@
 
   var BOARD_START = 0;
   var BOARD_END = 7;
+
+  var icons = {
+    queen: {WHITE: "&#9813;", BLACK: "&#9819;"},
+    rook: {WHITE: "&#9814;", BLACK: "&#9820;"},
+    king: {WHITE: "&#9812;", BLACK: "&#9818;"},
+    bishop: {WHITE: "&#9815;", BLACK: "&#9821;"}
+  };
   //  Append piece to square and move occupying piece to capture zone if present
   function movePiece(move, color) {
     var from = toCoords(move.from);
@@ -279,6 +286,7 @@
     if (App.cable.subscriptions['subscriptions'].length > 1) {
       App.cable.subscriptions.remove(App.cable.subscriptions['subscriptions'][1])
     };
+
     App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
       connected: function(data){
         console.log("Connected to channel");
@@ -298,6 +306,10 @@
               if(data.check){
                 toastr.info("CHECK!")
               }
+              if(data.move.promo){
+                transformPiece(data.move, data.color);
+                showPromoToastr(data.move.promo);
+              }
               break;
             case "MOVE_INVALID": case "NOT_ALLOWED":
             //  Don't show failed attempt to other player
@@ -311,17 +323,41 @@
                 joinGame(data.player, data.color, currentPlayerEmail);
               }
               break;
-            case "PROMOTION":
-              if(data.player.id === currentPlayerId){
-                //  Ask for piece
-                var chosenPiece = prompt("Please specify piece to promote to (Q,KN,B,R,KG)");
-                console.log(chosenPiece);
-              }
-              break;
+//            case "PROMOTION":
+//              if(data.player.id === currentPlayerId){
+//                //  Ask for piece
+//                var chosenPiece = prompt("Please specify piece to promote to (Q,KN,B,R,KG)");
+//                console.log(chosenPiece);
+//              }
+//              break;
           }
         }
       }
     });
+
+    function transformPiece(move, color){
+      var piece = getPiece(getSquare(toCoords(move.to)));
+      var icon = null;
+      switch(move.promo){
+        case 'Q': icon = icons.queen[color.toUpperCase()]; break;
+        case 'K': icon = icons.knight[color.toUpperCase()]; break;
+        case 'B': icon = icons.bishop[color.toUpperCase()]; break;
+        case 'R': icon = icons.rook[color.toUpperCase()]; break;
+      }
+      if(icon && piece){
+        $(piece).html(icon);
+      }
+      console.log("transform", piece);
+    }
+
+    function showPromoToastr(promo) {
+      switch(promo){
+        case 'Q': toastr.info("Pawn promoted to Queen!"); break;
+        case 'K': toastr.info("Pawn promoted to Knight!"); break;
+        case 'B': toastr.info("Pawn promoted to Bishop!"); break;
+        case 'R': toastr.info("Pawn promoted to Rook!"); break;
+      }
+    }
 
 
     /*
@@ -389,8 +425,11 @@
       var pieceType = $(pieceSquare).data("piece-type");
       var destSquareY = $(destSquare).data('y');
       console.log(pieceType, destSquareY);
-
-      return (pieceType.toUpperCase() === "PAWN" && (destSquareY === BOARD_END || destSquareY === BOARD_START));
+      if(pieceType) {
+        return (pieceType.toUpperCase() === "PAWN" && (destSquareY === BOARD_END || destSquareY === BOARD_START));
+      }else{
+        return false;
+      }
     }
 
     function validPromo(chosen){
