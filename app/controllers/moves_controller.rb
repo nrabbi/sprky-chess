@@ -9,7 +9,7 @@ class MovesController < ApplicationController
   end
 
   def create
-    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
+    new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer, promo: move_params[:promo])
     this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
 
     pieces = StartingPositions::STARTING_POSITIONS
@@ -124,7 +124,7 @@ class MovesController < ApplicationController
   private
 
   def move_params
-    params.require(:move).permit(:from, :to)
+    params.require(:move).permit(:from, :to, :promo)
   end
 
   def current_game
