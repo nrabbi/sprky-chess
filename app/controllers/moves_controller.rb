@@ -2,15 +2,13 @@ class MovesController < ApplicationController
 
   before_action :current_game, only: [:index, :new, :create]
 
-  def index; end
-
   def new
     @move = Move.new
   end
 
   def create
     @new_move = current_game.moves.new(from: from_position.to_integer, to: to_position.to_integer)
-    this_game_players = [ current_game.player_1_id, current_game.player_2_id ]
+    this_game_players = [current_game.player_1_id, current_game.player_2_id]
 
     pieces = StartingPositions::STARTING_POSITIONS
     after_move_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
@@ -80,23 +78,21 @@ class MovesController < ApplicationController
           king_start = castle.results[0].position
           king_finish = castle.results[1].position
           rook_start = castle.results[2].position
-          rook_finish = castle.results[3].position
           @new_move.from = king_start.to_integer
           @new_move.to = king_finish.to_integer
           @new_move.save(validate: false)
-      after_save_pieces = PieceMover.apply_moves(pieces, @game.moves)
-      PieceMover::is_in_check(opposite_color(piece.color), after_save_pieces) ? check = true : check = false
-      ActionCable.server.broadcast "game-#{current_game.id}",
-                                     event: 'MOVE_CREATED',
-                                     player: current_player,
-                                     color: current_player_color(current_game),
-                                     move: @new_move,
-                                     from_letter: from_position.to_chess_position,
-                                     to_letter: to_position.to_chess_position,
-                                     game: current_game,
-                                     message: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}.",
-                                     check: check
-          # redirect_to game_board_path(@game), notice: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}."
+          after_save_pieces = PieceMover.apply_moves(pieces, @game.moves)
+          check = PieceMover.is_in_check(opposite_color(piece.color), after_save_pieces) ? true : false
+          ActionCable.server.broadcast "game-#{current_game.id}",
+                                         event: 'MOVE_CREATED',
+                                         player: current_player,
+                                         color: current_player_color(current_game),
+                                         move: @new_move,
+                                         from_letter: from_position.to_chess_position,
+                                         to_letter: to_position.to_chess_position,
+                                         game: current_game,
+                                         message: "King at #{king_start.to_chess_position} has been castled with Rook at #{rook_start.to_chess_position}.",
+                                         check: check
         else
           ActionCable.server.broadcast "game-#{current_game.id}",
                                    event: 'NOT_ALLOWED',
@@ -107,9 +103,8 @@ class MovesController < ApplicationController
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
                                    message: "Unable to castle. #{castle.error_message}"
-          # redirect_to game_board_path(@game), alert: "Unable to castle. #{castle.error_message}"
         end
-      else 
+      else
         ActionCable.server.broadcast "game-#{current_game.id}",
                                    event: 'NOT_ALLOWED',
                                    player: current_player,
@@ -126,7 +121,7 @@ class MovesController < ApplicationController
       if @new_move.save
         after_save_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
 
-        PieceMover::is_in_check(opposite_color(piece.color), after_save_pieces) ? check = true : check = false
+        check = PieceMover.is_in_check(opposite_color(piece.color), after_save_pieces) ? true : false
 
         ActionCable.server.broadcast "game-#{current_game.id}",
                                      event: 'MOVE_CREATED',
@@ -159,8 +154,8 @@ class MovesController < ApplicationController
   def correct_player_turn?
     if player_turn(current_game) == current_game.player_1_color
       player_turn_id = current_game.player_1_id
-    else player_turn(current_game) == current_game.player_2_color
-         player_turn_id = current_game.player_2_id
+    elsif player_turn(current_game) == current_game.player_2_color
+      player_turn_id = current_game.player_2_id
     end
     player_turn_id == current_player.id ? true : false
   end
@@ -191,14 +186,14 @@ class MovesController < ApplicationController
     end
   end
 
-  def piece_to_be_moved(_pieces, _move)
-    _pieces.detect{ |piece| piece.position.to_integer == _move.from }
+  def piece_to_be_moved(pieces, move)
+    pieces.detect { |piece| piece.position.to_integer == move.from }
   end
 
   def pieces_to_be_castled(pieces, move)
     castlers = []
-    castlers << pieces.detect{ |piece| piece.position.to_integer == move.from }
-    castlers << pieces.detect{ |piece| piece.position.to_integer == move.to }
+    castlers << pieces.detect { |piece| piece.position.to_integer == move.from }
+    castlers << pieces.detect { |piece| piece.position.to_integer == move.to }
     [castlers[0].class, castlers[1].class].include?(Rook && King) ? castlers : false
   end
 
