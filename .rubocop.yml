@@ -6,7 +6,6 @@ AllCops:
     - db/schema.rb
     - db/migrate/*
     - bin/*
-    - app/services/*
     - spec/services/*
     - app/controllers/*
     - spec/controllers/*
