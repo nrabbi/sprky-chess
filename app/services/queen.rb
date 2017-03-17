@@ -8,25 +8,25 @@ class Queen < ChessPiece
     difference_y = (position.y - destination.y).abs
     valid_diagonal_move = (difference_x > 0 || difference_y > 0) && (difference_x == difference_y)
 
-    cellsTouched = []
+    cells_touched = []
 
     if valid_diagonal_move
       # 2) collect all touched cells
-      n = difference_x > difference_x ? difference_x : difference_y
+      n = difference_x > difference_y ? difference_x : difference_y
 
       inc_x = destination.x > position.x ? 1 : -1
       inc_y = destination.y > position.y ? 1 : -1
 
       (n - 1).times do |i|
-        cellsTouched << Position.new(position.x + ((i + 1) * inc_x), position.y + ((i + 1) * inc_y))
+        cells_touched << Position.new(position.x + ((i + 1) * inc_x), position.y + ((i + 1) * inc_y))
       end
     else
-      moving_along_x = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
-      moving_along_y = (position.y - destination.y).abs > 0 && (position.x - destination.x).abs == 0
+      moving_along_x = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs.zero?
+      moving_along_y = (position.y - destination.y).abs > 0 && (position.x - destination.x).abs.zero?
 
-      if moving_along_x && moving_along_y
-        raise "Cant be moving along x- and y-axis"
-      elsif moving_along_x
+      raise "Cant be moving along x- and y-axis" if moving_along_x && moving_along_y
+        
+      if moving_along_x
 
         # 2) collect all touched cells
         n = destination.x > position.x ? destination.x - position.x : position.x - destination.x
@@ -34,7 +34,7 @@ class Queen < ChessPiece
         inc = destination.x > position.x ? 1 : -1
 
         (n - 1).times do |i|
-          cellsTouched << Position.new(position.x + ((i + 1) * inc), position.y)
+          cells_touched << Position.new(position.x + ((i + 1) * inc), position.y)
         end
 
       elsif moving_along_y
@@ -44,7 +44,7 @@ class Queen < ChessPiece
         inc = destination.y > position.y ? 1 : -1
 
         (n - 1).times do |i|
-          cellsTouched << Position.new(position.x, position.y + ((i + 1) * inc))
+          cells_touched << Position.new(position.x, position.y + ((i + 1) * inc))
         end
       else
         false
@@ -53,7 +53,7 @@ class Queen < ChessPiece
 
     # 3) check all touched cells for pieces on them
     pieces.each do |piece|
-      cellsTouched.each do |position|
+      cells_touched.each do |position|
         return true if (piece.position.x == position.x) && (piece.position.y == position.y)
       end
 
@@ -71,8 +71,8 @@ class Queen < ChessPiece
     y_diff = (position.y - destination.y).abs
     valid_diagonal_move = (x_diff == y_diff)
 
-    x_only_move = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs == 0
-    y_only_move = (position.y - destination.y).abs > 0 && (position.x - destination.x).abs == 0
+    x_only_move = (position.x - destination.x).abs > 0 && (position.y - destination.y).abs.zero?
+    y_only_move = (position.y - destination.y).abs > 0 && (position.x - destination.x).abs.zero?
 
     moved = !position.equals?(destination)
 
