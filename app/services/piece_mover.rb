@@ -126,7 +126,6 @@ class PieceMover
 
       # check promo move
       if move.promo
-        puts "PROMOTION! " + this_piece.inspect
         promote(this_piece, move.promo, new_pieces)
       end
 
@@ -157,14 +156,6 @@ class PieceMover
     end
   end
 
-
-  def self.can_promote?(piece, position)
-    piece.class == Pawn && promotion_position?(position)
-  end
-
-  def self.promotion_position?(position)
-    position.y == ChessPiece::BOARD_START || position.y == ChessPiece::BOARD_END
-  end
 
   private
 
