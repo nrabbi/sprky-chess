@@ -26,30 +26,6 @@ describe 'PieceMover' do
       # check that the black pawn is captured
       expect(move_resolution.pieces[1].position.equals?(white_capture_area_pos)).to eq true
 
-      # ???????????????????
-
-      # 2 moves should exist in db. The move to to_pos and captured piece off board. ORDER MATTERS
-      # inserted = Move.last(2)
-      # expect(inserted.length).to eq(2)
-
-      # # Check that the captured piece was moved off board
-      # capture_move = inserted[0]
-      # capture_from = Position.new_from_int(capture_move.from)
-      # capture_to = Position.new_from_int(capture_move.to)
-
-      # black_capture_pos = Position.new_from_int(Position::BLACK_CAPTURE_INT)
-
-      # expect(capture_from.equals?(to_pos)).to eq true
-      # expect(capture_to.equals?(black_capture_pos)).to eq true
-
-      # # Check that the piece was moved to the to_pos
-      # move = inserted[1]
-      # move_from = Position.new_from_int(move.from)
-      # move_to = Position.new_from_int(move.to)
-
-      # expect(move_from.equals?(from_pos)).to eq true
-      # expect(move_to.equals?(to_pos)).to eq true
-
     end
 
     it "a pawn captures another chess piece" do
