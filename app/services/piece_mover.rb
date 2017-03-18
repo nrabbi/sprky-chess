@@ -135,7 +135,9 @@ class PieceMover
   end
 
 
-  # Replace piece on board with selected promotion
+  # promote(pawn: Pawn, promo: string, pieces: ChessPiece[])
+  # -------------------------------
+  # Replaces piece on board with player specified promotion
   def self.promote(pawn, promo, pieces)
     promo_piece = nil
     case promo
