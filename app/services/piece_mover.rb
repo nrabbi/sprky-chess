@@ -78,6 +78,23 @@ class PieceMover
     result
   end
 
+  def self.is_in_check_pos(color, pieces, king_position)
+    # for every piece of opposite color, check if it can capture this king
+    enemyPieces = pieces.select { |piece| piece.color != color }
+
+    enemyPieces.each do |piece| 
+      is_valid = piece.is_valid?(king_position)
+      is_obstructed = piece.is_obstructed?(pieces, king_position)
+      can_capture = piece.can_capture?(pieces, king_position)
+
+      if is_valid && !is_obstructed && can_capture
+        return true
+      end
+    end
+    false
+  end
+
+
   def self.is_in_check(color, pieces)
     king = find_king(color, pieces)
 
@@ -86,19 +103,73 @@ class PieceMover
       return false
     end
 
-    # for every piece of opposite color, check if it can capture this king
-    enemyPieces = pieces.select { |piece| piece.color != color }
+    return is_in_check_pos(color, pieces, king.position)
+  end
 
-    enemyPieces.each do |piece| 
-      is_valid = piece.is_valid?(king.position)
-      is_obstructed = piece.is_obstructed?(pieces, king.position)
-      can_capture = piece.can_capture?(pieces, king.position)
+  def self.is_in_check_mate(color, pieces)
+    king = find_king(color, pieces)
 
-      if is_valid && !is_obstructed && can_capture
-        return true
+    if king.nil?
+      # happens in test cases, when there is only one king on the board.
+      return false
+    end
+
+    in_check_mate = false
+
+    # 1) check if the king can move out of check
+    new_king_positions = []
+    for i in 0..63 do 
+      pos = Position.new_from_int(i)
+      is_valid = king.is_valid?(pos)
+      if is_valid
+        new_king_positions << pos
       end
     end
-    false
+
+    new_pieces = pieces.map(&:dup)
+    king = find_king(color, new_pieces)
+    new_king_positions.each do |position|
+      # temporarily move the king to the new position. Needed for correct capture
+      # and obstruction checking.
+      king.position = position
+
+      in_check = is_in_check_pos(color, new_pieces, position)
+      if in_check
+        in_check_mate = true
+      end
+    end
+
+    # 2) check if any own pieces can block the enemy pieces
+    new_pieces = pieces.map(&:dup)
+    friendly_pieces = new_pieces.select { |piece| piece.color == color && piece.class.name != "King"}
+    
+    for i in 0..63 do 
+      pos = Position.new_from_int(i)
+
+      friendly_pieces.each do |piece| 
+        is_valid = piece.is_valid?(pos)
+        is_obstructed = piece.is_obstructed?(pieces, pos)
+
+        if is_valid && !is_obstructed
+          # this position is good for this piece, now check 
+          # if it blocks the check
+
+          # temporarily move the piece to the new position. Needed for correct capture
+          # and obstruction checking.
+          old_position = piece.position
+          piece.position = pos
+          in_check = is_in_check(color, new_pieces)
+          # restore old position for next loop run
+          piece.position = old_position
+
+          if !in_check
+            return false
+          end
+        end
+      end
+    end
+
+    in_check_mate
   end
 
   def self.find_king(color, pieces)

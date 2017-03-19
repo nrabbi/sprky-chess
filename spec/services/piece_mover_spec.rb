@@ -25,31 +25,6 @@ describe 'PieceMover' do
       expect(move_resolution.ok?).to eq true
       # check that the black pawn is captured
       expect(move_resolution.pieces[1].position.equals?(white_capture_area_pos)).to eq true
-
-      # ???????????????????
-
-      # 2 moves should exist in db. The move to to_pos and captured piece off board. ORDER MATTERS
-      # inserted = Move.last(2)
-      # expect(inserted.length).to eq(2)
-
-      # # Check that the captured piece was moved off board
-      # capture_move = inserted[0]
-      # capture_from = Position.new_from_int(capture_move.from)
-      # capture_to = Position.new_from_int(capture_move.to)
-
-      # black_capture_pos = Position.new_from_int(Position::BLACK_CAPTURE_INT)
-
-      # expect(capture_from.equals?(to_pos)).to eq true
-      # expect(capture_to.equals?(black_capture_pos)).to eq true
-
-      # # Check that the piece was moved to the to_pos
-      # move = inserted[1]
-      # move_from = Position.new_from_int(move.from)
-      # move_to = Position.new_from_int(move.to)
-
-      # expect(move_from.equals?(from_pos)).to eq true
-      # expect(move_to.equals?(to_pos)).to eq true
-
     end
 
     it "a pawn captures another chess piece" do
@@ -247,6 +222,53 @@ describe 'PieceMover' do
 
       move_resolution = PieceMover.move_to!(pieces, game.moves)
       expect(move_resolution.ok?).to eq false
+    end 
+
+    it 'detects a check mate situation' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # R,0,0,0,0,0,0,0
+      # R,0,0,0,0,0,K,0
+      game
+
+      white_rook0 = Rook.new(:white, Position.new(0, 0))
+      white_rook1 = Rook.new(:white, Position.new(0, 1))
+
+      black_king = King.new(:black, Position.new(6, 0))
+
+      pieces = [white_rook0, white_rook1, black_king]
+
+      is_in_check_mate = PieceMover.is_in_check_mate(:black, pieces)
+
+      expect(is_in_check_mate).to eq true
+    end
+
+    it 'detects a piece can block a check situation ' do
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,0,0,0
+      # 0,0,0,0,0,R,0,0
+      # R,0,0,0,0,0,0,0
+      # R,0,0,0,0,0,K,0
+      game
+
+      white_rook0 = Rook.new(:white, Position.new(0, 0))
+      white_rook1 = Rook.new(:white, Position.new(0, 1))
+
+      black_king = King.new(:black, Position.new(6, 0))
+      black_rook = Rook.new(:black, Position.new(5, 2))
+
+      pieces = [white_rook0, white_rook1, black_king, black_rook]
+
+      is_in_check_mate = PieceMover.is_in_check_mate(:black, pieces)
+
+      expect(is_in_check_mate).to eq false
     end
   end
 
