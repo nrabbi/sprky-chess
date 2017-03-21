@@ -42,41 +42,17 @@ class GamesController < ApplicationController
     @white_player = white_player
 
     @player_turn = player_turn(current_game)
-    
+
     @opposite_player = opposite_player(current_game)
     @opposite_player_color = opposite_color(@current_player_color)
   end
 
   def black_player
-    if @current_game.player_1_color == "Black"
-      if current_player.id == @current_game.player_1_id
-        current_player
-      else
-        Player.find_by(id: @current_game.player_1_id)
-      end
-    else
-      if current_player.id == @current_game.player_2_id
-        current_player
-      else
-        Player.find_by(id: @current_game.player_2_id)
-      end
-    end
+    player_1_black? ? find_player_1 : find_player_2
   end
 
-  def white_player
-    if @current_game.player_1_color == "White"
-      if current_player.id == @current_game.player_1_id
-        current_player
-      else
-        Player.find_by(id: @current_game.player_1_id)
-      end
-    else
-      if current_player.id == @current_game.player_2_id
-        current_player
-      else
-        Player.find_by(id: @current_game.player_2_id)
-      end
-    end
+  def white_player #### FIX
+    player_1_white? ? find_player_1 : find_player_2
   end
 
   def available
@@ -149,10 +125,9 @@ class GamesController < ApplicationController
   end
 
   def opposite_player(current_game)
-    if current_game.started? && current_player
-      opp_player = current_player.id == current_game.player_1_id ? current_game.player_2_id : current_game.player_1_id
-      Player.find(opp_player)
-    end
+    return unless current_game.started? && current_player
+    opp_player = current_player.id == current_game.player_1_id ? current_game.player_2_id : current_game.player_1_id
+    Player.find(opp_player)
   end
 
   def player_1_email
@@ -163,4 +138,27 @@ class GamesController < ApplicationController
     current_game.player_2_id.nil? ? "(no opponent has joined yet)" : Player.find(current_game.player_2_id).email
   end
 
+  def player_1_black?
+    @current_game.player_1_color == "Black"
+  end
+
+  def player_1_white?
+    @current_game.player_1_color == "White"
+  end
+
+  def current_player_player_1?
+    current_player.id == @current_game.player_1_id
+  end
+
+  def current_player_player_2?
+    current_player.id == @current_game.player_2_id
+  end
+
+  def find_player_1
+    Player.find_by(id: @current_game.player_1_id)
+  end
+
+  def find_player_2
+    Player.find_by(id: @current_game.player_2_id)
+  end
 end

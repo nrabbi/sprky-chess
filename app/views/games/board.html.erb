@@ -76,14 +76,14 @@
 
                 <% end %>
               </tr>
-
-              <% row_index -= 1 %>
-              <% col_index = 0 %>
+            <% row_index -= 1 %>
+            <% col_index = 0 %>
           <% end %>
         </table>
         <br />
       </div>
     </div>
+
     <!--  large(> 1024px screens)-->
     <div class="col-md-4 moves-right">
       <% if @game.moves.count > 0 %>
@@ -93,12 +93,28 @@
       <% end %>
       <div class="moves-list">
         <ol>
-          <% @game.moves.each do |move| %>
+            <% @game.moves.each_with_index do |move, i| %>
               <li>
-                <%  position = Position.new_from_int(move.from) %>
-                From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
-                <%  position = Position.new_from_int(move.to) %>
-                To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <% previous_moves = @game.moves[0..i] %>
+                <% moved = previous_moves.select { |old_move| (old_move.from == move.from) && (old_move != move) } %>
+                <% if ((move.from - move.to).abs == 2) && move.from == 4 && moved.blank? %>
+                  <% if move.to == 2 %>
+                    A1 (0, 0) and E1 (4, 0) Castle
+                  <% elsif move.to == 6 %>
+                    E1 (4, 0) and H1 (0, 7) Castle
+                  <% end %>
+                <% elsif ((move.from - move.to).abs == 2) && move.from == 60 %>
+                  <% if move.to == 58 %>
+                    A8 (0, 7) and E8 (4, 7) Castle
+                  <% elsif move.to == 62 %>
+                    E8 (4, 7) and H8 (7, 7) Castle
+                  <% end %>
+                <% else %>
+                  <% position = Position.new_from_int(move.from) %>
+                  From: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                  <%  position = Position.new_from_int(move.to) %>
+                  To: <%= position.to_chess_position %> (<%= position.x %>, <%= position.y %>)
+                <% end %>
               </li>
           <% end %>
         </ol>
@@ -186,7 +202,18 @@
     var to = toCoords(move.to);
     var toSq = getSquare(to);
     var toPiece = toSq.children('.pieces').first();
-    if(toPiece.length){
+    // Move Rook to Castle position if castle move
+    if(castleMove(move, color)){
+      console.log('castle move', castleMove)
+
+      var rookTo = getRookTo(move.to);
+      var rookFrom = getRookFrom(move.to);
+      var rookFromSq = getSquare(rookFrom);
+      var rookToSq = getSquare(rookTo);
+      var rookPiece = getPiece(rookFromSq);
+
+      rookToSq.append(rookPiece);
+    } else if(toPiece.length){
       console.log('CAPTURE PIECE!', toPiece);
       moveToCapture(toPiece, color);
     }
@@ -220,9 +247,20 @@
 
     var from = toCoords(move.from);
     var to = toCoords(move.to);
-    var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
-        'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
-
+    var message = data.message;
+    // make conditional case for castle move here
+    if(message.includes("castled" && "A1")){
+      var li = '<li>A1 (0, 0) and E1 (4, 0) Castle</li>';
+    }else if(message.includes("castled" && "H1")){
+      var li = '<li>E1 (4, 0) and H1 (0, 7) Castle</li>';
+    }else if(message.includes("castled" && "A8")){
+      var li = '<li>A8 (0, 7) and E8 (4, 7) Castle</li>';
+    }else if(message.includes("castled" && "H8")){
+      var li = '<li>E8 (4, 7) and H8 (7, 7) Castle</li>';
+    }else {
+      var li = '<li>' + 'From: ' + data.from_letter + ' (' + from.x + ', ' +  from.y + ') ' +
+    'To: ' + data.to_letter + ' (' + to.x + ', ' +  to.y + ')' + '</li>';
+    }
     $('.moves-list ol').append($(li));
     var movesCountElem = $('.moves-count');
     var count = 0;
@@ -450,7 +488,7 @@
     }
 
   });
-
+     
 
   function integerConversion(x, y){
     console.log(y);
@@ -463,4 +501,66 @@
       y: Math.floor(positionInt / 8)
     }
   }
+
+  function getRookTo(kingToInt){
+    if(kingToInt === 2){
+      return{
+      x: 3,
+      y: 0
+      };
+    }else if(kingToInt === 6){
+      return{
+      x: 5,
+      y: 0
+      };
+    }else if(kingToInt === 58){
+      return{
+      x: 3,
+      y: 7
+      };
+    }else if(kingToInt === 62){
+      return{
+      x: 5,
+      y: 7
+      };
+    }
+  }
+  function getRookFrom(kingToInt){
+    if(kingToInt === 2){
+      return{
+      x: 0,
+      y: 0
+      };
+    }else if(kingToInt === 6){
+      return{
+      x: 7,
+      y: 0
+      };
+    }else if(kingToInt === 58){
+      return{
+      x: 0,
+      y: 7
+      };
+    }else if(kingToInt === 62){
+      return{
+      x: 7,
+      y: 7
+      };
+    }
+  }
+
+  function castleMove(move, color){
+    var from = toCoords(move.from);
+    var to = toCoords(move.to);
+    var fromSq = getSquare(from);
+    var fromPiece = getPiece(fromSq);
+    var distanceInt = Math.abs(from.x - to.x);
+    var pieceText = fromPiece[0].childNodes[0].textContent;
+    if((distanceInt === 2) && (pieceText === "♔") || (pieceText === "♚")){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 </script>

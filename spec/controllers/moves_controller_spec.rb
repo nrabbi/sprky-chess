@@ -7,7 +7,7 @@ RSpec.describe MovesController, type: :controller do
   let(:sign_in_player) { sign_in player }
   let(:sign_in_player2) { sign_in player2 }
   describe "moves#index action" do
-    it "successfullies show the page" do
+    it "shows the page" do
       game
       get :index, params: { game_id: game }
       expect(response).to have_http_status(:success)
@@ -15,20 +15,19 @@ RSpec.describe MovesController, type: :controller do
   end
 
   describe "moves#new action" do
-    it "successfullies show the new form" do
+    it "shows the new form" do
       game
       get :new, params: { game_id: game }
       expect(response).to have_http_status(:success)
     end
   end
-  describe 'moves#create action' do
 
-    it 'successfully create a valid move' do
+  describe 'moves#create action' do
+    it 'creates a valid move' do
       player
       player2
       sign_in_player
       game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
-      # move pawn from A2 to A3
       post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
       # expect(response).to redirect_to game_board_path(game)
       move = Move.last
@@ -41,20 +40,6 @@ RSpec.describe MovesController, type: :controller do
       expect { post :create, params: { game_id: -2, move: { from: 128, to: -43 } } }.to raise_error(ActiveRecord::RecordNotFound)
       expect(Move.count).to eq move_count
     end
-
-    # context 'lets the player who has current turn create a move' do
-    #   let(:game) { FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")}
-    #   let(:move_count) { game.moves.count }
-    #   before do
-    #     sign_in_player
-    #     post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
-    #     sign_out player
-    #     sign_in_player2
-    #   end
-    #   it 'has 2 moves' do
-    #     expect { post :create, params: { game_id: game.id, move: { from: 48, to: 40 } } }.to change { move_count }.by(1)
-    #   end
-    # end
 
     it "lets the player who has current turn create a move" do
       player
@@ -96,6 +81,87 @@ RSpec.describe MovesController, type: :controller do
       game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       post :create, params: { game_id: game.id, move: { from: 48, to: 32 } }
       expect(Move.count).to eq 0
+    end
+
+    context "when Castler get valid castle" do
+      it "returns updated move" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        # tests that Castler updated the move positions
+        expect(move.from).to eq(4)
+        expect(move.to).to eq(6)
+      end
+    end
+
+    context "when Castler get invalid castle" do
+      it "does not create move if obstructed" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        # Castle is still obstructed. Should not create new move.
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(49)
+        expect(move.to).to eq(41)
+      end
+      it "does not create move if piece has moved before" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+        move7 = game.moves.new(game_id: game.id, from: 4, to: 5).save
+        move8 = game.moves.new(game_id: game.id, from: 51, to: 43).save
+        move9 = game.moves.new(game_id: game.id, from: 5, to: 4).save
+        move8 = game.moves.new(game_id: game.id, from: 52, to: 44).save
+        post :create, params: { game_id: game.id, move: { from: 4, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(52)
+        expect(move.to).to eq(44)
+      end
+      it "does not create move if wrong pieces" do
+        player
+        player2
+        sign_in_player
+        game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
+        move1 = game.moves.new(game_id: game.id, from: 6, to: 23).save
+        move2 = game.moves.new(game_id: game.id, from: 48, to: 40).save
+        move3 = game.moves.new(game_id: game.id, from: 14, to: 22).save
+        move4 = game.moves.new(game_id: game.id, from: 49, to: 41).save
+        move5 = game.moves.new(game_id: game.id, from: 5, to: 14).save
+        move6 = game.moves.new(game_id: game.id, from: 50, to: 42).save
+
+        post :create, params: { game_id: game.id, move: { from: 4, to: 6 } }
+        move = Move.last
+        expect(move.from).to eq(50)
+        expect(move.to).to eq(42)
+        
+        post :create, params: { game_id: game.id, move: { from: 3, to: 7 } }
+        move = Move.last
+        expect(move.from).to eq(50)
+        expect(move.to).to eq(42)
+      end
     end
   end
 

@@ -114,10 +114,13 @@ class PieceMover
       this_piece = find_piece_for_coordinate(new_pieces, move_position_from(move))
 
       to_piece = find_piece_for_coordinate(new_pieces, move_position_to(move))
-
+      castle_move = this_piece.class == King && (move.from - move.to).abs == 2
       if to_piece && this_piece.can_capture?(new_pieces, move_position_to(move))
         capture_int = to_piece.color == :black ? Position::WHITE_CAPTURE_INT : Position::BLACK_CAPTURE_INT
         to_piece.position = Position.new_from_int(capture_int)
+      elsif castle_move
+        rook = find_piece_for_coordinate(new_pieces, rook_from_position(move))
+        rook.position = Position.new_from_int(rook_to_position(rook))
       end
 
       # move piece to new position
@@ -167,6 +170,30 @@ class PieceMover
 
   def self.move_position_to(move)
     Position.new_from_int(move.to)
+  end
+
+  def self.rook_from_position(castle_move)
+    if castle_move.from == 4 && castle_move.to == 2
+      Position.new_from_int(0)
+    elsif castle_move.from == 4 && castle_move.to == 6
+      Position.new_from_int(7)
+    elsif castle_move.from == 60 && castle_move.to == 58
+      Position.new_from_int(56)
+    elsif castle_move.from == 60 && castle_move.to == 62
+      Position.new_from_int(63)
+    end
+  end
+
+  def self.rook_to_position(rook)
+    if rook.position.to_integer == 0
+      3
+    elsif rook.position.to_integer == 7
+      5
+    elsif rook.position.to_integer == 56
+      59
+    elsif rook.position.to_integer == 63
+      61
+    end
   end
 
   def self.find_piece_for_coordinate(pieces, coordinate)
