@@ -29,3 +29,6 @@
 
 # RubyMine
 .idea/
+
+/assets/.DS_Store/
+.DS_Store/

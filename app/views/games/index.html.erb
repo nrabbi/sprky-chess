@@ -1,7 +1,7 @@
 </br></br>
 
 <div class="container card card-compressed">
-  <h1 class="text-center">Available Games</h1>
+  <h1 class="text-center">Games in Progress</h1>
   <hr />
   <% @games.each do |game| %>
     <h2 class="text-center"><%= link_to game.name, game_board_path(game) %></h2>

@@ -55,6 +55,7 @@ group :development, :test do
   gem 'poltergeist'
   gem 'database_cleaner'
   gem 'webmock'
+  gem 'rails-controller-testing'
 end
 
 group :development do
