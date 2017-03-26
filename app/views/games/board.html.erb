@@ -1,6 +1,6 @@
 <div class="container-fluid arena">
   <div id="game" class="hidden"> I should be hidden <%= %></div>
-  <div class="row game-header">
+  <div class="row game-header" data-winner-id="<%= @winner_id %>">
     <span class="game-name"><%= @current_game.name %></span>
     <br>
     <span id="matchup">
@@ -15,7 +15,7 @@
     </span>
 
     <% if current_player && [ @current_game.player_1_id, @current_game.player_2_id ].include?(current_player.id) %>
-        <h4>You are playing as <%= @current_player_color %></h4>
+        <h4 class="current-player-indicator">You are playing as <%= @current_player_color %></h4>
     <% end %>
   </div>
 
@@ -56,7 +56,9 @@
   <div class="row">
     <div class="col-md-8">
       <div id="chessboard" data-game-id="<%= @current_game.id %>" data-current-player-id="<%= @current_player.id %>"
-           data-current-player-email="<%= @current_player.email %>">
+           data-current-player-email="<%= @current_player.email %>" data-current-player-color="<%=@current_player_color%>"
+           data-opposite-player-id="<%= @opposite_player.id %>"
+           data-opposite-player-email="<%= @opposite_player.email %>" data-opposite-player-color="<%=@opposite_player_color%>">
         <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
            row_index = 7
            col_index = 0 %>
@@ -292,6 +294,23 @@
     toastr.info('Piece Captured!');
   }
 
+
+
+  //  Display winner and disable chessboard
+  function endGame(winnerColor, winnerEmail) {
+    console.log('WINNER', winnerColor, winnerEmail);
+    var message = winnerEmail + " (" + winnerColor + ")" + " has won";
+    toastr.info(message);
+    $('.current-player-indicator').remove();
+    $('#matchup').append('<h4>' + message + '</h4>');
+
+    $('.square').unbind();
+    $('.square').click(function(ev){
+      toastr.error("The game is over")
+    });
+
+  }
+
   $(document).ready(function(){
     //    Show toast on flash message existence
     if($('.alert').length){
@@ -305,7 +324,12 @@
     var gameId = $('#chessboard').data('game-id');
     var currentPlayerId = $('#chessboard').data('current-player-id');
     var currentPlayerEmail = $('#chessboard').data('current-player-email');
+    var currentPlayerColor = $('#chessboard').data('current-player-color');
+    var oppositePlayerId = $('#chessboard').data('opposite-player-id');
+    var oppositePlayerEmail = $('#chessboard').data('opposite-player-email');
+    var oppositePlayerColor = $('#chessboard').data('opposite-player-color');
     var from, to;
+
 
     /*
      Action cable
@@ -330,8 +354,11 @@
               addToList(data);
               changeTurn(data.color);
               toastr.success(data.message);
-              if(data.check){
-                toastr.info("CHECK!")
+              if(data.checkmate){
+                toastr.info("CHECKMATE!");
+                endGame(data.player);
+              } else if(data.check){
+                toastr.info("CHECK!");
               }
               break;
             case "MOVE_INVALID": case "NOT_ALLOWED":
@@ -352,11 +379,12 @@
     });
 
 
+
     /*
      * Movement logic
      * */
     var selectedCount = 0;
-    $('.square').click(function(ev){
+    var onSquareClick = function(ev){
       var square = $(this);
       selectedCount++;
       // 1st or 2nd Selection?
@@ -385,11 +413,24 @@
           square.addClass('selected');
           from = integerConversion(square.data('x'), square.data('y'));
         }else{
-          alert('Select a piece!');
+          toastr.error('Select a piece!');
           selectedCount = 0;
         }
       }
-    });
+    };
+
+    $('.square').click(onSquareClick);
+
+    //  Check if winner
+    function checkWinner(){
+      var winnerId = $('.game-header').data('winner-id');
+      if(winnerId && winnerId === currentPlayerId){
+        endGame(currentPlayerColor, currentPlayerEmail);
+      }else if(winnerId && winnerId === oppositePlayerId){
+        endGame(oppositePlayerColor, oppositePlayerEmail);
+      }
+    }
+    checkWinner();
 
     //  Update player info and matchup
     function joinGame(player, color, currentPlayerEmail){
