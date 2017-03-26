@@ -36,6 +36,16 @@ class MovesController < ApplicationController
                                    to_letter: to_position.to_chess_position,
                                    game: current_game,
                                    message: "You must be a player in this game to make a move."
+    elsif current_game.player_1_won? || current_game.player_2_won?
+      ActionCable.server.broadcast "game-#{current_game.id}",
+                                   event: 'NOT_ALLOWED',
+                                   player: current_player,
+                                   color: current_player_color(current_game),
+                                   move: @new_move,
+                                   from_letter: from_position.to_chess_position,
+                                   to_letter: to_position.to_chess_position,
+                                   game: current_game,
+                                   message: "The game is over."
     elsif !current_game.started?
       ActionCable.server.broadcast "game-#{current_game.id}",
                                    event: 'NOT_ALLOWED',
@@ -119,9 +129,25 @@ class MovesController < ApplicationController
 
     elsif @new_move.valid?
       if @new_move.save
+
         after_save_pieces = PieceMover.apply_moves(pieces, @game.moves.select(&:persisted?))
 
         check = PieceMover.is_in_check(opposite_color(piece.color), after_save_pieces) ? true : false
+        checkmate = false
+        if check
+          #   Check end of game
+          checkmate = PieceMover.is_in_check_mate(opposite_color(piece.color), after_save_pieces)
+          if checkmate
+            #   End game logic
+            if current_player.id == current_game.player_1_id
+            #   player 1 won
+              current_game.player_1_won!
+            else
+            #   player 2 won
+              current_game.player_2_won!
+            end
+          end
+        end
 
         ActionCable.server.broadcast "game-#{current_game.id}",
                                      event: 'MOVE_CREATED',
@@ -132,7 +158,8 @@ class MovesController < ApplicationController
                                      to_letter: to_position.to_chess_position,
                                      game: current_game,
                                      message: "#{current_player_color(current_game)} has moved",
-                                     check: check
+                                     check: check,
+                                     checkmate: checkmate
       end
     else
       ActionCable.server.broadcast "game-#{current_game.id}",
