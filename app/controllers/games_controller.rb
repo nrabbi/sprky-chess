@@ -45,6 +45,14 @@ class GamesController < ApplicationController
 
     @opposite_player = opposite_player(current_game)
     @opposite_player_color = opposite_color(@current_player_color)
+
+    @winner_id = nil
+    if @game.player_1_won?
+      @winner_id = @game.player_1_id
+    elsif @game.player_2_won?
+      @winner_id = @game.player_2_id
+    end
+
   end
 
   def black_player
@@ -125,7 +133,7 @@ class GamesController < ApplicationController
   end
 
   def opposite_player(current_game)
-    return unless current_game.started? && current_player
+    return unless (current_game.started? || current_game.player_1_won? || current_game.player_2_won?) && current_player
     opp_player = current_player.id == current_game.player_1_id ? current_game.player_2_id : current_game.player_1_id
     Player.find(opp_player)
   end
