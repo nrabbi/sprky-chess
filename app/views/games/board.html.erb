@@ -38,6 +38,8 @@
     <div class="col-md-8">
       <span id="black-turn-bg" class="<%= 'turn-bg' if @player_turn == 'Black'  %>">
         <span id="black-turn"><%= 'Turn - ' if @player_turn == 'Black' %></span>
+        <span class="outcome" style="display: none;"></span>
+
         <span id="black-player">
           <% if @black_player != nil %>
             <%= @black_player.email %>
@@ -127,6 +129,7 @@
     <div class="col-md-8">
       <span id="white-turn-bg" class="<%= 'turn-bg' if @player_turn == 'White'  %>">
         <span id="white-turn"><%= 'Turn - ' if @player_turn == 'White' %></span>
+        <span class="outcome" style="display: none;"></span>
         <span id="white-player">
           <% if @white_player != nil %>
             <%= @white_player.email %>
@@ -296,19 +299,40 @@
 
 
 
-  //  Display winner and disable chessboard
+  //  Indicate winner and disable chessboard
   function endGame(winnerColor, winnerEmail) {
-    console.log('WINNER', winnerColor, winnerEmail);
+    /*  Game header */
     var message = winnerEmail + " (" + winnerColor + ")" + " has won";
     toastr.info(message);
     $('.current-player-indicator').remove();
     $('#matchup').append('<h4>' + message + '</h4>');
 
+    /*  Disable chessboard */
     $('.square').unbind();
     $('.square').click(function(ev){
       toastr.error("The game is over")
     });
 
+    /*  Turn indication becomes Winner indication */
+    $('.turn-bg').removeClass('turn-bg');
+    $('.turn').removeClass('turn');
+    $('#white-turn').remove();
+    $('#black-turn').remove();
+    $('.player-info').css('color', 'black');
+
+    var black = $('#black-player-info').find('.outcome');
+    var white = $('#white-player-info').find('.outcome');
+    if(winnerColor.toUpperCase() === "BLACK"){
+      black.html('WINNER - ');
+      white.html('LOSER - ');
+      black.css({display: 'inline-block', color: 'green'});
+      white.css({display: 'inline-block', color: 'red'});
+    }else{
+      white.html('WINNER - ');
+      black.html('LOSER - ');
+      white.css({display: 'inline-block', color: 'green'});
+      black.css({display: 'inline-block', color: 'red'});
+    }
   }
 
   $(document).ready(function(){
@@ -329,7 +353,6 @@
     var oppositePlayerEmail = $('#chessboard').data('opposite-player-email');
     var oppositePlayerColor = $('#chessboard').data('opposite-player-color');
     var from, to;
-
 
     /*
      Action cable
@@ -356,7 +379,7 @@
               toastr.success(data.message);
               if(data.checkmate){
                 toastr.info("CHECKMATE!");
-                endGame(data.player);
+                endGame(data.color, data.player.email);
               } else if(data.check){
                 toastr.info("CHECK!");
               }
