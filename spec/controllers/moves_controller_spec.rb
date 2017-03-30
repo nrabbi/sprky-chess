@@ -85,28 +85,30 @@ RSpec.describe MovesController, type: :controller do
 
 
     it "prohibits a new move if game is over" do
+
       player
       player2
-      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: Game::STARTED)
-      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
-      last_move = Move.last
+      sign_in_player
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       game.player_1_won!
-      post :create, params: { game_id: game.id, move: { from: 16, to: 24 } }
-      attempted_move = Move.last
-      expect(attempted_move.id).to eq(last_move.id)
+      post :create, params: { game_id: game.id, move: { from: 8, to: 16 } }
+      move = Move.last
+      expect(move).to eq(nil)
+
     end
 
     it "sets the game status to one of {player_1_won, player_2_won} after checkmate" do
       player
       player2
-      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: Game::STARTED)
+      game = FactoryGirl.create(:game, player_1_id: player.id, player_2_id: player2.id, player_2_color: "Black", status: "started")
       # Fool's Mate
-      post :create, params: { game_id: game.id, move: { from: 13, to: 21 } }
-      post :create, params: { game_id: game.id, move: { from: 52, to: 36 } }
-      post :create, params: { game_id: game.id, move: { from: 14, to: 30 } }
+      sign_in_player2
+      game.moves.new(game_id: game.id, from: 13, to: 21).save
+      game.moves.new(game_id: game.id, from: 52, to: 36).save
+      game.moves.new(game_id: game.id, from: 14, to: 30).save
       post :create, params: { game_id: game.id, move: { from: 59, to: 31 } }
-
-      expect(game.status).to eq(Game:: PLAYER_2_WON)
+      game.reload
+      expect(game.status).to eq("player_2_won")
     end
 
     context "when Castler get valid castle" do
