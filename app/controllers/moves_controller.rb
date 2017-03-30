@@ -190,7 +190,7 @@ class MovesController < ApplicationController
   private
 
   def move_params
-    params.require(:move).permit(:from, :to)
+    params.require(:move).permit(:from, :to, :promo)
   end
 
   def current_game

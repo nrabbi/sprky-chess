@@ -76,7 +76,7 @@
                       <div><%= col[col_index] + (row_index+1).to_s %></div>
                       <% piece = get_piece_at(col_index, row_index) %>
                       <% if piece %>
-                          <div class="pieces"><%= piece.html_icon.html_safe %></div>
+                          <div data-piece-type="<%= piece.class %>" class="pieces"><%= piece.html_icon.html_safe %></div>
                       <% end %>
                     </td>
                     <% col_index += 1 %>
@@ -192,6 +192,15 @@
 
 <script>
 
+  var BOARD_START = 0;
+  var BOARD_END = 7;
+
+  var icons = {
+    queen: {WHITE: "&#9813;", BLACK: "&#9819;"},
+    rook: {WHITE: "&#9814;", BLACK: "&#9820;"},
+    king: {WHITE: "&#9812;", BLACK: "&#9818;"},
+    bishop: {WHITE: "&#9815;", BLACK: "&#9821;"}
+  };
   //  Append piece to square and move occupying piece to capture zone if present
   function movePiece(move, color) {
     var from = toCoords(move.from);
@@ -355,7 +364,8 @@
     var oppositePlayerId = $('#chessboard').data('opposite-player-id');
     var oppositePlayerEmail = $('#chessboard').data('opposite-player-email');
     var oppositePlayerColor = $('#chessboard').data('opposite-player-color');
-    var from, to;
+    var from, to, fromSquare;
+
 
     /*
      Action cable
@@ -364,6 +374,7 @@
     if (App.cable.subscriptions['subscriptions'].length > 1) {
       App.cable.subscriptions.remove(App.cable.subscriptions['subscriptions'][1])
     };
+
     App.game = App.cable.subscriptions.create({channel:'GameChannel', room: gameId}, {
       connected: function(data){
         console.log("Connected to channel");
@@ -386,6 +397,10 @@
               } else if(data.check){
                 toastr.info("CHECK!");
               }
+              if(data.move.promo){
+                transformPiece(data.move, data.color);
+                showPromoToastr(data.move.promo);
+              }
               break;
             case "MOVE_INVALID": case "NOT_ALLOWED":
             //  Don't show failed attempt to other player
@@ -403,6 +418,30 @@
         }
       }
     });
+
+    function transformPiece(move, color){
+      var piece = getPiece(getSquare(toCoords(move.to)));
+      var icon = null;
+      switch(move.promo){
+        case 'Q': icon = icons.queen[color.toUpperCase()]; break;
+        case 'K': icon = icons.knight[color.toUpperCase()]; break;
+        case 'B': icon = icons.bishop[color.toUpperCase()]; break;
+        case 'R': icon = icons.rook[color.toUpperCase()]; break;
+      }
+      if(icon && piece){
+        $(piece).html(icon);
+      }
+      console.log("transform", piece);
+    }
+
+    function showPromoToastr(promo) {
+      switch(promo){
+        case 'Q': toastr.info("Pawn promoted to Queen!"); break;
+        case 'K': toastr.info("Pawn promoted to Knight!"); break;
+        case 'B': toastr.info("Pawn promoted to Bishop!"); break;
+        case 'R': toastr.info("Pawn promoted to Rook!"); break;
+      }
+    }
 
 
 
@@ -427,9 +466,22 @@
             to: to
           }
         };
+        if(promotionMove(getPiece(fromSquare), square)){
+          var chosen = prompt("Specify one of {Q, B, R, K} to promote");
+          if(validPromo(chosen)){
+            payload.move.promo = chosen.toUpperCase();
+          }else{
+            toastr.error('Not a valid promo move! Type one of {Q, B, R, K}');
+            unhiliteSelected();
+            selectedCount = 0;
+            return;
+          }
+          console.log(payload.move);
+
+        }
         $.post('/games/' + gameId + "/moves", payload).success(function(data){
           console.log("Post result", data);
-          $('.selected').removeClass('selected');
+          unhiliteSelected();
         });
         selectedCount = 0;
 
@@ -438,6 +490,7 @@
         if(square.find('.pieces').length != 0){
           square.addClass('selected');
           from = integerConversion(square.data('x'), square.data('y'));
+          fromSquare = square;
         }else{
           toastr.error('Select a piece!');
           selectedCount = 0;
@@ -457,6 +510,34 @@
       }
     }
     checkWinner();
+
+    //  Un-hilite square
+    function unhiliteSelected(){
+      $('.selected').removeClass('selected');
+    }
+
+    /*  Determines whether a move is a promotion */
+    function promotionMove(pieceSquare, destSquare) {
+      var pieceType = $(pieceSquare).data("piece-type");
+      var destSquareY = $(destSquare).data('y');
+      console.log(pieceType, destSquareY);
+      if(pieceType) {
+        return (pieceType.toUpperCase() === "PAWN" && (destSquareY === BOARD_END || destSquareY === BOARD_START));
+      }else{
+        return false;
+      }
+    }
+
+    function validPromo(chosen){
+      if(!chosen){return false;}
+      switch(chosen.toUpperCase()){
+        case 'K': return true;
+        case 'Q': return true;
+        case 'B': return true;
+        case 'R': return true;
+        default: return false;
+      }
+    }
 
     //  Update player info and matchup
     function joinGame(player, color, currentPlayerEmail){

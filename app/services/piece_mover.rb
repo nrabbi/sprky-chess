@@ -193,12 +193,45 @@ class PieceMover
         rook = find_piece_for_coordinate(new_pieces, rook_from_position(move))
         rook.position = Position.new_from_int(rook_to_position(rook))
       end
+
       # move piece to new position
       this_piece.position = move_position_to(move)
+
+
+      # check promo move
+      if move.promo
+        promote(this_piece, move.promo, new_pieces)
+      end
+
     end
 
     new_pieces
   end
+
+
+  # promote(pawn: Pawn, promo: string, pieces: ChessPiece[])
+  # -------------------------------
+  # Replaces piece on board with player specified promotion
+  def self.promote(pawn, promo, pieces)
+    promo_piece = nil
+    case promo
+      when 'B'
+        promo_piece = Bishop.new(pawn.color, pawn.position)
+      when 'K'
+        promo_piece = Knight.new(pawn.color, pawn.position)
+      when 'R'
+        promo_piece = Rook.new(pawn.color, pawn.position)
+      when 'Q'
+        promo_piece = Queen.new(pawn.color, pawn.position)
+      else
+        return
+    end
+    if promo_piece != nil
+      pieces.delete(pawn)
+      pieces.push(promo_piece)
+    end
+  end
+
 
   private
 

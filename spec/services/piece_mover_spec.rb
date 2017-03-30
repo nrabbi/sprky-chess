@@ -3,6 +3,45 @@ require 'rails_helper'
 
 describe 'PieceMover' do
 
+  describe 'PieceMover#promote' do
+    it 'does nothing if selected promo type is not one of {Q, B, K, R}' do
+      pawn = Pawn.new(:white, Position.new(0, 7))
+      pieces = [pawn]
+      promo = 'WRONG'
+      PieceMover::promote(pawn, promo, pawn)
+
+      # no change
+      expect(pieces[0]).to eq pawn
+    end
+
+    it 'replaces a piece with the appropriate promotion piece and same position' do
+      pawn = Pawn.new(:white, Position.new(0,7))
+      pieces = [pawn]
+      promo = 'Q'
+      PieceMover::promote(pawn, promo, pieces)
+      expect(pieces[0].class).to eq Queen
+      expect(pieces[0].position.equals?(pawn.position)).to eq true
+
+      promo = 'K'
+      pieces = [pawn]
+      PieceMover::promote(pawn, promo, pieces)
+      expect(pieces[0].class).to eq Knight
+      expect(pieces[0].position.equals?(pawn.position)).to eq true
+
+      promo = 'B'
+      pieces = [pawn]
+      PieceMover::promote(pawn, promo, pieces)
+      expect(pieces[0].class).to eq Bishop
+      expect(pieces[0].position.equals?(pawn.position)).to eq true
+
+      promo = 'R'
+      pieces = [pawn]
+      PieceMover::promote(pawn, promo, pieces)
+      expect(pieces[0].class).to eq Rook
+      expect(pieces[0].position.equals?(pawn.position)).to eq true
+    end
+  end
+
   describe 'PieceMover#move_to!' do
     piece_mover = PieceMover.new
     let(:game) { FactoryGirl.create :game }
