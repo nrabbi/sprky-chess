@@ -59,8 +59,11 @@
     <div class="col-md-8">
       <div id="chessboard" data-game-id="<%= @current_game.id %>" data-current-player-id="<%= @current_player.id %>"
            data-current-player-email="<%= @current_player.email %>" data-current-player-color="<%=@current_player_color%>"
-           data-opposite-player-id="<%= @opposite_player.id %>"
-           data-opposite-player-email="<%= @opposite_player.email %>" data-opposite-player-color="<%=@opposite_player_color%>">
+           <% if @opposite_player != nil %>
+            data-opposite-player-id="<%= @opposite_player.id %>"
+            data-opposite-player-email="<%= @opposite_player.email %>" data-opposite-player-color="<%=@opposite_player_color%>"
+            <% end %>
+            >
         <% col = ["A", "B", "C", "D", "E", "F", "G", "H"]
            row_index = 7
            col_index = 0 %>
