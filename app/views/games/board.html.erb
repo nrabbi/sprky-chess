@@ -556,7 +556,7 @@
     var fromPiece = getPiece(fromSq);
     var distanceInt = Math.abs(from.x - to.x);
     var pieceText = fromPiece[0].childNodes[0].textContent;
-    if((distanceInt === 2) && (pieceText === "♔") || (pieceText === "♚")){
+    if((distanceInt === 2) && ((pieceText === "♔") || (pieceText === "♚"))){
       return true;
     }else{
       return false;
